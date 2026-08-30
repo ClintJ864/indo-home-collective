@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>indo home collective. — balinese inspired living</title>
+<link rel="icon" href="assets/icon.jpg">
+<style>
+  :root{
+    --moss:#3D5C3B;
+    --moss-dark:#2c4429;
+    --beige:#EAE0D3;
+    --charcoal:#333333;
+    --aqua:#72D3D8;
+    --aqua-dark:#4fb8be;
+    --tan:#C7B194;
+    --cream:#FBF9F5;
+    --white:#FFFFFF;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--charcoal);
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  img{max-width:100%;display:block;}
+
+  h1,h2,.brand-font{
+    font-family:Georgia, 'Times New Roman', serif;
+    font-weight:400;
+    letter-spacing:0.5px;
+    text-transform:lowercase;
+    color:var(--moss);
+  }
+  .serif{
+    font-family:Georgia, 'Times New Roman', serif;
+  }
+  .eyebrow{
+    font-family:Georgia, 'Times New Roman', serif;
+    font-style:italic;
+    color:var(--tan);
+    font-size:1.05rem;
+    letter-spacing:0.03em;
+  }
+
+  /* ---------- Layout shell ---------- */
+  .site-header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(251,249,245,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(199,177,148,0.4);
+  }
+  .header-inner{
+    max-width:1200px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 32px;
+  }
+  .logo-link{display:flex; align-items:center; gap:10px;}
+  .logo-link img{height:44px; width:auto;}
+  nav.main-nav{display:flex; align-items:center; gap:34px;}
+  nav.main-nav a{
+    font-size:0.82rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--charcoal); position:relative; padding:4px 0;
+    transition:color .2s ease;
+  }
+  nav.main-nav a:hover{color:var(--moss);}
+  nav.main-nav a.active{color:var(--moss); font-weight:600;}
+  nav.main-nav a.active::after{
+    content:""; position:absolute; left:0; right:0; bottom:-2px; height:2px; background:var(--aqua);
+  }
+  .cart-btn{
+    display:flex; align-items:center; gap:8px;
+    background:var(--moss); color:var(--white);
+    border:none; border-radius:30px; padding:9px 18px;
+    font-size:0.8rem; letter-spacing:0.06em; text-transform:uppercase;
+    transition:background .2s ease;
+  }
+  .cart-btn:hover{background:var(--moss-dark);}
+  .cart-count{
+    background:var(--aqua); color:var(--moss-dark);
+    border-radius:50%; min-width:20px; height:20px;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:0.72rem; font-weight:600; padding:0 4px;
+  }
+
+  main{min-height:60vh;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 32px;}
+
+  footer{
+    background:var(--moss); color:var(--beige);
+    padding:56px 32px 28px; margin-top:80px;
+  }
+  .footer-inner{
+    max-width:1200px; margin:0 auto;
+    display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px;
+  }
+  footer h3{color:var(--beige); font-size:0.95rem; margin:0 0 14px;}
+  footer p, footer a{color:rgba(234,224,211,0.8); font-size:0.88rem; line-height:1.8;}
+  footer a:hover{color:var(--aqua);}
+  .social-row{display:flex; gap:12px; margin-top:12px;}
+  .social-row a{
+    width:34px; height:34px; border-radius:50%; background:rgba(234,224,211,0.12);
+    display:flex; align-items:center; justify-content:center; color:var(--beige);
+    transition:background .2s ease, color .2s ease;
+  }
+  .social-row a:hover{background:rgba(114,211,216,0.25); color:var(--aqua);}
+  .social-row svg{width:16px; height:16px;}
+  .footer-bottom{
+    max-width:1200px; margin:40px auto 0; padding-top:20px;
+    border-top:1px solid rgba(234,224,211,0.2);
+    font-size:0.75rem; color:rgba(234,224,211,0.55);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    background:url('assets/hero-bg.jpg') center/cover no-repeat;
+    padding:90px 32px 100px;
+    text-align:center;
+    overflow:hidden;
+  }
+  .hero-content{position:relative; z-index:2; max-width:640px; margin:0 auto;}
+  .hero .eyebrow{display:block; margin-bottom:14px;}
+  .hero h1{font-size:clamp(1.9rem, 4vw, 2.7rem); margin:0 0 18px; line-height:1.3;}
+  .hero p.sub{font-family:Georgia, 'Times New Roman', serif; font-size:1.15rem; color:var(--charcoal); margin:0 0 32px; line-height:1.6;}
+  .btn{
+    display:inline-block; border:none; border-radius:2px;
+    padding:14px 34px; font-size:0.82rem; letter-spacing:0.12em; text-transform:uppercase;
+    transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary{background:var(--aqua); color:var(--moss-dark); font-weight:600;}
+  .btn-primary:hover{background:var(--aqua-dark); transform:translateY(-2px); box-shadow:0 8px 20px rgba(114,211,216,0.35);}
+  .btn-outline{background:transparent; border:1px solid var(--moss); color:var(--moss);}
+  .btn-outline:hover{background:var(--moss); color:var(--white);}
+  .btn-dark{background:var(--moss); color:var(--white); font-weight:500;}
+  .btn-dark:hover{background:var(--moss-dark);}
+  .btn:disabled{opacity:0.45; cursor:not-allowed; transform:none !important; box-shadow:none !important;}
+
+  /* ---------- Section headers ---------- */
+  .section-head{text-align:center; max-width:600px; margin:0 auto 48px;}
+  .section-head h2{font-size:1.9rem; margin:0 0 10px;}
+  .section-head .eyebrow{display:block; margin-bottom:8px;}
+
+  section.shop-section{padding:80px 0 20px;}
+
+  /* ---------- Filters ---------- */
+  .filter-row{
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:44px;
+  }
+  .filter-chip{
+    background:transparent; border:1px solid var(--tan); color:var(--charcoal);
+    border-radius:30px; padding:8px 20px; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;
+    transition:all .2s ease;
+  }
+  .filter-chip:hover{border-color:var(--moss);}
+  .filter-chip.active{background:var(--moss); border-color:var(--moss); color:var(--white);}
+  .filter-chip.chip-coming-soon{color:rgba(51,51,51,0.4); border-color:rgba(51,51,51,0.22);}
+  .filter-chip.chip-coming-soon:hover{border-color:rgba(51,51,51,0.4);}
+  .filter-chip.chip-coming-soon.active{background:rgba(51,51,51,0.35); border-color:rgba(51,51,51,0.35); color:var(--white);}
+
+  /* ---------- Product grid ---------- */
+  .product-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr));
+    gap:34px; padding-bottom:90px;
+  }
+  .product-card{
+    background:var(--white); border:1px solid rgba(199,177,148,0.35);
+    border-radius:4px; overflow:hidden; cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease;
+    display:flex; flex-direction:column;
+  }
+  .product-card:hover{transform:translateY(-5px); box-shadow:0 16px 30px rgba(61,92,59,0.12);}
+  .product-photo{
+    aspect-ratio:1/1; background:var(--beige);
+    display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  .product-photo svg{width:52%; height:52%;}
+  .placeholder-tag{
+    position:absolute; bottom:10px; right:10px;
+    background:rgba(255,255,255,0.85); color:var(--tan);
+    font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase;
+    padding:3px 8px; border-radius:20px;
+  }
+  .handmade-badge{
+    position:absolute; top:10px; left:10px;
+    display:flex; align-items:center; gap:5px;
+    background:rgba(61,92,59,0.9); color:var(--beige);
+    font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase;
+    padding:4px 9px; border-radius:20px;
+  }
+  .handmade-badge img{height:11px; width:auto; filter:brightness(0) invert(1);}
+  .product-info{padding:20px 20px 22px; flex:1; display:flex; flex-direction:column;}
+  .product-info .cat{
+    font-family:Georgia, 'Times New Roman', serif; font-style:italic; color:var(--tan); font-size:0.85rem; margin-bottom:4px;
+  }
+  .product-info h3{font-size:1.05rem; margin:0 0 8px; text-transform:none;}
+  .product-info .price{
+    margin-top:auto; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight:600; color:var(--moss); font-size:1rem;
+  }
+  .product-info .price .from{font-weight:400; font-size:0.75rem; color:var(--charcoal); text-transform:uppercase; letter-spacing:0.05em; margin-right:4px;}
+  .coming-soon-badge{
+    display:inline-block; background:var(--tan); color:#fff; font-size:0.66rem; font-weight:600;
+    letter-spacing:0.08em; text-transform:uppercase; padding:5px 11px; border-radius:20px; margin-top:auto;
+  }
+  .coming-soon-badge.large{font-size:0.72rem; padding:6px 14px; margin:2px 0 18px;}
+  .product-photo.is-coming-soon, .detail-photo.is-coming-soon{filter:grayscale(1);}
+  .product-photo.is-coming-soon svg, .detail-photo.is-coming-soon svg{opacity:0.3;}
+  .watermark{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-16deg);
+    font-family:Georgia, 'Times New Roman', serif; font-style:italic;
+    font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:rgba(51,51,51,0.28); white-space:nowrap; pointer-events:none;
+    border-top:1px solid rgba(51,51,51,0.28); border-bottom:1px solid rgba(51,51,51,0.28);
+    padding:5px 4px;
+  }
+  .detail-photo .watermark{font-size:1.1rem;}
+  .product-card.is-coming-soon .product-info h3, .product-card.is-coming-soon .product-info .cat{opacity:0.6;}
+
+  /* ---------- Product detail ---------- */
+  .breadcrumb{font-size:0.78rem; color:var(--tan); margin:32px 0 10px; letter-spacing:0.04em;}
+  .breadcrumb a:hover{color:var(--moss);}
+  .detail-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:64px; padding:20px 0 30px; align-items:flex-start;
+  }
+  .detail-photo{
+    background:var(--beige); border-radius:4px; aspect-ratio:1/1;
+    display:flex; align-items:center; justify-content:center; position:relative;
+    position:sticky; top:96px;
+  }
+  .detail-photo svg{width:42%; height:42%;}
+  .detail-info .cat{font-family:Georgia, 'Times New Roman', serif; font-style:italic; color:var(--tan); font-size:0.95rem;}
+  .detail-info h1{font-size:2rem; margin:6px 0 16px;}
+  .detail-info .price{font-size:1.4rem; color:var(--moss); font-weight:600; margin-bottom:22px;}
+  .detail-info .price .from{font-size:0.85rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--charcoal); font-weight:500;}
+  .detail-info .desc{font-family:Georgia, 'Times New Roman', serif; font-size:1.12rem; line-height:1.75; color:#4a4a4a; margin-bottom:28px;}
+  .qty-row{display:flex; align-items:center; gap:18px; margin-bottom:10px; flex-wrap:wrap;}
+  .qty-control{display:flex; align-items:center; border:1px solid var(--tan); border-radius:30px; overflow:hidden;}
+  .qty-control button{background:transparent; border:none; width:36px; height:36px; font-size:1.1rem; color:var(--moss);}
+  .qty-control button:hover{background:var(--beige);}
+  .qty-control span{width:34px; text-align:center; font-weight:600;}
+  .qty-subtotal{font-size:0.82rem; color:#999;}
+  .finish-row{margin-bottom:22px;}
+  .finish-row label{display:block; margin-bottom:10px;}
+  .finish-options{display:flex; gap:10px; flex-wrap:wrap;}
+  .finish-chip{
+    background:transparent; border:1px solid var(--tan); color:var(--charcoal);
+    border-radius:30px; padding:9px 18px; font-size:0.8rem; letter-spacing:0.02em;
+    transition:all .2s ease;
+  }
+  .finish-chip:hover{border-color:var(--moss);}
+  .finish-chip.active{background:var(--moss); border-color:var(--moss); color:#fff;}
+  .in-cart-note{
+    display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--moss);
+    margin:0 0 20px; font-weight:500;
+  }
+  .in-cart-note svg{width:14px; height:14px;}
+  .detail-actions{display:flex; gap:14px; flex-wrap:wrap; margin-top:12px;}
+  .meta-table{margin-top:34px; padding-top:22px; border-top:1px solid rgba(199,177,148,0.4);}
+  .meta-row{
+    display:flex; justify-content:space-between; gap:16px; padding:11px 0;
+    border-bottom:1px dashed rgba(199,177,148,0.4); font-size:0.85rem;
+  }
+  .meta-row:last-child{border-bottom:none;}
+  .meta-row .label{color:#999; text-transform:uppercase; letter-spacing:0.05em; font-size:0.7rem; flex:none; padding-top:2px;}
+  .meta-row .value{color:var(--charcoal); font-weight:500; text-align:right;}
+  .added-toast{
+    display:flex; align-items:center; gap:8px; max-height:0; overflow:hidden; opacity:0;
+    background:rgba(114,211,216,0.18); border:1px solid var(--aqua); border-radius:3px;
+    font-size:0.85rem; color:var(--moss-dark); padding:0 16px; margin-top:0;
+    transition:max-height .25s ease, opacity .25s ease, margin-top .25s ease, padding .25s ease;
+  }
+  .added-toast svg{width:16px; height:16px; flex:none;}
+  .added-toast.show{max-height:60px; opacity:1; padding:12px 16px; margin-top:16px;}
+  .related-section{margin-top:24px; padding:56px 0 90px; border-top:1px solid rgba(199,177,148,0.4);}
+  .related-section h2{font-size:1.3rem; margin:0 0 26px;}
+
+  /* ---------- Cart ---------- */
+  .cart-wrap{padding:40px 0 100px;}
+  .cart-wrap h1{margin-bottom:6px;}
+  .cart-count-note{color:#888; font-size:0.85rem; margin:0 0 10px;}
+  .cart-layout{display:grid; grid-template-columns:2fr 1fr; gap:56px; margin-top:28px; align-items:flex-start;}
+  .cart-items{border-top:1px solid rgba(199,177,148,0.4);}
+  .cart-item{
+    display:flex; gap:20px; align-items:flex-start;
+    padding:22px 0; border-bottom:1px solid rgba(199,177,148,0.4);
+    transition:opacity .2s ease;
+  }
+  .cart-item.removing{opacity:0; transform:translateX(6px);}
+  .cart-item .thumb{
+    flex:none; width:90px; background:var(--beige); border-radius:4px; aspect-ratio:1/1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cart-item .thumb svg{width:55%; height:55%;}
+  .item-details{flex:1; min-width:0; display:flex; flex-direction:column; gap:16px;}
+  .item-top{display:flex; justify-content:space-between; align-items:flex-start; gap:14px;}
+  .item-top-text{min-width:0;}
+  .cart-item .name{font-weight:600; margin:0 0 4px; font-size:0.98rem; line-height:1.35;}
+  .cart-item .cat{font-family:Georgia, 'Times New Roman', serif; font-style:italic; color:var(--tan); font-size:0.85rem;}
+  .cart-item .variant-label{font-size:0.78rem; color:#777; margin-top:3px;}
+  .cart-item .unit-price{font-size:0.78rem; color:#999; margin-top:4px;}
+  .remove-btn{
+    flex:none; background:transparent; border:none; padding:7px; margin:-7px -7px 0 0;
+    border-radius:50%; color:#a35c5c; display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease;
+  }
+  .remove-btn svg{width:16px; height:16px; display:block;}
+  .remove-btn:hover{background:rgba(163,51,85,0.1); color:#82233a;}
+  .item-bottom{display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;}
+  .cart-item .qty-control{border-color:rgba(199,177,148,0.7);}
+  .cart-item .qty-control button{width:32px; height:32px; font-size:1rem;}
+  .cart-item .line-price{font-weight:600; color:var(--moss); white-space:nowrap; font-size:1rem;}
+  .summary-box{
+    background:var(--white); border:1px solid rgba(199,177,148,0.4); border-radius:4px; padding:28px;
+    position:sticky; top:100px;
+  }
+  .summary-box h2{font-size:1.15rem; margin:0 0 20px;}
+  .summary-row{display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:12px; color:#555;}
+  .summary-row.total{
+    font-weight:700; color:var(--moss); font-size:1.1rem; margin-top:16px; padding-top:16px;
+    border-top:1px solid rgba(199,177,148,0.4);
+  }
+  .summary-note{font-size:0.76rem; color:#999; margin-top:14px; line-height:1.6; text-align:center;}
+  .empty-state{text-align:center; padding:70px 20px;}
+  .empty-state .eyebrow{display:block; margin-bottom:10px;}
+  .empty-state svg{width:80px; height:80px; margin-bottom:20px; opacity:0.5;}
+
+  /* ---------- Checkout ---------- */
+  .checkout-layout{display:grid; grid-template-columns:1.4fr 1fr; gap:56px; padding:40px 0 100px; align-items:flex-start;}
+  .form-block{background:var(--white); border:1px solid rgba(199,177,148,0.4); border-radius:4px; padding:34px;}
+  .form-block + .form-block{margin-top:24px;}
+  .form-block h2{font-size:1.05rem; margin:0 0 20px; display:flex; align-items:center; gap:10px;}
+  .step-num{
+    width:24px; height:24px; border-radius:50%; background:var(--moss); color:#fff;
+    display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;}
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field.full{grid-column:1/-1;}
+  label{font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; color:#666;}
+  input, select, textarea{
+    border:1px solid rgba(199,177,148,0.6); border-radius:3px; padding:11px 12px;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:0.9rem; background:var(--cream);
+    color:var(--charcoal);
+  }
+  textarea{resize:vertical; min-height:74px; font-family:inherit;}
+  input:focus, select:focus, textarea:focus{outline:2px solid var(--aqua); outline-offset:1px; border-color:var(--aqua);}
+  .field.error input, .field.error select{border-color:#a35c5c; background:rgba(163,92,92,0.05);}
+  .field-error-msg{font-size:0.72rem; color:#a35c5c; display:none;}
+  .field.error .field-error-msg{display:block;}
+  .optional-tag{font-weight:400; text-transform:none; letter-spacing:0; color:#aaa; font-size:0.7rem;}
+  .payment-note{
+    background:rgba(114,211,216,0.14); border:1px dashed var(--aqua-dark);
+    border-radius:3px; padding:16px 18px; font-size:0.82rem; color:#3a6a6d; line-height:1.6; margin-bottom:20px;
+  }
+  .payment-note strong{color:var(--moss-dark);}
+  .fake-card-row{display:grid; grid-template-columns:1fr; gap:16px;}
+
+  .order-summary-items{margin-bottom:6px;}
+  .order-summary-item{display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid rgba(199,177,148,0.3);}
+  .order-summary-item .thumb{
+    flex:none; width:44px; height:44px; border-radius:4px; background:var(--beige);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .order-summary-item .thumb svg{width:60%; height:60%;}
+  .order-summary-item .info{flex:1; min-width:0;}
+  .order-summary-item .info .name{font-size:0.86rem; font-weight:600; margin:0; line-height:1.3;}
+  .order-summary-item .info .variant{font-size:0.74rem; color:#888; margin-top:2px;}
+  .order-summary-item .info .qty{font-size:0.74rem; color:#999; margin-top:2px;}
+  .order-summary-item .line-price{flex:none; font-size:0.86rem; font-weight:600; color:var(--moss); white-space:nowrap;}
+  .summary-box .edit-cart-link{font-size:0.78rem; color:var(--moss); text-decoration:underline; display:inline-block; margin-bottom:4px;}
+
+  .order-confirm{text-align:center; padding:70px 20px 100px; max-width:640px; margin:0 auto;}
+  .order-confirm img{height:60px; margin:0 auto 26px;}
+  .order-confirm h1{font-size:1.8rem; margin-bottom:14px;}
+  .order-confirm p{font-family:Georgia, 'Times New Roman', serif; font-size:1.1rem; line-height:1.7; color:#444; margin-bottom:30px;}
+  .order-id{
+    display:inline-block; background:var(--beige); color:var(--moss); font-weight:600;
+    padding:8px 18px; border-radius:20px; font-size:0.85rem; margin-bottom:34px; letter-spacing:0.04em;
+  }
+  .confirm-panel{
+    background:var(--white); border:1px solid rgba(199,177,148,0.4); border-radius:4px;
+    padding:30px; text-align:left; margin-bottom:24px;
+  }
+  .confirm-panel h2{font-size:1rem; margin:0 0 18px; text-align:left;}
+  .confirm-panel .order-summary-item:last-child{border-bottom:none;}
+  .confirm-panel .summary-row.total{margin-top:14px;}
+  .confirm-address{font-size:0.88rem; color:#555; line-height:1.8;}
+  .confirm-address strong{color:var(--charcoal); display:block; margin-bottom:2px;}
+  .custom-note{
+    display:flex; gap:10px; align-items:flex-start; background:rgba(114,211,216,0.14);
+    border:1px dashed var(--aqua-dark); border-radius:3px; padding:14px 16px;
+    font-size:0.82rem; color:#3a6a6d; line-height:1.6; margin-top:18px; text-align:left;
+  }
+  .custom-note svg{flex:none; width:18px; height:18px; margin-top:1px;}
+  .next-steps{text-align:left; margin-top:34px;}
+  .next-steps h2{font-size:1rem; margin-bottom:16px;}
+  .confirm-actions{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:14px;}
+
+  /* ---------- About page ---------- */
+  .about-hero{padding:70px 32px 10px; text-align:center;}
+  .about-hero img.icon{height:70px; margin:0 auto 20px;}
+  .about-hero h1{font-size:2.2rem; margin-bottom:0;}
+  .about-body{max-width:680px; margin:0 auto; padding:30px 32px 90px;}
+  .about-body p{font-family:Georgia, 'Times New Roman', serif; font-size:1.18rem; line-height:1.85; color:#3f3f3f; margin-bottom:24px; text-align:center;}
+
+  .ordering-section{background:var(--beige); padding:80px 0 90px; margin-top:40px;}
+  .ordering-section .section-head img{height:56px; margin-bottom:18px;}
+  .steps{max-width:640px; margin:0 auto; display:flex; flex-direction:column; gap:0;}
+  .step{display:flex; gap:22px; padding:22px 0; border-bottom:1px solid rgba(61,92,59,0.15);}
+  .step:last-child{border-bottom:none;}
+  .step-circle{
+    flex:none; width:44px; height:44px; border-radius:50%; border:1.5px solid var(--moss);
+    color:var(--moss); display:flex; align-items:center; justify-content:center; font-family:Georgia, 'Times New Roman', serif; font-size:1.2rem;
+  }
+  .step-text p{margin:0; font-size:1.02rem; line-height:1.6;}
+  .step-text .note{font-size:0.82rem; color:var(--tan); margin-top:4px; font-style:italic; font-family:Georgia, 'Times New Roman', serif;}
+
+  .value-strip{
+    display:flex; justify-content:center; gap:60px; flex-wrap:wrap;
+    padding:50px 32px; border-top:1px solid rgba(199,177,148,0.4); border-bottom:1px solid rgba(199,177,148,0.4);
+  }
+  .value-item{text-align:center; max-width:200px;}
+  .value-item svg{width:34px; height:34px; margin-bottom:10px;}
+  .value-item p{font-size:0.82rem; color:#555; line-height:1.5; margin:0;}
+  .value-item .v-title{display:block; font-weight:600; color:var(--moss); margin-bottom:4px; font-size:0.88rem; letter-spacing:0.03em;}
+
+  /* ---------- Utility / responsive ---------- */
+  .visually-hidden{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);}
+  .bottom-nav{display:none;}
+  @media (max-width: 860px){
+    nav.main-nav{display:none;}
+    .detail-grid, .cart-layout, .checkout-layout, .field-row{grid-template-columns:1fr;}
+    .footer-inner{grid-template-columns:1fr; gap:28px;}
+    .summary-box{position:static; top:auto;}
+    .detail-photo{position:static; top:auto;}
+    body{padding-bottom:66px;}
+    .bottom-nav{
+      display:flex; position:fixed; left:0; right:0; bottom:0; z-index:60;
+      background:rgba(251,249,245,0.96); backdrop-filter:blur(6px);
+      border-top:1px solid rgba(199,177,148,0.4);
+      padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+      justify-content:space-around; align-items:center;
+    }
+    .bottom-nav a{
+      display:flex; flex-direction:column; align-items:center; gap:3px;
+      flex:1; padding:4px 0; position:relative;
+      color:var(--charcoal); font-size:0.66rem; letter-spacing:0.01em;
+    }
+    .bottom-nav a svg{width:22px; height:22px; stroke:currentColor;}
+    .bottom-nav a.active{color:var(--moss); font-weight:600;}
+    .bottom-nav .cart-count{
+      position:absolute; top:-2px; right:26%;
+      background:var(--aqua); color:var(--moss-dark);
+      border-radius:50%; min-width:16px; height:16px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.62rem; font-weight:600; padding:0 3px;
+    }
+  }
+  @media (max-width: 560px){
+    .cart-item{gap:14px;}
+    .cart-item .thumb{width:64px;}
+    .item-details{gap:12px;}
+  }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var(--aqua); outline-offset:2px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#/shop" class="logo-link">
+      <img src="assets/logo.jpg" alt="indo home collective — balinese inspired living">
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="#/shop" data-route="shop">Shop</a>
+      <a href="#/about" data-route="about">About</a>
+      <a href="#/ordering" data-route="ordering">Ordering</a>
+    </nav>
+    <button class="cart-btn" onclick="location.hash='#/cart'">
+      Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<nav class="bottom-nav" id="bottomNav">
+  <a href="#/shop" data-route="shop">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 40 H78 L70 84 H30 Z"/><path d="M22 40 Q50 30 78 40"/><line x1="32" y1="48" x2="38" y2="78"/><line x1="50" y1="48" x2="50" y2="80"/><line x1="68" y1="48" x2="62" y2="78"/></svg>
+    <span>Shop</span>
+  </a>
+  <a href="#/ordering" data-route="ordering">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><rect x="26" y="14" width="48" height="72" rx="4"/><line x1="36" y1="30" x2="64" y2="30"/><line x1="36" y1="44" x2="64" y2="44"/><line x1="36" y1="58" x2="54" y2="58"/></svg>
+    <span>Ordering</span>
+  </a>
+  <a href="#/about" data-route="about">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="34"/><line x1="50" y1="46" x2="50" y2="70"/><circle cx="50" cy="32" r="3" fill="currentColor" stroke="none"/></svg>
+    <span>About</span>
+  </a>
+  <a href="#/cart" data-route="cart">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18 H26 L34 62 H74 L84 30 H30"/><circle cx="40" cy="80" r="6"/><circle cx="68" cy="80" r="6"/></svg>
+    <span>Cart</span>
+    <span class="cart-count" id="cartCountMobile">0</span>
+  </a>
+</nav>
+
+<main id="app"></main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h3 class="brand-font" style="color:var(--beige); font-size:1.05rem;">indo home collective.</h3>
+      <p style="max-width:280px;">Handcrafted timber slat blinds and curated homewares, bringing fifteen years of Bali living into Australian homes.</p>
+    </div>
+    <div>
+      <h3>Shop</h3>
+      <p><a href="#/shop">All products</a></p>
+      <p><a href="#/ordering">How ordering works</a></p>
+      <p><a href="#/about">Our story</a></p>
+    </div>
+    <div>
+      <h3>Get in touch</h3>
+      <p id="footerEmail"></p>
+      <p id="footerPhone"></p>
+      <div class="social-row">
+        <a id="footerInstagram" href="#" target="_blank" rel="noopener noreferrer" aria-label="Indo Home Collective on Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a id="footerFacebook" href="#" target="_blank" rel="noopener noreferrer" aria-label="Indo Home Collective on Facebook">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 8h-2a2 2 0 0 0-2 2v2H9v3h2v7h3v-7h2.2l.8-3H14v-1.5c0-.7.3-1 1-1h1.5V8Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Indo Home Collective</span>
+    <span>Balinese inspired living.</span>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   DATA
+   ========================================================= */
+const PRODUCTS = [
+  {
+    id:'timber-slat-blinds',
+    name:'Custom Timber & Bamboo Slat Blinds',
+    category:'Blinds',
+    price:75,
+    priceLabel:'From',
+    unit:'per blind — priced by size',
+    icon:'blinds',
+    customBlind:true,
+    desc:"Our signature piece. Real timber or bamboo slats, handcrafted by a family of makers with over thirty years of experience. Choose your type, colour, width and drop below — pricing, bulk discounts and shipping calculate instantly.",
+    meta:[['Material','Solid timber or bamboo'],['Slat width','Timber 2.5cm · Bamboo 1.2cm'],['Sizes','50–300cm wide, 50–300cm drop'],['Lead time','8–12 weeks']]
+  },
+  {
+    id:'rattan-pendant-light',
+    name:'Coming Soon',
+    category:'Lighting',
+    comingSoon:true,
+    icon:'pendant',
+    desc:"Our lighting collection is being curated and will be available here soon. Check back shortly, or DM us to be notified when it launches."
+  },
+  {
+    id:'rattan-mirror',
+    name:'Coming Soon',
+    category:'Mirrors',
+    comingSoon:true,
+    icon:'mirror',
+    desc:"Our mirror collection is being curated and will be available here soon. Check back shortly, or DM us to be notified when it launches."
+  },
+  {
+    id:'teak-console',
+    name:'Coming Soon',
+    category:'Furniture',
+    comingSoon:true,
+    icon:'console',
+    desc:"Our furniture collection is being curated and will be available here soon. Check back shortly, or DM us to be notified when it launches."
+  },
+  {
+    id:'wooden-bowl-small',
+    name:'Wooden Bowl Small (150mm diameter)',
+    category:'Wooden Bowls & Leather Goods',
+    price:35,
+    unit:'each',
+    icon:'bowl',
+    desc:"A hand-turned bowl in solid teak, sized for keys, small trinkets, or a single piece of fruit. Each one carries a slightly different grain pattern.",
+    meta:[['Material','Solid teak, food-safe oil finish'],['Dimensions','150mm diameter'],['Care','Hand wash, oil occasionally']]
+  },
+  {
+    id:'wooden-bowl-large',
+    name:'Wooden Bowl Large (250mm diameter)',
+    category:'Wooden Bowls & Leather Goods',
+    price:55,
+    unit:'each',
+    icon:'bowl',
+    desc:"A larger hand-turned teak bowl, perfect as a centrepiece for fruit or as a quiet catch-all on a console or dining table.",
+    meta:[['Material','Solid teak, food-safe oil finish'],['Dimensions','250mm diameter'],['Care','Hand wash, oil occasionally']]
+  },
+  {
+    id:'leather-notebook',
+    name:'Leather Notebook',
+    category:'Wooden Bowls & Leather Goods',
+    price:48,
+    unit:'each',
+    icon:'notebook',
+    desc:"A hand-bound leather notebook that softens and darkens beautifully with use. Refillable pages inside, finished with a simple leather tie closure.",
+    meta:[['Material','Full-grain leather'],['Pages','Refillable, lined'],['Care','Wipe clean, avoid water']]
+  },
+  {
+    id:'leather-coasters',
+    name:'Leather Coasters (pack of 4)',
+    category:'Wooden Bowls & Leather Goods',
+    price:32,
+    unit:'pack of 4',
+    icon:'coaster',
+    desc:"Thick-cut leather coasters that age into a rich patina over time. A small, everyday piece of craftsmanship for the coffee table.",
+    meta:[['Material','Full-grain leather'],['Set contents','4 coasters'],['Care','Wipe clean, avoid water']]
+  },
+  {
+    id:'floating-pool-tray',
+    name:'Coming Soon',
+    category:'Floating Pool Trays',
+    comingSoon:true,
+    icon:'pooltray',
+    desc:"Our floating pool tray collection is being curated and will be available here soon. Check back shortly, or DM us to be notified when it launches."
+  }
+];
+
+const CATEGORIES = Array.from(new Set(PRODUCTS.map(p=>p.category)));
+// Categories with no near-term sale plans get a muted filter chip. Floating Pool
+// Trays is deliberately excluded — a real product is being added for sale soon.
+const CHIP_MUTED_CATEGORIES = ['Lighting', 'Mirrors', 'Furniture'];
+
+/* =========================================================
+   ICONS  (line-art placeholders in brand moss green)
+   ========================================================= */
+function icon(key){
+  const stroke = 'var(--moss)';
+  const icons = {
+    blinds:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><rect x="18" y="14" width="64" height="72" rx="4"/><line x1="24" y1="28" x2="76" y2="28"/><line x1="24" y1="40" x2="76" y2="40"/><line x1="24" y1="52" x2="76" y2="52"/><line x1="24" y1="64" x2="76" y2="64"/><line x1="24" y1="76" x2="76" y2="76"/></svg>`,
+    pendant:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><line x1="50" y1="8" x2="50" y2="30"/><path d="M28 30 Q50 20 72 30 Q78 55 50 62 Q22 55 28 30 Z"/><line x1="38" y1="40" x2="62" y2="40"/><line x1="34" y1="48" x2="66" y2="48"/></svg>`,
+    mirror:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><path d="M30 88 V50 Q30 18 50 18 Q70 18 70 50 V88 Z"/><path d="M38 84 V52 Q38 28 50 28 Q62 28 62 52 V84" opacity="0.5"/></svg>`,
+    console:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><rect x="14" y="32" width="72" height="10" rx="2"/><line x1="20" y1="42" x2="20" y2="82"/><line x1="80" y1="42" x2="80" y2="82"/><line x1="50" y1="42" x2="50" y2="82" opacity="0.5"/><line x1="14" y1="82" x2="86" y2="82"/></svg>`,
+    basket:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><path d="M22 40 H78 L70 84 H30 Z"/><path d="M22 40 Q50 30 78 40"/><line x1="32" y1="48" x2="38" y2="78"/><line x1="50" y1="48" x2="50" y2="80"/><line x1="68" y1="48" x2="62" y2="78"/></svg>`,
+    cushion:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><path d="M22 22 Q50 30 78 22 Q70 50 78 78 Q50 70 22 78 Q30 50 22 22 Z"/></svg>`,
+    bowl:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><ellipse cx="50" cy="40" rx="34" ry="10"/><path d="M16 40 Q20 68 50 70 Q80 68 84 40"/></svg>`,
+    macrame:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><line x1="20" y1="12" x2="80" y2="12"/><path d="M28 12 Q28 30 40 34 Q28 38 28 56"/><path d="M50 12 Q50 30 62 34 Q50 38 50 56"/><path d="M72 12 Q72 30 84 34 Q72 38 72 56" opacity="0.6"/><line x1="28" y1="56" x2="28" y2="82"/><line x1="50" y1="56" x2="50" y2="76"/></svg>`,
+    notebook:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><rect x="26" y="14" width="54" height="72" rx="3"/><line x1="26" y1="26" x2="19" y2="26"/><line x1="26" y1="38" x2="19" y2="38"/><line x1="26" y1="50" x2="19" y2="50"/><line x1="26" y1="62" x2="19" y2="62"/><line x1="26" y1="74" x2="19" y2="74"/><line x1="37" y1="30" x2="69" y2="30"/><line x1="37" y1="42" x2="69" y2="42"/><line x1="37" y1="54" x2="60" y2="54"/></svg>`,
+    coaster:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><ellipse cx="50" cy="68" rx="30" ry="8"/><ellipse cx="50" cy="59" rx="30" ry="8"/><ellipse cx="50" cy="50" rx="30" ry="8"/><ellipse cx="50" cy="41" rx="30" ry="8"/></svg>`,
+    pooltray:`<svg viewBox="0 0 100 100" fill="none" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"><ellipse cx="50" cy="40" rx="34" ry="14"/><ellipse cx="50" cy="40" rx="19" ry="7" opacity="0.5"/><path d="M12 60 Q26 68 40 60 T68 60 T96 60"/><path d="M18 74 Q32 82 46 74 T74 74" opacity="0.5"/></svg>`
+  };
+  return icons[key] || icons.basket;
+}
+const ARCH_MARK = `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M20 80 Q20 30 40 20 Q30 15 22 22 Q10 30 14 42 Q22 34 28 38"/><path d="M55 82 V38 Q55 18 70 18 Q85 18 85 38 V82 Z"/></svg>`;
+
+/* =========================================================
+   CONTACT (built at runtime, not present as plain text in the
+   page source, to make it harder for basic bots to scrape)
+   ========================================================= */
+const CONTACT = {
+  emailParts: ['indohomecollective', 'gmail.com'],
+  phoneDigits: '61410495924', // E.164, no leading 0, no spaces/plus
+  instagramUrl: 'https://www.instagram.com/indohomecollective',
+  facebookUrl: 'https://www.facebook.com/profile.php?id=61589068032578'
+};
+function contactEmail(){ return CONTACT.emailParts.join('@'); }
+function contactPhoneDisplay(){ return '+' + CONTACT.phoneDigits.replace(/^61/, '61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'); }
+function contactPhoneTel(){ return '+' + CONTACT.phoneDigits; }
+
+function initContactLinks(){
+  const emailEl = document.getElementById('footerEmail');
+  if(emailEl){
+    const a = document.createElement('a');
+    a.href = 'mailto:' + contactEmail();
+    a.textContent = contactEmail();
+    emailEl.appendChild(a);
+  }
+  const phoneEl = document.getElementById('footerPhone');
+  if(phoneEl){
+    const a = document.createElement('a');
+    a.href = 'tel:' + contactPhoneTel();
+    a.textContent = contactPhoneDisplay();
+    phoneEl.appendChild(a);
+  }
+  const igEl = document.getElementById('footerInstagram');
+  if(igEl) igEl.href = CONTACT.instagramUrl;
+  const fbEl = document.getElementById('footerFacebook');
+  if(fbEl) fbEl.href = CONTACT.facebookUrl;
+}
+
+/* =========================================================
+   BLIND PRICING (from the client's Blind Order Form workbook)
+   ========================================================= */
+const BLIND_WIDTHS = [50,100,150,200,250,300];
+const BLIND_DROPS = [50,75,100,125,150,175,200,225,250,275,300];
+const BLIND_COLOURS = { Timber:['Natural Wood','White','Black'], Bamboo:['Natural','White','Black'] };
+const BLIND_DISCOUNT_PCT = { Timber:0.25, Bamboo:0.30 };
+const BLIND_DISCOUNT_THRESHOLD = 400;
+const BLIND_SHIPPING_PER_UNIT = 50;
+
+function computeBlindPrice(type, width, drop){
+  const base = (width * drop) / 100;
+  const eligible = base >= BLIND_DISCOUNT_THRESHOLD;
+  const pct = eligible ? (BLIND_DISCOUNT_PCT[type] || 0) : 0;
+  const unitPrice = base * (1 - pct) + BLIND_SHIPPING_PER_UNIT;
+  return { base, eligible, pct, unitPrice };
+}
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let cart = []; // {key, id, variant, qty, price?} — price overrides product.price for custom-priced lines (e.g. blinds)
+let lastOrder = null; // snapshot captured at checkout, since cart clears after placing an order
+
+function findProduct(id){ return PRODUCTS.find(p=>p.id===id); }
+function money(n){ return 'A$' + n.toFixed(2).replace(/\.00$/,''); }
+function lineKey(id, variant){ return variant ? id+'::'+variant : id; }
+function findCartLine(id, variant){ return cart.find(c=>c.key===lineKey(id, variant)); }
+
+function addToCart(id, qty=1, variant=null, price=null){
+  const key = lineKey(id, variant);
+  const existing = cart.find(c=>c.key===key);
+  if(existing){ existing.qty += qty; } else { cart.push({key, id, variant, qty, price}); }
+  updateCartCount();
+}
+function setQty(key, qty){
+  const existing = cart.find(c=>c.key===key);
+  if(!existing) return;
+  existing.qty = Math.max(1, qty);
+  updateCartCount();
+  render();
+}
+function removeFromCart(key){
+  cart = cart.filter(c=>c.key!==key);
+  updateCartCount();
+  render();
+}
+function lineUnitPrice(c){
+  return c.price != null ? c.price : findProduct(c.id).price;
+}
+function cartTotal(){
+  return cart.reduce((sum,c)=> sum + lineUnitPrice(c) * c.qty, 0);
+}
+function cartCount(){
+  return cart.reduce((sum,c)=> sum + c.qty, 0);
+}
+function updateCartCount(){
+  document.getElementById('cartCount').textContent = cartCount();
+  document.getElementById('cartCountMobile').textContent = cartCount();
+}
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', ()=>{
+  if(!location.hash) location.hash = '#/shop';
+  render();
+  initContactLinks();
+});
+
+function setActiveNav(routeName){
+  document.querySelectorAll('#mainNav a, #bottomNav a').forEach(a=>{
+    a.classList.toggle('active', a.dataset.route === routeName);
+  });
+}
+
+function render(){
+  const hash = location.hash || '#/shop';
+  const parts = hash.replace('#/','').split('/');
+  const app = document.getElementById('app');
+  window.scrollTo({top:0, behavior:'instant' in document.documentElement.style ? 'instant' : 'auto'});
+
+  if(parts[0]==='shop' && !parts[1]){
+    setActiveNav('shop');
+    app.innerHTML = renderShop();
+    bindShopEvents();
+  } else if(parts[0]==='product' && parts[1]){
+    setActiveNav('shop');
+    app.innerHTML = renderProductDetail(parts[1]);
+    bindDetailEvents(parts[1]);
+  } else if(parts[0]==='cart'){
+    setActiveNav('cart');
+    app.innerHTML = renderCart();
+    bindCartEvents();
+  } else if(parts[0]==='checkout'){
+    setActiveNav('shop');
+    app.innerHTML = renderCheckout();
+    bindCheckoutEvents();
+  } else if(parts[0]==='order-confirmed'){
+    setActiveNav('shop');
+    app.innerHTML = renderConfirmation(parts[1]);
+  } else if(parts[0]==='about'){
+    setActiveNav('about');
+    app.innerHTML = renderAbout();
+  } else if(parts[0]==='ordering'){
+    setActiveNav('ordering');
+    app.innerHTML = renderOrdering();
+  } else {
+    setActiveNav('shop');
+    app.innerHTML = renderShop();
+    bindShopEvents();
+  }
+  updateCartCount();
+}
+
+/* =========================================================
+   VIEW: SHOP
+   ========================================================= */
+let activeCategory = 'Blinds';
+
+function renderShop(){
+  const filtered = PRODUCTS.filter(p=>p.category===activeCategory);
+  return `
+    <section class="hero">
+      <div class="hero-content">
+        <span class="eyebrow">balinese inspired living.</span>
+        <h1>bring the calm of bali<br>into your home.</h1>
+        <p class="sub">Handcrafted timber blinds and curated homewares, made by artisan hands and shipped from our hearts in Bali to yours.</p>
+        <a href="#shop-grid" class="btn btn-primary">Shop the collection</a>
+      </div>
+    </section>
+
+    <section class="shop-section" id="shop-grid">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">the collection</span>
+          <h2>curated for the home</h2>
+        </div>
+        <div class="filter-row" id="filterRow">
+          ${CATEGORIES.map(c=>`<button class="filter-chip ${c===activeCategory?'active':''} ${CHIP_MUTED_CATEGORIES.includes(c)?'chip-coming-soon':''}" data-cat="${c}">${c}</button>`).join('')}
+        </div>
+        <div class="product-grid">
+          ${filtered.map(p=>`
+            <article class="product-card ${p.comingSoon?'is-coming-soon':''}" data-id="${p.id}">
+              <div class="product-photo ${p.comingSoon?'is-coming-soon':''}">
+                ${p.comingSoon ? '' : `<div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')} <span style="display:none"></span>Handmade</div>`}
+                ${icon(p.icon)}
+                <span class="placeholder-tag">placeholder photo</span>
+                ${p.comingSoon ? `<span class="watermark">Not yet for sale</span>` : ''}
+              </div>
+              <div class="product-info">
+                <span class="cat">${p.category}</span>
+                <h3>${p.name}</h3>
+                ${p.comingSoon
+                  ? `<span class="coming-soon-badge">Coming soon</span>`
+                  : `<div class="price">${p.priceLabel?`<span class="from">${p.priceLabel}</span>`:''}${money(p.price)} <span style="font-weight:400;color:#888;font-size:0.78rem;">/ ${p.unit}</span></div>`}
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <div class="value-strip">
+      <div class="value-item">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><path d="${'M20 50 L42 72 L82 28'}"/></svg>
+        <span class="v-title">Handcrafted</span>
+        <p>Every piece made by hand, by artisans with decades of craft.</p>
+      </div>
+      <div class="value-item">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><circle cx="50" cy="50" r="34"/><path d="M50 30 V50 L64 60"/></svg>
+        <span class="v-title">Made to order</span>
+        <p>Custom blinds cut and finished to your exact measurements.</p>
+      </div>
+      <div class="value-item">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><path d="M50 14 L80 30 V56 Q80 78 50 90 Q20 78 20 56 V30 Z"/></svg>
+        <span class="v-title">Natural materials</span>
+        <p>Real timber, teak and leather — built to last, not landfill.</p>
+      </div>
+    </div>
+  `;
+}
+
+function bindShopEvents(){
+  document.querySelectorAll('.product-card').forEach(card=>{
+    card.addEventListener('click', ()=>{ location.hash = '#/product/' + card.dataset.id; });
+  });
+  document.querySelectorAll('.filter-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      activeCategory = chip.dataset.cat;
+      document.getElementById('app').innerHTML = renderShop();
+      bindShopEvents();
+      document.getElementById('shop-grid').scrollIntoView({behavior:'smooth'});
+    });
+  });
+}
+
+/* =========================================================
+   VIEW: PRODUCT DETAIL
+   ========================================================= */
+function renderProductDetail(id){
+  const p = findProduct(id);
+  if(!p){
+    return `<div class="wrap" style="padding:100px 0; text-align:center;"><h2>Product not found</h2><a href="#/shop" class="btn btn-outline" style="margin-top:20px;">Back to shop</a></div>`;
+  }
+  const related = PRODUCTS.filter(r=>r.category===p.category && r.id!==p.id && !r.comingSoon).slice(0,4);
+
+  if(p.comingSoon){
+    return `
+      <div class="wrap">
+        <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category}</div>
+        <div class="detail-grid">
+          <div class="detail-photo is-coming-soon">
+            ${icon(p.icon)}
+            <span class="placeholder-tag">placeholder photo</span>
+            <span class="watermark">Not yet for sale</span>
+          </div>
+          <div class="detail-info">
+            <span class="cat">${p.category}</span>
+            <h1>${p.name}</h1>
+            <span class="coming-soon-badge large">Coming soon</span>
+            <p class="desc">${p.desc}</p>
+            <a href="#/shop" class="btn btn-primary">Browse available pieces</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if(p.customBlind){
+    return renderBlindDetail(p);
+  }
+
+  const defaultFinish = p.finishOptions ? p.finishOptions[0] : null;
+  const inCart = findCartLine(id, defaultFinish);
+  return `
+    <div class="wrap">
+      <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category} / ${p.name}</div>
+      <div class="detail-grid">
+        <div class="detail-photo">
+          <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
+          ${icon(p.icon)}
+          <span class="placeholder-tag">placeholder photo</span>
+        </div>
+        <div class="detail-info">
+          <span class="cat">${p.category}</span>
+          <h1>${p.name}</h1>
+          <div class="price">${p.priceLabel?`<span class="from">${p.priceLabel} </span>`:''}${money(p.price)} <span style="font-size:0.85rem;color:#888;font-weight:400;">/ ${p.unit}</span></div>
+          <p class="desc">${p.desc}</p>
+          ${inCart ? `
+          <p class="in-cart-note" id="inCartNote">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>${inCart.qty} already in your cart</span>
+          </p>` : `<p class="in-cart-note" id="inCartNote" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span></span>
+          </p>`}
+          ${p.finishOptions ? `
+          <div class="finish-row">
+            <label>Finish</label>
+            <div class="finish-options" id="finishOptions">
+              ${p.finishOptions.map((f,i)=>`<button type="button" class="finish-chip ${i===0?'active':''}" data-finish="${f}">${f}</button>`).join('')}
+            </div>
+          </div>` : ''}
+          <div class="qty-row">
+            <label style="margin:0;">Quantity</label>
+            <div class="qty-control">
+              <button id="qtyMinus" aria-label="Decrease quantity">–</button>
+              <span id="qtyVal">1</span>
+              <button id="qtyPlus" aria-label="Increase quantity">+</button>
+            </div>
+            <span class="qty-subtotal" id="qtySubtotal">${money(p.price)}</span>
+          </div>
+          <div class="detail-actions">
+            <button class="btn btn-primary" id="addToCartBtn">Add to cart</button>
+            <a href="#/cart" class="btn btn-outline">View cart</a>
+          </div>
+          <div class="added-toast" id="addedToast">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Added to your cart</span>
+          </div>
+          <div class="meta-table">
+            ${p.meta.map(m=>`<div class="meta-row"><span class="label">${m[0]}</span><span class="value">${m[1]}</span></div>`).join('')}
+          </div>
+        </div>
+      </div>
+      ${related.length ? `
+      <div class="related-section">
+        <h2>You may also like</h2>
+        <div class="product-grid">
+          ${related.map(r=>`
+            <article class="product-card related-card" data-id="${r.id}">
+              <div class="product-photo">
+                <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
+                ${icon(r.icon)}
+                <span class="placeholder-tag">placeholder photo</span>
+              </div>
+              <div class="product-info">
+                <span class="cat">${r.category}</span>
+                <h3>${r.name}</h3>
+                <div class="price">${r.priceLabel?`<span class="from">${r.priceLabel}</span>`:''}${money(r.price)} <span style="font-weight:400;color:#888;font-size:0.78rem;">/ ${r.unit}</span></div>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      </div>` : ''}
+    </div>
+  `;
+}
+
+function bindDetailEvents(id){
+  const p = findProduct(id);
+  if(p.comingSoon) return;
+  if(p.customBlind){ bindBlindDetailEvents(p); return; }
+
+  let qty = 1;
+  let selectedFinish = p.finishOptions ? p.finishOptions[0] : null;
+  const qtyVal = document.getElementById('qtyVal');
+  const qtySubtotal = document.getElementById('qtySubtotal');
+
+  function updateInCartNote(){
+    const line = findCartLine(id, selectedFinish);
+    const note = document.getElementById('inCartNote');
+    if(line){
+      note.style.display = 'flex';
+      note.querySelector('span').textContent = `${line.qty} already in your cart`;
+    } else {
+      note.style.display = 'none';
+    }
+  }
+
+  document.getElementById('qtyMinus').addEventListener('click', ()=>{
+    qty = Math.max(1, qty-1); qtyVal.textContent = qty;
+    qtySubtotal.textContent = money(p.price * qty);
+  });
+  document.getElementById('qtyPlus').addEventListener('click', ()=>{
+    qty = qty+1; qtyVal.textContent = qty;
+    qtySubtotal.textContent = money(p.price * qty);
+  });
+
+  if(p.finishOptions){
+    document.querySelectorAll('.finish-chip').forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        document.querySelectorAll('.finish-chip').forEach(c=>c.classList.remove('active'));
+        chip.classList.add('active');
+        selectedFinish = chip.dataset.finish;
+        updateInCartNote();
+      });
+    });
+  }
+
+  document.getElementById('addToCartBtn').addEventListener('click', ()=>{
+    addToCart(id, qty, selectedFinish);
+    const toast = document.getElementById('addedToast');
+    toast.classList.add('show');
+    setTimeout(()=>{ toast.classList.remove('show'); }, 2200);
+    updateInCartNote();
+  });
+
+  document.querySelectorAll('.related-card').forEach(card=>{
+    card.addEventListener('click', ()=>{ location.hash = '#/product/' + card.dataset.id; });
+  });
+}
+
+/* =========================================================
+   VIEW: PRODUCT DETAIL — CUSTOM BLINDS
+   ========================================================= */
+function renderBlindDetail(p){
+  const defaultType = 'Timber';
+  const defaultColour = BLIND_COLOURS[defaultType][0];
+  const defaultWidth = 100;
+  const defaultDrop = 150;
+  const calc = computeBlindPrice(defaultType, defaultWidth, defaultDrop);
+
+  return `
+    <div class="wrap">
+      <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category} / ${p.name}</div>
+      <div class="detail-grid">
+        <div class="detail-photo">
+          <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
+          ${icon(p.icon)}
+          <span class="placeholder-tag">placeholder photo</span>
+        </div>
+        <div class="detail-info">
+          <span class="cat">${p.category}</span>
+          <h1>${p.name}</h1>
+          <p class="desc">${p.desc}</p>
+
+          <div class="finish-row">
+            <label>Blind type</label>
+            <div class="finish-options" id="blindTypeOptions">
+              <button type="button" class="finish-chip active" data-type="Timber">Timber</button>
+              <button type="button" class="finish-chip" data-type="Bamboo">Bamboo</button>
+            </div>
+          </div>
+          <div class="finish-row">
+            <label>Colour</label>
+            <div class="finish-options" id="blindColourOptions">
+              ${BLIND_COLOURS[defaultType].map((c,i)=>`<button type="button" class="finish-chip ${i===0?'active':''}" data-colour="${c}">${c}</button>`).join('')}
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Width (cm)</label>
+              <select id="blindWidth">${BLIND_WIDTHS.map(w=>`<option value="${w}" ${w===defaultWidth?'selected':''}>${w}</option>`).join('')}</select>
+            </div>
+            <div class="field">
+              <label>Drop (cm)</label>
+              <select id="blindDrop">${BLIND_DROPS.map(d=>`<option value="${d}" ${d===defaultDrop?'selected':''}>${d}</option>`).join('')}</select>
+            </div>
+          </div>
+          <div class="qty-row">
+            <label style="margin:0;">Quantity</label>
+            <div class="qty-control">
+              <button id="qtyMinus" aria-label="Decrease quantity">–</button>
+              <span id="qtyVal">1</span>
+              <button id="qtyPlus" aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+
+          <div class="meta-table" id="blindBreakdown">
+            <div class="meta-row"><span class="label">List price</span><span class="value" id="bpList">${money(calc.base)}</span></div>
+            <div class="meta-row" id="bpDiscountRow" style="${calc.eligible?'':'display:none;'}"><span class="label">Bulk discount</span><span class="value" id="bpDiscount">&minus;${Math.round(calc.pct*100)}%</span></div>
+            <div class="meta-row"><span class="label">Shipping</span><span class="value">${money(BLIND_SHIPPING_PER_UNIT)} / blind</span></div>
+          </div>
+          <div class="price" id="bpTotal" style="margin:18px 0 24px;">${money(calc.unitPrice)} <span style="font-size:0.85rem;color:#888;font-weight:400;">per blind</span></div>
+
+          <div class="detail-actions">
+            <button class="btn btn-primary" id="addToCartBtn">Add to cart</button>
+            <a href="#/cart" class="btn btn-outline">View cart</a>
+          </div>
+          <div class="added-toast" id="addedToast">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Added to your cart</span>
+          </div>
+          <div class="meta-table">
+            ${p.meta.map(m=>`<div class="meta-row"><span class="label">${m[0]}</span><span class="value">${m[1]}</span></div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindBlindDetailEvents(p){
+  let type = 'Timber';
+  let colour = BLIND_COLOURS[type][0];
+  let qty = 1;
+
+  const widthSel = document.getElementById('blindWidth');
+  const dropSel = document.getElementById('blindDrop');
+  const qtyVal = document.getElementById('qtyVal');
+  const colourWrap = document.getElementById('blindColourOptions');
+  const bpList = document.getElementById('bpList');
+  const bpDiscountRow = document.getElementById('bpDiscountRow');
+  const bpDiscount = document.getElementById('bpDiscount');
+  const bpTotal = document.getElementById('bpTotal');
+
+  function recalc(){
+    const width = Number(widthSel.value);
+    const drop = Number(dropSel.value);
+    const calc = computeBlindPrice(type, width, drop);
+    bpList.textContent = money(calc.base);
+    if(calc.eligible){
+      bpDiscountRow.style.display = '';
+      bpDiscount.textContent = '−' + Math.round(calc.pct*100) + '%';
+    } else {
+      bpDiscountRow.style.display = 'none';
+    }
+    bpTotal.innerHTML = money(calc.unitPrice) + ' <span style="font-size:0.85rem;color:#888;font-weight:400;">per blind</span>';
+    return calc;
+  }
+
+  function renderColourChips(){
+    colourWrap.innerHTML = BLIND_COLOURS[type].map((c,i)=>`<button type="button" class="finish-chip ${i===0?'active':''}" data-colour="${c}">${c}</button>`).join('');
+    colour = BLIND_COLOURS[type][0];
+    bindColourChips();
+  }
+
+  function bindColourChips(){
+    colourWrap.querySelectorAll('.finish-chip').forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        colourWrap.querySelectorAll('.finish-chip').forEach(c=>c.classList.remove('active'));
+        chip.classList.add('active');
+        colour = chip.dataset.colour;
+      });
+    });
+  }
+  bindColourChips();
+
+  document.getElementById('blindTypeOptions').querySelectorAll('.finish-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.getElementById('blindTypeOptions').querySelectorAll('.finish-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      type = chip.dataset.type;
+      renderColourChips();
+      recalc();
+    });
+  });
+
+  widthSel.addEventListener('change', recalc);
+  dropSel.addEventListener('change', recalc);
+
+  document.getElementById('qtyMinus').addEventListener('click', ()=>{
+    qty = Math.max(1, qty-1); qtyVal.textContent = qty;
+  });
+  document.getElementById('qtyPlus').addEventListener('click', ()=>{
+    qty = Math.min(20, qty+1); qtyVal.textContent = qty;
+  });
+
+  document.getElementById('addToCartBtn').addEventListener('click', ()=>{
+    const width = Number(widthSel.value);
+    const drop = Number(dropSel.value);
+    const calc = computeBlindPrice(type, width, drop);
+    const variant = `${type} · ${colour} · ${width}×${drop}cm`;
+    addToCart(p.id, qty, variant, calc.unitPrice);
+    const toast = document.getElementById('addedToast');
+    toast.classList.add('show');
+    setTimeout(()=>{ toast.classList.remove('show'); }, 2200);
+  });
+}
+
+/* =========================================================
+   VIEW: CART
+   ========================================================= */
+function renderCart(){
+  if(cart.length===0){
+    return `
+      <div class="wrap">
+        <div class="empty-state">
+          <svg viewBox="0 0 100 100" fill="none" stroke="var(--tan)" stroke-width="2.2"><path d="M20 30 H80 L72 78 H28 Z"/><path d="M20 30 Q50 18 80 30"/></svg>
+          <span class="eyebrow">your basket is empty</span>
+          <h2 style="margin:0 0 20px;">Nothing here yet</h2>
+          <a href="#/shop" class="btn btn-primary">Browse the collection</a>
+        </div>
+      </div>`;
+  }
+  return `
+    <div class="wrap cart-wrap">
+      <span class="eyebrow">your basket</span>
+      <h1>shopping cart</h1>
+      <p class="cart-count-note">${cartCount()} item${cartCount()===1?'':'s'} in your cart</p>
+      <div class="cart-layout">
+        <div class="cart-items">
+          ${cart.map(c=>{
+            const p = findProduct(c.id);
+            const unitPrice = lineUnitPrice(c);
+            return `
+            <div class="cart-item" data-key="${c.key}">
+              <div class="thumb">${icon(p.icon)}</div>
+              <div class="item-details">
+                <div class="item-top">
+                  <div class="item-top-text">
+                    <p class="name">${p.name}</p>
+                    <span class="cat">${p.category}</span>
+                    ${c.variant ? `<div class="variant-label">${p.customBlind ? '' : 'Finish: '}${c.variant}</div>` : ''}
+                    ${p.customBlind
+                      ? `<div class="unit-price">${money(unitPrice)} per blind (size, colour &amp; discount applied, shipping included)</div>`
+                      : `<div class="unit-price">${money(unitPrice)} / ${p.unit}</div>`}
+                  </div>
+                  <button class="remove-btn" data-key="${c.key}" aria-label="Remove ${p.name} from cart">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                      <line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="item-bottom">
+                  <div class="qty-control">
+                    <button class="cart-qty-minus" aria-label="Decrease quantity">–</button>
+                    <span>${c.qty}</span>
+                    <button class="cart-qty-plus" aria-label="Increase quantity">+</button>
+                  </div>
+                  <div class="line-price">${money(unitPrice * c.qty)}</div>
+                </div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="summary-box">
+          <h2>Order summary</h2>
+          <div class="summary-row"><span>Subtotal (${cartCount()} items)</span><span>${money(cartTotal())}</span></div>
+          <div class="summary-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+          <div class="summary-row total"><span>Estimated total</span><span>${money(cartTotal())}</span></div>
+          <a href="#/checkout" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Proceed to checkout</a>
+          <a href="#/shop" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Continue shopping</a>
+          <p class="summary-note">Secure checkout · Free returns within 14 days</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindCartEvents(){
+  document.querySelectorAll('.cart-item').forEach(item=>{
+    const key = item.dataset.key;
+    const c = cart.find(x=>x.key===key);
+    item.querySelector('.cart-qty-minus').addEventListener('click', ()=> setQty(key, c.qty-1));
+    item.querySelector('.cart-qty-plus').addEventListener('click', ()=> setQty(key, c.qty+1));
+  });
+  document.querySelectorAll('.remove-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const item = btn.closest('.cart-item');
+      item.classList.add('removing');
+      setTimeout(()=> removeFromCart(btn.dataset.key), 160);
+    });
+  });
+}
+
+/* =========================================================
+   VIEW: CHECKOUT
+   ========================================================= */
+function renderCheckout(){
+  if(cart.length===0){
+    return `<div class="wrap" style="padding:100px 0; text-align:center;">
+      <h2>Your cart is empty</h2>
+      <p style="color:#777; margin:12px 0 24px;">Add something from the collection before checking out.</p>
+      <a href="#/shop" class="btn btn-primary">Browse the collection</a>
+    </div>`;
+  }
+  return `
+    <div class="wrap">
+      <span class="eyebrow">almost there</span>
+      <h1>checkout</h1>
+      <div class="checkout-layout">
+        <form id="checkoutForm" novalidate>
+          <div class="form-block">
+            <h2><span class="step-num">1</span> Shipping details</h2>
+            <div class="field-row">
+              <div class="field" data-field="firstName"><label>First name</label><input required name="firstName" placeholder="Jane"><span class="field-error-msg">Please enter your first name</span></div>
+              <div class="field" data-field="lastName"><label>Last name</label><input required name="lastName" placeholder="Smith"><span class="field-error-msg">Please enter your last name</span></div>
+            </div>
+            <div class="field-row">
+              <div class="field full" data-field="email"><label>Email</label><input required type="email" name="email" placeholder="jane@example.com"><span class="field-error-msg">Please enter a valid email address</span></div>
+            </div>
+            <div class="field-row">
+              <div class="field full" data-field="address"><label>Street address</label><input required name="address" placeholder="12 Palm Street"><span class="field-error-msg">Please enter your street address</span></div>
+            </div>
+            <div class="field-row">
+              <div class="field" data-field="city"><label>City</label><input required name="city" placeholder="Brisbane"><span class="field-error-msg">Please enter your city</span></div>
+              <div class="field" data-field="state"><label>State</label><input required name="state" placeholder="QLD"><span class="field-error-msg">Please enter your state</span></div>
+            </div>
+            <div class="field-row">
+              <div class="field" data-field="postcode"><label>Postcode</label><input required name="postcode" placeholder="4000"><span class="field-error-msg">Please enter your postcode</span></div>
+              <div class="field" data-field="country"><label>Country</label><input required name="country" value="Australia"><span class="field-error-msg">Please enter your country</span></div>
+            </div>
+            <div class="field-row">
+              <div class="field full">
+                <label>Order notes <span class="optional-tag">(optional)</span></label>
+                <textarea name="notes" placeholder="Measurements, preferred finish, delivery instructions…"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-block">
+            <h2><span class="step-num">2</span> Payment</h2>
+            <div class="payment-note">
+              <strong>Demo mode:</strong> this is a placeholder payment step so you can see the full flow. No real card details are collected and no payment is processed here — when you're ready to launch, this step gets connected to Stripe Checkout via a small backend.
+            </div>
+            <div class="fake-card-row">
+              <div class="field full"><label>Card number</label><input name="card" placeholder="4242 4242 4242 4242"></div>
+              <div class="field-row">
+                <div class="field"><label>Expiry</label><input name="expiry" placeholder="MM/YY"></div>
+                <div class="field"><label>CVC</label><input name="cvc" placeholder="123"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="summary-box">
+          <h2>Order summary</h2>
+          <a href="#/cart" class="edit-cart-link">Edit cart</a>
+          <div class="order-summary-items">
+            ${cart.map(c=>{
+              const p = findProduct(c.id);
+              const unitPrice = lineUnitPrice(c);
+              return `
+              <div class="order-summary-item">
+                <div class="thumb">${icon(p.icon)}</div>
+                <div class="info">
+                  <p class="name">${p.name}</p>
+                  ${c.variant ? `<div class="variant">${c.variant}</div>` : ''}
+                  <div class="qty">Qty ${c.qty} · ${money(unitPrice)} each</div>
+                </div>
+                <div class="line-price">${money(unitPrice*c.qty)}</div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div class="summary-row" style="margin-top:16px;"><span>Subtotal</span><span>${money(cartTotal())}</span></div>
+          <div class="summary-row"><span>Shipping</span><span>Free</span></div>
+          <div class="summary-row total"><span>Total</span><span>${money(cartTotal())}</span></div>
+          <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; margin-top:18px;">Place order</button>
+          <a href="#/cart" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Back to cart</a>
+          <p class="summary-note">Secure checkout · Free returns within 14 days</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindCheckoutEvents(){
+  const form = document.getElementById('checkoutForm');
+
+  function validateField(input){
+    const field = input.closest('.field');
+    const valid = input.checkValidity();
+    field.classList.toggle('error', !valid);
+    return valid;
+  }
+
+  form.querySelectorAll('input[required]').forEach(input=>{
+    input.addEventListener('blur', ()=> validateField(input));
+    input.addEventListener('input', ()=>{
+      if(input.closest('.field').classList.contains('error')) validateField(input);
+    });
+  });
+
+  document.getElementById('placeOrderBtn').addEventListener('click', (e)=>{
+    e.preventDefault();
+    let allValid = true;
+    form.querySelectorAll('input[required]').forEach(input=>{
+      if(!validateField(input)) allValid = false;
+    });
+    if(!allValid){
+      form.querySelector('.field.error input').focus();
+      return;
+    }
+    const orderId = 'IHC-' + Math.floor(100000 + Math.random()*900000);
+    const fd = new FormData(form);
+    const hasCustomBlind = cart.some(c=>{
+      const p = findProduct(c.id);
+      return p.customBlind;
+    });
+    lastOrder = {
+      id: orderId,
+      firstName: fd.get('firstName'),
+      lastName: fd.get('lastName'),
+      email: fd.get('email'),
+      address: fd.get('address'),
+      city: fd.get('city'),
+      state: fd.get('state'),
+      postcode: fd.get('postcode'),
+      country: fd.get('country'),
+      notes: fd.get('notes'),
+      items: cart.map(c=>{
+        const p = findProduct(c.id);
+        return {id:c.id, name:p.name, icon:p.icon, variant:c.variant, qty:c.qty, price:lineUnitPrice(c)};
+      }),
+      total: cartTotal(),
+      hasCustomBlind
+    };
+    cart = [];
+    updateCartCount();
+    location.hash = '#/order-confirmed/' + orderId;
+  });
+}
+
+/* =========================================================
+   VIEW: ORDER CONFIRMATION
+   ========================================================= */
+function renderConfirmation(orderId){
+  const order = (lastOrder && lastOrder.id === orderId) ? lastOrder : null;
+  const firstName = order ? order.firstName : null;
+
+  return `
+    <div class="wrap">
+      <div class="order-confirm">
+        <img src="assets/icon.jpg" alt="">
+        <span class="eyebrow">terima kasih${firstName ? ', '+firstName : ''}</span>
+        <h1>your order is confirmed</h1>
+        <div class="order-id">Order ${orderId || ''}</div>
+        <p>Thank you for bringing a little piece of Bali into your home. A confirmation email is on its way${order && order.email ? ' to <strong>'+order.email+'</strong>' : ''}, and we'll let you know as soon as your order ships.</p>
+
+        ${order ? `
+        <div class="confirm-panel">
+          <h2>Order summary</h2>
+          <div class="order-summary-items">
+            ${order.items.map(it=>`
+              <div class="order-summary-item">
+                <div class="thumb">${icon(it.icon)}</div>
+                <div class="info">
+                  <p class="name">${it.name}</p>
+                  ${it.variant ? `<div class="variant">${it.variant}</div>` : ''}
+                  <div class="qty">Qty ${it.qty} · ${money(it.price)} each</div>
+                </div>
+                <div class="line-price">${money(it.price*it.qty)}</div>
+              </div>`).join('')}
+          </div>
+          <div class="summary-row total"><span>Total paid</span><span>${money(order.total)}</span></div>
+          ${order.hasCustomBlind ? `
+          <div class="custom-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            <span>Your order includes custom blinds. We'll be in touch by DM or email within 1 business day to confirm the details above before production begins — lead time is typically 8–12 weeks.</span>
+          </div>` : ''}
+        </div>
+
+        <div class="confirm-panel confirm-address">
+          <h2>Shipping to</h2>
+          <strong>${order.firstName} ${order.lastName}</strong>
+          ${order.address}<br>
+          ${order.city}, ${order.state} ${order.postcode}<br>
+          ${order.country}
+          ${order.notes ? `<div style="margin-top:14px; padding-top:14px; border-top:1px dashed rgba(199,177,148,0.4);"><strong style="margin-bottom:4px;">Order notes</strong>${order.notes}</div>` : ''}
+        </div>` : ''}
+
+        <div class="confirm-actions">
+          <a href="#/shop" class="btn btn-primary">Continue shopping</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   VIEW: ABOUT
+   ========================================================= */
+function renderAbout(){
+  return `
+    <section class="about-hero">
+      <img class="icon" src="assets/icon.jpg" alt="">
+      <h1>about us</h1>
+    </section>
+    <section class="about-body">
+      <p>After living in beautiful Bali for over 15 years, we fell in love with the relaxed lifestyle, natural textures, and timeless craftsmanship that make every Bali home feel warm and inviting.</p>
+      <p>At Indo Home Collective, our passion is bringing that same Bali feeling into Australian homes through our handcrafted timber slat blinds and carefully selected home products.</p>
+      <p>We believe natural materials create a calm and welcoming space, which is why we choose real timber for its beauty, durability, and natural insulation qualities. Every blind is custom made by hand by a talented family of craftsmen who have been creating these beautiful products for over 30 years.</p>
+      <p>Each piece is made to measure with care and attention to detail, ensuring your home receives a unique and authentic touch inspired by island living.</p>
+      <div style="text-align:center; margin-top:10px;">
+        <a href="#/shop" class="btn btn-primary">Explore the collection</a>
+      </div>
+    </section>
+  `;
+}
+
+/* =========================================================
+   VIEW: ORDERING
+   ========================================================= */
+function renderOrdering(){
+  return `
+    <section class="ordering-section">
+      <div class="wrap">
+        <div class="section-head">
+          <img src="assets/icon.jpg" alt="">
+          <span class="eyebrow">for custom blinds</span>
+          <h2>ordering is easy ✦</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-circle">1</div>
+            <div class="step-text"><p>DM us your measurements and preferred colour.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-circle">2</div>
+            <div class="step-text"><p>We'll send you a personalised quote.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-circle">3</div>
+            <div class="step-text"><p>Once confirmed, we'll send through your invoice to secure your order.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-circle">4</div>
+            <div class="step-text">
+              <p>Sit back while your custom handcrafted blinds are carefully made.</p>
+              <span class="note">Approximate timeframe: 8–12 weeks</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:44px;">
+          <a href="#/shop" class="btn btn-dark">Browse ready-to-ship pieces</a>
+        </div>
+      </div>
+    </section>
+  `;
+}
+</script>
+</body>
+</html>
