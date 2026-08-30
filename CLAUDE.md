@@ -153,11 +153,23 @@ store with no need for a custom in-page payment UI.
 has a small serverless backend via Netlify Functions
 (`netlify/functions/`, configured in `netlify.toml`, dependency on the
 `stripe` npm package declared in the root `package.json`):
+- `lib/pricing.js` — **server-side pricing**, deliberately duplicated from
+  the `PRODUCTS`/`computeBlindPrice()` logic in `index.html` (no build step
+  to share code with the client `<script>`). `priceCartItem({id,
+  blindSpec})` looks up the real price and throws on an unknown product id
+  or an out-of-range blind spec. This exists so a tampered client request
+  (e.g. editing the POST body in devtools) can't pay less than the real
+  price — the client never sends a price, only `id` + `variant` (display
+  string) + `blindSpec` (structured `{type, colour, width, drop}`, stashed
+  on the cart line by `addToCart()`'s 5th param). **Known tradeoff**: two
+  copies of pricing data (here and `index.html`) must be kept in sync by
+  hand if prices ever change — acceptable for this catalog's size.
 - `create-checkout-session.js` — `POST`, takes `{orderId, customerEmail,
-  items:[{name, variant, quantity, unitAmount}]}` from `bindCheckoutEvents()`
-  in `index.html`, builds AUD `price_data` line items, and returns
-  `{url}` — the Checkout Session's hosted-page URL — which the client
-  redirects to via `window.location.href`. `success_url` routes back to
+  items:[{id, variant, blindSpec, quantity}]}` from `bindCheckoutEvents()`
+  in `index.html`, prices each line via `lib/pricing.js`, builds AUD
+  `price_data` line items, and returns `{url}` — the Checkout Session's
+  hosted-page URL — which the client redirects to via
+  `window.location.href`. `success_url` routes back to
   `/?session_id={CHECKOUT_SESSION_ID}#/order-confirmed/<orderId>` (the
   `session_id` has to sit in the real query string *before* the `#`, not
   inside the hash, since the app's router only looks at `location.hash`).
