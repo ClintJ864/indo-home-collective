@@ -123,39 +123,86 @@ writes the cart badge to both `#cartCount` (header) and `#cartCountMobile`
 into the `render()` route table's `setActiveNav(...)` calls.
 
 ## Known limitations / next steps
-1. **Cart and `lastOrder` are in-memory only** — everything resets on page
-   refresh. No `localStorage`/`sessionStorage` is used anywhere (this was a
-   constraint of the chat preview environment, not a deliberate design
-   choice — feel free to add persistence here in Claude Code).
-2. **Checkout payment step is a placeholder.** No real card processing yet —
-   Stripe integration is in progress (see below). Fields map cleanly onto
-   what Stripe Checkout expects. The `payment-note` div in `renderCheckout()`
-   explicitly tells the user this is demo mode.
-3. **No backend at all.** Placing an order just clears the cart and shows a
-   confirmation — nothing is persisted, emailed, or sent anywhere.
+1. ~~Cart and `lastOrder` are in-memory only~~ — **fixed 2026-08-30.** Cart
+   is now persisted to `localStorage` (`ihc_cart` key, via `saveCart()` /
+   `loadCart()`), and the in-flight order draft is stashed as
+   `ihc_pendingOrder` around the Stripe redirect round-trip (see below) —
+   necessary because leaving for Stripe's hosted page and coming back is a
+   real navigation that wipes all in-memory JS state.
+2. ~~Checkout payment step is a placeholder~~ — **replaced 2026-08-30** with
+   a real Stripe Checkout (hosted, redirect) integration. See below.
+3. **No backend beyond the two Netlify Functions below.** No order
+   database, no confirmation emails sent by us (Stripe's own receipt email
+   still fires). Order details live only in the Stripe Dashboard (via
+   Checkout Session `metadata`/`customer_details`) and in the browser's
+   `localStorage` until the confirmation page consumes them.
 4. **Contact info is obfuscated in JS on purpose** (see below) — don't
    "simplify" this back to a static `mailto:`/`tel:` link without
    understanding why.
 
-## Stripe integration (in progress)
-Business context: `indohomecollective@gmail.com`, needs **Payments** and
-**Invoicing** products. Setup so far, done from the project root (one level
-up from this folder):
-- Stripe Claude Code plugin installed (`stripe@claude-plugins-official`,
-  required adding the `anthropics/claude-plugins-official` marketplace first
-  — it wasn't pre-registered in this environment).
-- Stripe MCP server added: `claude mcp add --transport http stripe
-  https://mcp.stripe.com`.
-- **Blocked on**: `claude mcp login stripe` — this needs an interactive
-  terminal with browser access to complete the OAuth consent flow, so it
-  can't be run from an agent's non-interactive shell. The user needs to run
-  this themselves, then the `stripe_implementation_planner` tool becomes
-  available to generate a tailored integration plan.
-- Once connected: generate the plan via `stripe_implementation_planner`,
-  then wire real Stripe Checkout/Payment Intents into `renderCheckout()`
-  and `bindCheckoutEvents()`, replacing the fake-card-row placeholder. This
-  will need a small backend (or a hosted Stripe Checkout redirect) since a
-  static-HTML site can't hold a secret key.
+## Stripe integration (live as of 2026-08-30)
+Business context: `indohomecollective@gmail.com`. Stripe account
+`acct_1U1Kdk7RWQCVcHzg` ("indo home collective"), connected via the Stripe
+MCP server (`claude mcp login stripe` — previously blocked, now done).
+
+**Integration shape** (per `stripe_implementation_planner`): Stripe Checkout,
+hosted/redirect — the simplest fit for a physical-goods, one-time-payment
+store with no need for a custom in-page payment UI.
+
+**Architecture** — since a static site can't hold a secret key, the repo now
+has a small serverless backend via Netlify Functions
+(`netlify/functions/`, configured in `netlify.toml`, dependency on the
+`stripe` npm package declared in the root `package.json`):
+- `create-checkout-session.js` — `POST`, takes `{orderId, customerEmail,
+  items:[{name, variant, quantity, unitAmount}]}` from `bindCheckoutEvents()`
+  in `index.html`, builds AUD `price_data` line items, and returns
+  `{url}` — the Checkout Session's hosted-page URL — which the client
+  redirects to via `window.location.href`. `success_url` routes back to
+  `/?session_id={CHECKOUT_SESSION_ID}#/order-confirmed/<orderId>` (the
+  `session_id` has to sit in the real query string *before* the `#`, not
+  inside the hash, since the app's router only looks at `location.hash`).
+  `cancel_url` routes back to `#/checkout`.
+- `verify-checkout-session.js` — `GET ?session_id=...`, retrieves the
+  session server-side and returns `{paid, orderId, email, amountTotal}`.
+  The confirmation page (`bindConfirmationEvents()`) calls this before
+  showing "order confirmed" — this stops someone from faking a confirmed
+  order just by visiting the URL with a made-up `session_id`.
+
+**Checkout flow in `index.html`**: `bindCheckoutEvents()`'s place-order
+handler no longer clears the cart or navigates directly to
+`#/order-confirmed`. It builds the order draft, saves it to
+`localStorage` (`savePendingOrder`) so it survives the trip to Stripe and
+back, POSTs to `create-checkout-session`, and redirects. The cart is only
+actually cleared once `bindConfirmationEvents()` has verified the returned
+session as paid — if the customer cancels on Stripe's page, `cancel_url`
+sends them back to `#/checkout` with their cart still intact.
+
+**Current status**: code is deployed and working end-to-end *except* the
+`STRIPE_SECRET_KEY` env var isn't set in Netlify yet, so
+`create-checkout-session` currently 500s (verified this fails gracefully —
+the "Place order" button shows an inline error and re-enables, cart is
+preserved). To finish:
+1. Get a **test-mode** secret key from
+   https://dashboard.stripe.com/test/apikeys (decided to build against test
+   mode first, not the live key, since this MCP session only exposed the
+   account's live context).
+2. Set it — from the user's own terminal, not relayed through chat —
+   either via `netlify env:set STRIPE_SECRET_KEY sk_test_...` (run from
+   `indo-home-collective-handoff/`, already linked to the
+   `indo-home-collective` Netlify site) or via the Netlify dashboard
+   (Site settings → Environment variables).
+3. Redeploy (`netlify deploy --prod --dir=.`) so functions pick it up.
+4. Test a full purchase with Stripe's `4242 4242 4242 4242` test card.
+5. When ready to actually launch, swap in the **live** secret key the same
+   way — Stripe's hosted Checkout page shows its own "test mode" banner
+   automatically based on which key was used, no code change needed.
+
+**Local testing**: the existing `indo-home-collective` launch.json config
+(`python -m http.server`) only serves static files — it can't exercise the
+Netlify Functions, so the checkout flow will always show the graceful
+error under it. To test the full flow locally, run `netlify dev` by hand
+from inside `indo-home-collective-handoff/` (it's already linked to the
+Netlify site and will pick up env vars from there).
 
 ## Contact info handling (intentional — read before touching)
 Email, phone, and social links are NOT present as plain text anywhere in the
@@ -175,15 +222,31 @@ If you add more contact touchpoints elsewhere on the site, route them through
 the same `contactEmail()` / `contactPhoneDisplay()` / `contactPhoneTel()`
 helpers rather than hardcoding the address again.
 
+## Deployment
+- GitHub: https://github.com/ClintJ864/indo-home-collective (public), this
+  folder is its repo root (has its own `.git`, separate from the parent
+  project folder which is not a git repo).
+- Netlify: site `indo-home-collective`, live at
+  https://indo-home-collective.netlify.app. Created and deployed via
+  Netlify CLI (`netlify sites:create` + `netlify deploy --prod --dir=.`),
+  **not** yet connected to GitHub for auto-deploy-on-push — pushes to
+  GitHub currently do nothing to the live site; redeploy manually with
+  `netlify deploy --prod --dir=.` from this folder after pushing, or wire
+  up continuous deployment later via the Netlify dashboard (Site
+  configuration → Build & deploy → Link repository) if that's wanted.
+- Netlify's account-wide "Team protection" login wall was on by default
+  and was turned off for this specific site only (`sso_login: false` via
+  `netlify api updateSite`) so the shop is publicly visible — other sites
+  on the team are unaffected.
+
 ## Suggested next steps in Claude Code
 - [x] Bring in the blind order form Excel sheet and wire up real
       per-size/type/colour pricing for the Blinds product
-- [ ] Finish Stripe integration — user needs to run `claude mcp login stripe`
-      in their own interactive terminal, then resume with
-      `stripe_implementation_planner` and wire up `renderCheckout()`
+- [x] Cart persistence across refresh (`localStorage`, see above)
+- [x] Deploy to GitHub + Netlify (see above)
+- [x] Wire up Stripe Checkout (see Stripe integration section) — just
+      needs `STRIPE_SECRET_KEY` set in Netlify to go live, see steps above
 - [ ] Swap placeholder icons for real product photography as it becomes
       available
 - [ ] Confirm/adjust Decor pricing and dimensions (currently placeholders)
-- [ ] Decide on a persistence layer (backend, or at minimum cart
-      persistence across refresh)
-- [ ] Add real domain + hosting once tested
+- [ ] Add real domain (currently the default `.netlify.app` subdomain)
