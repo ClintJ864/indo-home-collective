@@ -1,4 +1,5 @@
 const Stripe = require('stripe');
+const { priceCartItem } = require('./lib/pricing');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -25,19 +26,23 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: 'Missing orderId' };
   }
 
+  // Prices are re-derived server-side from each item's product id (and, for
+  // custom blinds, its structured spec) — never taken from the client, so a
+  // tampered request can't pay less than the real price.
   let line_items;
   try {
     line_items = items.map((item) => {
-      const unitAmount = Math.round(Number(item.unitAmount) * 100);
       const quantity = Number(item.quantity);
-      if (!item.name || !Number.isFinite(unitAmount) || unitAmount <= 0 || !Number.isInteger(quantity) || quantity < 1) {
-        throw new Error('Invalid line item');
+      if (!Number.isInteger(quantity) || quantity < 1) {
+        throw new Error('Invalid quantity');
       }
+      const { name, unitPrice } = priceCartItem(item);
+      const unitAmount = Math.round(unitPrice * 100);
       return {
         price_data: {
           currency: 'aud',
           product_data: {
-            name: item.variant ? `${item.name} — ${item.variant}` : item.name,
+            name: item.variant ? `${name} — ${item.variant}` : name,
           },
           unit_amount: unitAmount,
         },

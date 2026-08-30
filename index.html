@@ -760,10 +760,10 @@ function clearPendingOrder(){
   try{ localStorage.removeItem('ihc_pendingOrder'); }catch(e){}
 }
 
-function addToCart(id, qty=1, variant=null, price=null){
+function addToCart(id, qty=1, variant=null, price=null, blindSpec=null){
   const key = lineKey(id, variant);
   const existing = cart.find(c=>c.key===key);
-  if(existing){ existing.qty += qty; } else { cart.push({key, id, variant, qty, price}); }
+  if(existing){ existing.qty += qty; } else { cart.push({key, id, variant, qty, price, blindSpec}); }
   updateCartCount();
   saveCart();
 }
@@ -1253,7 +1253,7 @@ function bindBlindDetailEvents(p){
     const drop = Number(dropSel.value);
     const calc = computeBlindPrice(type, width, drop);
     const variant = `${type} · ${colour} · ${width}×${drop}cm`;
-    addToCart(p.id, qty, variant, calc.unitPrice);
+    addToCart(p.id, qty, variant, calc.unitPrice, {type, colour, width, drop});
     const toast = document.getElementById('addedToast');
     toast.classList.add('show');
     setTimeout(()=>{ toast.classList.remove('show'); }, 2200);
@@ -1484,7 +1484,7 @@ function bindCheckoutEvents(){
       notes: fd.get('notes'),
       items: cart.map(c=>{
         const p = findProduct(c.id);
-        return {id:c.id, name:p.name, icon:p.icon, variant:c.variant, qty:c.qty, price:lineUnitPrice(c)};
+        return {id:c.id, name:p.name, icon:p.icon, variant:c.variant, qty:c.qty, price:lineUnitPrice(c), blindSpec:c.blindSpec};
       }),
       total: cartTotal(),
       hasCustomBlind
@@ -1500,7 +1500,7 @@ function bindCheckoutEvents(){
         body: JSON.stringify({
           orderId,
           customerEmail: order.email,
-          items: order.items.map(it=>({name: it.name, variant: it.variant, quantity: it.qty, unitAmount: it.price}))
+          items: order.items.map(it=>({id: it.id, variant: it.variant, blindSpec: it.blindSpec, quantity: it.qty}))
         })
       });
       const data = await res.json().catch(()=>({}));
