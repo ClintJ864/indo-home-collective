@@ -1,0 +1,9 @@
+{
+  "name": "indo-home-collective",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Indo Home Collective — static site + Netlify Function for Stripe Checkout",
+  "dependencies": {
+    "stripe": "^22.0.0"
+  }
+}

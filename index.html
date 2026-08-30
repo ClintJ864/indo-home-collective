@@ -733,22 +733,52 @@ function money(n){ return 'A$' + n.toFixed(2).replace(/\.00$/,''); }
 function lineKey(id, variant){ return variant ? id+'::'+variant : id; }
 function findCartLine(id, variant){ return cart.find(c=>c.key===lineKey(id, variant)); }
 
+// Cart survives a page refresh, and survives leaving the site entirely for
+// Stripe's hosted checkout page and coming back (a real navigation, which
+// wipes all in-memory JS state).
+function saveCart(){
+  try{ localStorage.setItem('ihc_cart', JSON.stringify(cart)); }catch(e){}
+}
+function loadCart(){
+  try{
+    const raw = localStorage.getItem('ihc_cart');
+    if(raw) cart = JSON.parse(raw);
+  }catch(e){}
+}
+// The full order draft (shipping details + items) built at "Place order"
+// time, stashed so it can be re-read after the Stripe redirect round-trip.
+function savePendingOrder(order){
+  try{ localStorage.setItem('ihc_pendingOrder', JSON.stringify(order)); }catch(e){}
+}
+function loadPendingOrder(){
+  try{
+    const raw = localStorage.getItem('ihc_pendingOrder');
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function clearPendingOrder(){
+  try{ localStorage.removeItem('ihc_pendingOrder'); }catch(e){}
+}
+
 function addToCart(id, qty=1, variant=null, price=null){
   const key = lineKey(id, variant);
   const existing = cart.find(c=>c.key===key);
   if(existing){ existing.qty += qty; } else { cart.push({key, id, variant, qty, price}); }
   updateCartCount();
+  saveCart();
 }
 function setQty(key, qty){
   const existing = cart.find(c=>c.key===key);
   if(!existing) return;
   existing.qty = Math.max(1, qty);
   updateCartCount();
+  saveCart();
   render();
 }
 function removeFromCart(key){
   cart = cart.filter(c=>c.key!==key);
   updateCartCount();
+  saveCart();
   render();
 }
 function lineUnitPrice(c){
@@ -770,8 +800,10 @@ function updateCartCount(){
    ========================================================= */
 window.addEventListener('hashchange', render);
 window.addEventListener('DOMContentLoaded', ()=>{
+  loadCart();
   if(!location.hash) location.hash = '#/shop';
   render();
+  updateCartCount();
   initContactLinks();
 });
 
@@ -806,6 +838,7 @@ function render(){
   } else if(parts[0]==='order-confirmed'){
     setActiveNav('shop');
     app.innerHTML = renderConfirmation(parts[1]);
+    bindConfirmationEvents(parts[1]);
   } else if(parts[0]==='about'){
     setActiveNav('about');
     app.innerHTML = renderAbout();
@@ -1363,15 +1396,9 @@ function renderCheckout(){
           <div class="form-block">
             <h2><span class="step-num">2</span> Payment</h2>
             <div class="payment-note">
-              <strong>Demo mode:</strong> this is a placeholder payment step so you can see the full flow. No real card details are collected and no payment is processed here — when you're ready to launch, this step gets connected to Stripe Checkout via a small backend.
+              <strong>Secure checkout:</strong> after you click "Place order" you'll be redirected to Stripe's secure payment page to enter your card details. We never see or store your card information.
             </div>
-            <div class="fake-card-row">
-              <div class="field full"><label>Card number</label><input name="card" placeholder="4242 4242 4242 4242"></div>
-              <div class="field-row">
-                <div class="field"><label>Expiry</label><input name="expiry" placeholder="MM/YY"></div>
-                <div class="field"><label>CVC</label><input name="cvc" placeholder="123"></div>
-              </div>
-            </div>
+            <p id="checkoutError" class="field-error-msg" style="display:none; margin-top:10px;"></p>
           </div>
         </form>
 
@@ -1423,8 +1450,12 @@ function bindCheckoutEvents(){
     });
   });
 
-  document.getElementById('placeOrderBtn').addEventListener('click', (e)=>{
+  document.getElementById('placeOrderBtn').addEventListener('click', async (e)=>{
     e.preventDefault();
+    const btn = e.currentTarget;
+    const errorEl = document.getElementById('checkoutError');
+    errorEl.style.display = 'none';
+
     let allValid = true;
     form.querySelectorAll('input[required]').forEach(input=>{
       if(!validateField(input)) allValid = false;
@@ -1433,13 +1464,14 @@ function bindCheckoutEvents(){
       form.querySelector('.field.error input').focus();
       return;
     }
+
     const orderId = 'IHC-' + Math.floor(100000 + Math.random()*900000);
     const fd = new FormData(form);
     const hasCustomBlind = cart.some(c=>{
       const p = findProduct(c.id);
       return p.customBlind;
     });
-    lastOrder = {
+    const order = {
       id: orderId,
       firstName: fd.get('firstName'),
       lastName: fd.get('lastName'),
@@ -1457,17 +1489,81 @@ function bindCheckoutEvents(){
       total: cartTotal(),
       hasCustomBlind
     };
-    cart = [];
-    updateCartCount();
-    location.hash = '#/order-confirmed/' + orderId;
+
+    btn.disabled = true;
+    btn.textContent = 'Redirecting to secure checkout…';
+
+    try{
+      const res = await fetch('/.netlify/functions/create-checkout-session', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          orderId,
+          customerEmail: order.email,
+          items: order.items.map(it=>({name: it.name, variant: it.variant, quantity: it.qty, unitAmount: it.price}))
+        })
+      });
+      const data = await res.json().catch(()=>({}));
+      if(!res.ok || !data.url){
+        throw new Error(data.body || data.error || 'Could not start checkout. Please try again.');
+      }
+      // Cart/pending-order are kept until Stripe redirects back with a
+      // confirmed payment_status — the whole page (and all JS state) reloads
+      // fresh once we leave for Stripe's hosted page, so stash the draft.
+      savePendingOrder(order);
+      window.location.href = data.url;
+    }catch(err){
+      btn.disabled = false;
+      btn.textContent = 'Place order';
+      errorEl.textContent = 'Something went wrong starting checkout — please try again.';
+      errorEl.style.display = 'block';
+    }
   });
 }
 
 /* =========================================================
    VIEW: ORDER CONFIRMATION
    ========================================================= */
+function getSessionIdFromQuery(){
+  return new URLSearchParams(location.search).get('session_id');
+}
+
 function renderConfirmation(orderId){
+  if(getSessionIdFromQuery()){
+    return renderConfirmationLoading();
+  }
   const order = (lastOrder && lastOrder.id === orderId) ? lastOrder : null;
+  return renderConfirmationContent(order, orderId);
+}
+
+function renderConfirmationLoading(){
+  return `
+    <div class="wrap">
+      <div class="order-confirm">
+        <span class="eyebrow">just a moment</span>
+        <h1>confirming your payment…</h1>
+        <p>Hang tight while we check with Stripe that your payment went through.</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderConfirmationFailed(){
+  return `
+    <div class="wrap">
+      <div class="order-confirm">
+        <span class="eyebrow">something's not right</span>
+        <h1>we couldn't confirm your payment</h1>
+        <p>Your order wasn't completed. If you were charged, please contact us and we'll sort it out — otherwise your cart is still waiting for you.</p>
+        <div class="confirm-actions">
+          <a href="#/cart" class="btn btn-primary">Back to cart</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderConfirmationContent(order, orderId){
   const firstName = order ? order.firstName : null;
 
   return `
@@ -1517,6 +1613,43 @@ function renderConfirmation(orderId){
       </div>
     </div>
   `;
+}
+
+async function bindConfirmationEvents(orderId){
+  const sessionId = getSessionIdFromQuery();
+  if(!sessionId) return;
+
+  const app = document.getElementById('app');
+  try{
+    const res = await fetch('/.netlify/functions/verify-checkout-session?session_id=' + encodeURIComponent(sessionId));
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.paid || data.orderId !== orderId){
+      app.innerHTML = renderConfirmationFailed();
+      return;
+    }
+
+    const pending = loadPendingOrder();
+    const order = (pending && pending.id === orderId) ? pending : {
+      id: orderId,
+      firstName: null, lastName: '', address: '', city: '', state: '', postcode: '', country: '',
+      email: data.email || null,
+      items: [],
+      total: (data.amountTotal || 0) / 100,
+      hasCustomBlind: false
+    };
+
+    lastOrder = order;
+    cart = [];
+    saveCart();
+    updateCartCount();
+    clearPendingOrder();
+    history.replaceState(null, '', location.pathname + location.hash);
+
+    app.innerHTML = renderConfirmationContent(order, orderId);
+  }catch(e){
+    app.innerHTML = renderConfirmationFailed();
+  }
 }
 
 /* =========================================================
