@@ -316,7 +316,7 @@
   .related-section h2{font-size:1.3rem; margin:0 0 26px;}
 
   /* ---------- Cart ---------- */
-  .cart-wrap{padding:40px 0 100px;}
+  .cart-wrap{padding-top:40px; padding-bottom:100px;}
   .cart-wrap h1{margin-bottom:6px;}
   .cart-count-note{color:#888; font-size:0.85rem; margin:0 0 10px;}
   .cart-layout{display:grid; grid-template-columns:2fr 1fr; gap:56px; margin-top:28px; align-items:flex-start;}
@@ -1161,7 +1161,7 @@ function bindShopEvents(){
 function renderProductDetail(id){
   const p = findProduct(id);
   if(!p){
-    return `<div class="wrap" style="padding:100px 0; text-align:center;"><h2>Product not found</h2><a href="#/shop" class="btn btn-outline" style="margin-top:20px;">Back to shop</a></div>`;
+    return `<div class="wrap" style="padding:100px 32px; text-align:center;"><h2>Product not found</h2><a href="#/shop" class="btn btn-outline" style="margin-top:20px;">Back to shop</a></div>`;
   }
   const related = PRODUCTS.filter(r=>r.category===p.category && r.id!==p.id && !r.comingSoon).slice(0,4);
 
@@ -1570,7 +1570,7 @@ function bindCartEvents(){
    ========================================================= */
 function renderCheckout(){
   if(cart.length===0){
-    return `<div class="wrap" style="padding:100px 0; text-align:center;">
+    return `<div class="wrap" style="padding:100px 32px; text-align:center;">
       <h2>Your cart is empty</h2>
       <p style="color:#777; margin:12px 0 24px;">Add something from the collection before checking out.</p>
       <a href="#/shop" class="btn btn-primary">Browse the collection</a>
