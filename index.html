@@ -257,6 +257,22 @@
     padding:4px 9px; border-radius:20px;
   }
 
+  /* ---------- Two-image hover/tap swipe reveal (e.g. colour preview) ---------- */
+  .detail-photo.swipe-photo{overflow:hidden; cursor:pointer;}
+  .detail-photo.swipe-photo .base-img, .detail-photo.swipe-photo .reveal-img{position:absolute; inset:0;}
+  .detail-photo.swipe-photo .reveal-img{clip-path:inset(0 100% 0 0); transition:clip-path 0.5s cubic-bezier(.4,0,.2,1);}
+  .detail-photo.swipe-photo .ai-badge{opacity:0; transition:opacity 0.3s;}
+  .detail-photo.swipe-photo.is-revealed .reveal-img{clip-path:inset(0 0 0 0);}
+  .detail-photo.swipe-photo.is-revealed .ai-badge{opacity:1;}
+  /* Real hover only — touch devices fake a stuck :hover after tap, so the
+     hover-driven reveal is restricted to devices with an actual pointer and
+     rely on the is-revealed class (toggled by bindSwipePhoto's click
+     handler) for touch instead. */
+  @media (hover:hover) and (pointer:fine){
+    .detail-photo.swipe-photo:hover .reveal-img{clip-path:inset(0 0 0 0);}
+    .detail-photo.swipe-photo:hover .ai-badge{opacity:1;}
+  }
+
   /* ---------- Product detail ---------- */
   .breadcrumb{font-size:0.78rem; color:var(--tan); margin:32px 0 10px; letter-spacing:0.04em;}
   .breadcrumb a:hover{color:var(--moss);}
@@ -611,6 +627,10 @@ const PRODUCTS = [
     unit:'per blind — priced by size',
     icon:'blinds',
     customBlind:true,
+    images:[
+      {src:'assets/timber-slat-blinds-natural.jpg', label:'Natural Wood', aiGenerated:false},
+      {src:'assets/timber-slat-blinds-white.jpg', label:'White', aiGenerated:true}
+    ],
     desc:"Our signature piece. Real timber or bamboo slats, handcrafted by a family of makers with over thirty years of experience. Choose your type, colour, width and drop below — pricing, bulk discounts and shipping calculate instantly.",
     meta:[['Material','Solid timber or bamboo'],['Slat width','Timber 2.5cm · Bamboo 1.2cm'],['Sizes','50–300cm wide, 50–300cm drop'],['Lead time','8–12 weeks']]
   },
@@ -791,6 +811,30 @@ function bindPhotoToggle(p){
       badge.style.display = btn.dataset.ai === '1' ? 'inline-block' : 'none';
     });
   });
+}
+
+// Two-image hover-to-reveal swipe (desktop hovers the photo to preview a
+// second image, e.g. a colourway; touch devices tap to toggle instead,
+// since there's no hover) — distinct from the click-button toggle above,
+// which is for products with visible labelled photo options. Only used by
+// renderBlindDetail() today. p.images[0] is the default/base photo,
+// p.images[1] is the one revealed on hover/tap. Falls back to a plain
+// single photo if p.images isn't set.
+function renderSwipePhoto(p){
+  if(!(p.images && p.images.length > 1)) return photoMarkup(p);
+  const [base, reveal] = p.images;
+  return `
+    <img class="base-img" src="${base.src}" alt="${p.name} — ${base.label}" loading="lazy">
+    <img class="reveal-img" src="${reveal.src}" alt="${p.name} — ${reveal.label}" loading="lazy">
+    <span class="ai-badge" style="display:${reveal.aiGenerated ? 'inline-block' : 'none'};">AI-generated preview</span>
+  `;
+}
+
+function bindSwipePhoto(p){
+  if(!(p.images && p.images.length > 1)) return;
+  const photo = document.querySelector('.detail-photo.swipe-photo');
+  if(!photo) return;
+  photo.addEventListener('click', ()=>{ photo.classList.toggle('is-revealed'); });
 }
 
 /* =========================================================
@@ -1334,9 +1378,9 @@ function renderBlindDetail(p){
     <div class="wrap">
       <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category} / ${p.name}</div>
       <div class="detail-grid">
-        <div class="detail-photo">
+        <div class="detail-photo ${p.images && p.images.length > 1 ? 'swipe-photo' : ''}">
           <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
-          ${photoMarkup(p)}
+          ${renderSwipePhoto(p)}
         </div>
         <div class="detail-info">
           <span class="cat">${p.category}</span>
@@ -1400,6 +1444,7 @@ function renderBlindDetail(p){
 }
 
 function bindBlindDetailEvents(p){
+  bindSwipePhoto(p);
   let type = 'Timber';
   let colour = BLIND_COLOURS[type][0];
   let qty = 1;
