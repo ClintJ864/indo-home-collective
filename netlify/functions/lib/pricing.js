@@ -3,12 +3,16 @@
 // with the client <script>). The client never sends a price; this is the
 // only source of truth Stripe is charged against, so a tampered cart
 // payload can't change what a customer actually pays.
+// Only Blinds is purchasable — site launched 2026-09-05 with everything else
+// (Wooden Bowls & Leather Goods included) switched to "coming soon, register
+// your interest" until real stock/pricing is confirmed. The four bowls/
+// leather ids are deliberately absent here (not just hidden client-side) so
+// priceCartItem() throws "Unknown product" if someone posts a raw request
+// for one straight to this function, bypassing the UI. Re-add an entry here
+// (mirroring its PRODUCTS.price in ../../../index.html) when a category goes
+// back on sale.
 const PRODUCTS = {
   'timber-slat-blinds': { name: 'Custom Timber & Bamboo Slat Blinds', customBlind: true },
-  'wooden-bowl-small': { name: 'Wooden Bowl Small (150mm diameter)', price: 35 },
-  'wooden-bowl-large': { name: 'Wooden Bowl Large (250mm diameter)', price: 55 },
-  'leather-notebook': { name: 'Leather Notebook', price: 48 },
-  'leather-coasters': { name: 'Leather Coasters (pack of 4)', price: 32 },
 };
 
 const BLIND_WIDTHS = [50, 100, 150, 200, 250, 300];

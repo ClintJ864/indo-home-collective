@@ -224,6 +224,38 @@
   }
   .detail-photo .watermark{font-size:1.1rem;}
   .product-card.is-coming-soon .product-info h3, .product-card.is-coming-soon .product-info .cat{opacity:0.6;}
+  .product-photo img, .detail-photo img{width:100%; height:100%; object-fit:cover;}
+  .thumb img{width:100%; height:100%; object-fit:cover; border-radius:4px;}
+
+  /* ---------- Register interest ---------- */
+  .interest-form{margin-top:10px; padding-top:22px; border-top:1px solid rgba(199,177,148,0.4);}
+  .interest-form h3{font-size:0.95rem; margin:0 0 4px; color:var(--charcoal); text-transform:none; font-family:inherit; letter-spacing:0;}
+  .interest-form .sub{font-size:0.82rem; color:#777; margin:0 0 16px;}
+  .interest-form .field{margin-bottom:14px;}
+  .interest-form .hp-field{position:absolute; left:-9999px; top:-9999px;}
+  .interest-form .field-error-msg{margin-top:4px;}
+  .interest-success{
+    display:flex; align-items:center; gap:10px; background:rgba(114,211,216,0.18);
+    border:1px solid var(--aqua); border-radius:3px; padding:14px 16px;
+    font-size:0.88rem; color:var(--moss-dark); margin-top:10px;
+  }
+  .interest-success svg{width:18px; height:18px; flex:none;}
+
+  /* ---------- Multi-photo toggle (e.g. "on land" / "in the pool") ---------- */
+  .photo-toggle{
+    position:absolute; bottom:10px; left:10px; right:10px; z-index:3;
+    display:flex; gap:6px; justify-content:center; flex-wrap:wrap;
+  }
+  .photo-toggle-btn{
+    background:rgba(255,255,255,0.92); border:1px solid var(--tan); color:var(--charcoal);
+    border-radius:20px; padding:6px 14px; font-size:0.7rem; letter-spacing:0.04em; text-transform:uppercase;
+  }
+  .photo-toggle-btn.active{background:var(--moss); border-color:var(--moss); color:#fff;}
+  .ai-badge{
+    position:absolute; top:10px; right:10px; z-index:3;
+    background:rgba(51,51,51,0.85); color:#fff; font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase;
+    padding:4px 9px; border-radius:20px;
+  }
 
   /* ---------- Product detail ---------- */
   .breadcrumb{font-size:0.78rem; color:var(--tan); margin:32px 0 10px; letter-spacing:0.04em;}
@@ -519,6 +551,20 @@
 
 <main id="app"></main>
 
+<!-- Static replica for Netlify's build-time form parser — Netlify only detects
+     forms present in the raw HTML, not ones injected by JS. The real,
+     interactive version of this form is rendered by renderInterestForm() and
+     submitted via fetch() in bindInterestFormEvents(); field names below must
+     match exactly. Never remove this block or "register-interest" submissions
+     stop being accepted. -->
+<form name="register-interest" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="text" name="name">
+  <input type="email" name="email">
+  <input type="tel" name="phone">
+  <input type="text" name="product">
+  <textarea name="message"></textarea>
+</form>
+
 <footer>
   <div class="footer-inner">
     <div>
@@ -593,9 +639,15 @@ const PRODUCTS = [
     desc:"Our furniture collection is being curated and will be available here soon. Check back shortly, or DM us to be notified when it launches."
   },
   {
+    // Not currently for sale — client chose to launch with Blinds only and
+    // collect interest on everything else until stock/pricing is ready.
+    // price/unit/meta are kept (not deleted) so re-enabling later is just
+    // removing comingSoon:true. Add `image:'assets/...'` here once a real
+    // photo exists — comingSoon still takes priority over price display.
     id:'wooden-bowl-small',
     name:'Wooden Bowl Small (150mm diameter)',
     category:'Wooden Bowls & Leather Goods',
+    comingSoon:true,
     price:35,
     unit:'each',
     icon:'bowl',
@@ -606,6 +658,7 @@ const PRODUCTS = [
     id:'wooden-bowl-large',
     name:'Wooden Bowl Large (250mm diameter)',
     category:'Wooden Bowls & Leather Goods',
+    comingSoon:true,
     price:55,
     unit:'each',
     icon:'bowl',
@@ -616,6 +669,7 @@ const PRODUCTS = [
     id:'leather-notebook',
     name:'Leather Notebook',
     category:'Wooden Bowls & Leather Goods',
+    comingSoon:true,
     price:48,
     unit:'each',
     icon:'notebook',
@@ -626,6 +680,7 @@ const PRODUCTS = [
     id:'leather-coasters',
     name:'Leather Coasters (pack of 4)',
     category:'Wooden Bowls & Leather Goods',
+    comingSoon:true,
     price:32,
     unit:'pack of 4',
     icon:'coaster',
@@ -633,19 +688,33 @@ const PRODUCTS = [
     meta:[['Material','Full-grain leather'],['Set contents','4 coasters'],['Care','Wipe clean, avoid water']]
   },
   {
+    // Real product photo added 2026-09-05. Second image is an AI-generated
+    // composite (client-supplied, watermarked "AI-generated content" in the
+    // photo itself) showing it floating in water — kept clearly labelled via
+    // the aiGenerated flag (shows the .ai-badge overlay when selected) so it
+    // never reads as a genuine in-pool photo. Swap in a real on-water shot
+    // under the same key once one exists, and the aiGenerated flag can go.
     id:'floating-pool-tray',
-    name:'Coming Soon',
+    name:'Floating Pool Tray (500mm diameter)',
     category:'Floating Pool Trays',
     comingSoon:true,
     icon:'pooltray',
-    desc:"Our floating pool tray collection is being curated and will be available here soon. Check back shortly, or DM us to be notified when it launches."
+    images:[
+      {src:'assets/floating-pool-tray-land.jpg', label:'Product photo'},
+      {src:'assets/floating-pool-tray-pool.jpg', label:'In the pool', aiGenerated:true}
+    ],
+    desc:"A round floating tray for the pool, in the same handwoven-look finish as the rest of our collection — rest a drink or a candle on the water while you float. 500mm diameter.",
+    meta:[['Dimensions','500mm diameter']]
   }
 ];
 
 const CATEGORIES = Array.from(new Set(PRODUCTS.map(p=>p.category)));
 // Categories with no near-term sale plans get a muted filter chip. Floating Pool
 // Trays is deliberately excluded — a real product is being added for sale soon.
-const CHIP_MUTED_CATEGORIES = ['Lighting', 'Mirrors', 'Furniture'];
+// Wooden Bowls & Leather Goods was moved here 2026-09-05: site launches with
+// Blinds as the only purchasable category, everything else collects interest
+// until it's ready to sell.
+const CHIP_MUTED_CATEGORIES = ['Lighting', 'Mirrors', 'Furniture', 'Wooden Bowls & Leather Goods'];
 
 /* =========================================================
    ICONS  (line-art placeholders in brand moss green)
@@ -668,6 +737,61 @@ function icon(key){
   return icons[key] || icons.basket;
 }
 const ARCH_MARK = `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M20 80 Q20 30 40 20 Q30 15 22 22 Q10 30 14 42 Q22 34 28 38"/><path d="M55 82 V38 Q55 18 70 18 Q85 18 85 38 V82 Z"/></svg>`;
+
+// Single place that decides how a product's image renders: a real photo
+// (p.image, e.g. 'assets/wooden-bowl-small.jpg') once one exists, otherwise
+// the line-art icon placeholder. Adding real photography later is just
+// setting `image` on the product in PRODUCTS — no template changes needed.
+// A product can also carry `images: [{src,label,aiGenerated?}, ...]` for a
+// multi-photo toggle (see renderDetailPhotoBlock) — the first entry is used
+// here as the default/thumbnail image.
+function primaryImageSrc(p){
+  if(p.image) return p.image;
+  if(p.images && p.images.length) return p.images[0].src;
+  return null;
+}
+function photoMarkup(p){
+  const src = primaryImageSrc(p);
+  if(src) return `<img src="${src}" alt="${p.name}" loading="lazy">`;
+  return `${icon(p.icon)}<span class="placeholder-tag">placeholder photo</span>`;
+}
+function thumbMarkup(p){
+  const src = primaryImageSrc(p);
+  if(src) return `<img src="${src}" alt="${p.name}" loading="lazy">`;
+  return icon(p.icon);
+}
+
+// Product detail photo, with an optional toggle when p.images has more than
+// one entry (e.g. a real photo vs. an AI-generated preview). The aiGenerated
+// flag on an image drives the .ai-badge disclosure overlay — never remove
+// that flag from an entry that isn't a genuine photo of the actual product.
+function renderDetailPhotoBlock(p){
+  if(p.images && p.images.length > 1){
+    const first = p.images[0];
+    return `
+      <img id="detailPhotoImg" src="${first.src}" alt="${p.name}" loading="lazy">
+      <span class="ai-badge" id="aiBadge" style="display:${first.aiGenerated ? 'inline-block' : 'none'};">AI-generated preview</span>
+      <div class="photo-toggle" id="photoToggle">
+        ${p.images.map((im,i)=>`<button type="button" class="photo-toggle-btn ${i===0?'active':''}" data-src="${im.src}" data-ai="${im.aiGenerated?'1':'0'}">${im.label}</button>`).join('')}
+      </div>
+    `;
+  }
+  return photoMarkup(p);
+}
+
+function bindPhotoToggle(p){
+  if(!(p.images && p.images.length > 1)) return;
+  const img = document.getElementById('detailPhotoImg');
+  const badge = document.getElementById('aiBadge');
+  document.querySelectorAll('.photo-toggle-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.photo-toggle-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      img.src = btn.dataset.src;
+      badge.style.display = btn.dataset.ai === '1' ? 'inline-block' : 'none';
+    });
+  });
+}
 
 /* =========================================================
    CONTACT (built at runtime, not present as plain text in the
@@ -702,6 +826,103 @@ function initContactLinks(){
   if(igEl) igEl.href = CONTACT.instagramUrl;
   const fbEl = document.getElementById('footerFacebook');
   if(fbEl) fbEl.href = CONTACT.facebookUrl;
+}
+
+/* =========================================================
+   REGISTER INTEREST (coming-soon products)
+   Submits to Netlify Forms — no backend/secret needed. Field names here
+   must match the static hidden <form name="register-interest"> in the
+   raw HTML (Netlify only detects forms present in the build's markup,
+   not ones injected by JS) — see the comment above that form.
+   ========================================================= */
+function encodeFormData(data){
+  return Object.keys(data).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(data[k])).join('&');
+}
+
+function renderInterestForm(p){
+  return `
+    <div class="interest-form" id="interestForm" data-product="${p.id}">
+      <h3>Register your interest</h3>
+      <p class="sub">Leave your email (and contact details if you'd like) and we'll let you know the moment this is ready to order.</p>
+      <form id="interestFormEl" novalidate>
+        <div class="field" data-field="email">
+          <label>Email</label>
+          <input required type="email" name="email" placeholder="jane@example.com">
+          <span class="field-error-msg">Please enter a valid email address</span>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Name <span class="optional-tag">(optional)</span></label><input type="text" name="name" placeholder="Jane Smith"></div>
+          <div class="field"><label>Phone <span class="optional-tag">(optional)</span></label><input type="tel" name="phone" placeholder="04xx xxx xxx"></div>
+        </div>
+        <div class="field">
+          <label>Message <span class="optional-tag">(optional)</span></label>
+          <textarea name="message" placeholder="Anything specific you're after…"></textarea>
+        </div>
+        <p class="hp-field"><label>Leave this field blank<input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <p id="interestError" class="field-error-msg" style="display:none; margin-bottom:10px;"></p>
+        <button type="submit" class="btn btn-primary" id="interestSubmitBtn">Register interest</button>
+      </form>
+      <div class="interest-success" id="interestSuccess" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>Thanks — we'll be in touch as soon as this is ready.</span>
+      </div>
+    </div>
+  `;
+}
+
+function bindInterestFormEvents(p){
+  const wrap = document.getElementById('interestForm');
+  if(!wrap) return;
+  const form = document.getElementById('interestFormEl');
+  const errorEl = document.getElementById('interestError');
+  const emailField = form.querySelector('[data-field="email"]');
+  const emailInput = emailField.querySelector('input');
+
+  emailInput.addEventListener('blur', ()=> emailField.classList.toggle('error', !emailInput.checkValidity()));
+  emailInput.addEventListener('input', ()=>{
+    if(emailField.classList.contains('error')) emailField.classList.toggle('error', !emailInput.checkValidity());
+  });
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    errorEl.style.display = 'none';
+
+    if(!emailInput.checkValidity()){
+      emailField.classList.add('error');
+      emailInput.focus();
+      return;
+    }
+
+    const fd = new FormData(form);
+    if(fd.get('bot-field')) return; // honeypot tripped — silently drop
+
+    const btn = document.getElementById('interestSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try{
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: encodeFormData({
+          'form-name': 'register-interest',
+          email: fd.get('email'),
+          name: fd.get('name') || '',
+          phone: fd.get('phone') || '',
+          product: p.name + ' (' + p.category + ')',
+          message: fd.get('message') || ''
+        })
+      });
+      if(!res.ok) throw new Error('Submission failed');
+      form.style.display = 'none';
+      document.getElementById('interestSuccess').style.display = 'flex';
+    }catch(err){
+      btn.disabled = false;
+      btn.textContent = 'Register interest';
+      errorEl.textContent = "Something went wrong sending that — please try again, or email us directly.";
+      errorEl.style.display = 'block';
+    }
+  });
 }
 
 /* =========================================================
@@ -882,10 +1103,9 @@ function renderShop(){
         <div class="product-grid">
           ${filtered.map(p=>`
             <article class="product-card ${p.comingSoon?'is-coming-soon':''}" data-id="${p.id}">
-              <div class="product-photo ${p.comingSoon?'is-coming-soon':''}">
+              <div class="product-photo ${(p.comingSoon && !primaryImageSrc(p))?'is-coming-soon':''}">
                 ${p.comingSoon ? '' : `<div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')} <span style="display:none"></span>Handmade</div>`}
-                ${icon(p.icon)}
-                <span class="placeholder-tag">placeholder photo</span>
+                ${photoMarkup(p)}
                 ${p.comingSoon ? `<span class="watermark">Not yet for sale</span>` : ''}
               </div>
               <div class="product-info">
@@ -950,9 +1170,8 @@ function renderProductDetail(id){
       <div class="wrap">
         <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category}</div>
         <div class="detail-grid">
-          <div class="detail-photo is-coming-soon">
-            ${icon(p.icon)}
-            <span class="placeholder-tag">placeholder photo</span>
+          <div class="detail-photo ${primaryImageSrc(p) ? '' : 'is-coming-soon'}">
+            ${renderDetailPhotoBlock(p)}
             <span class="watermark">Not yet for sale</span>
           </div>
           <div class="detail-info">
@@ -960,7 +1179,8 @@ function renderProductDetail(id){
             <h1>${p.name}</h1>
             <span class="coming-soon-badge large">Coming soon</span>
             <p class="desc">${p.desc}</p>
-            <a href="#/shop" class="btn btn-primary">Browse available pieces</a>
+            ${renderInterestForm(p)}
+            <a href="#/shop" class="btn btn-outline" style="margin-top:18px;">Browse available pieces</a>
           </div>
         </div>
       </div>
@@ -979,8 +1199,7 @@ function renderProductDetail(id){
       <div class="detail-grid">
         <div class="detail-photo">
           <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
-          ${icon(p.icon)}
-          <span class="placeholder-tag">placeholder photo</span>
+          ${photoMarkup(p)}
         </div>
         <div class="detail-info">
           <span class="cat">${p.category}</span>
@@ -1032,8 +1251,7 @@ function renderProductDetail(id){
             <article class="product-card related-card" data-id="${r.id}">
               <div class="product-photo">
                 <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
-                ${icon(r.icon)}
-                <span class="placeholder-tag">placeholder photo</span>
+                ${photoMarkup(r)}
               </div>
               <div class="product-info">
                 <span class="cat">${r.category}</span>
@@ -1050,7 +1268,7 @@ function renderProductDetail(id){
 
 function bindDetailEvents(id){
   const p = findProduct(id);
-  if(p.comingSoon) return;
+  if(p.comingSoon){ bindInterestFormEvents(p); bindPhotoToggle(p); return; }
   if(p.customBlind){ bindBlindDetailEvents(p); return; }
 
   let qty = 1;
@@ -1118,8 +1336,7 @@ function renderBlindDetail(p){
       <div class="detail-grid">
         <div class="detail-photo">
           <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
-          ${icon(p.icon)}
-          <span class="placeholder-tag">placeholder photo</span>
+          ${photoMarkup(p)}
         </div>
         <div class="detail-info">
           <span class="cat">${p.category}</span>
@@ -1287,7 +1504,7 @@ function renderCart(){
             const unitPrice = lineUnitPrice(c);
             return `
             <div class="cart-item" data-key="${c.key}">
-              <div class="thumb">${icon(p.icon)}</div>
+              <div class="thumb">${thumbMarkup(p)}</div>
               <div class="item-details">
                 <div class="item-top">
                   <div class="item-top-text">
@@ -1411,7 +1628,7 @@ function renderCheckout(){
               const unitPrice = lineUnitPrice(c);
               return `
               <div class="order-summary-item">
-                <div class="thumb">${icon(p.icon)}</div>
+                <div class="thumb">${thumbMarkup(p)}</div>
                 <div class="info">
                   <p class="name">${p.name}</p>
                   ${c.variant ? `<div class="variant">${c.variant}</div>` : ''}
@@ -1484,7 +1701,7 @@ function bindCheckoutEvents(){
       notes: fd.get('notes'),
       items: cart.map(c=>{
         const p = findProduct(c.id);
-        return {id:c.id, name:p.name, icon:p.icon, variant:c.variant, qty:c.qty, price:lineUnitPrice(c), blindSpec:c.blindSpec};
+        return {id:c.id, name:p.name, icon:p.icon, image:p.image, variant:c.variant, qty:c.qty, price:lineUnitPrice(c), blindSpec:c.blindSpec};
       }),
       total: cartTotal(),
       hasCustomBlind
@@ -1581,7 +1798,7 @@ function renderConfirmationContent(order, orderId){
           <div class="order-summary-items">
             ${order.items.map(it=>`
               <div class="order-summary-item">
-                <div class="thumb">${icon(it.icon)}</div>
+                <div class="thumb">${thumbMarkup(it)}</div>
                 <div class="info">
                   <p class="name">${it.name}</p>
                   ${it.variant ? `<div class="variant">${it.variant}</div>` : ''}

@@ -47,7 +47,35 @@ for blinds carry an explicit `price` field (see `lineUnitPrice()`) that
 overrides the product's flat `price` — this is what lets one product have a
 different price per cart line depending on type/colour/size.
 
-## Category status (updated 2026-08-10)
+## Category status (updated 2026-09-05)
+**Site now launches with Blinds as the only purchasable category.** Wooden
+Bowls & Leather Goods (previously real/purchasable) was switched to
+`comingSoon:true` on 2026-09-05 — client decided to hold all non-blind
+categories until real photos/stock are ready, rather than sell placeholder
+products. `price`/`unit`/`meta` were left in place on those four products
+(not deleted) so re-enabling one later is just removing its `comingSoon:true`
+flag. The category was also added to `CHIP_MUTED_CATEGORIES`. **Server-side**
+`netlify/functions/lib/pricing.js` had these four ids removed entirely (not
+just hidden client-side) so `priceCartItem()` throws if someone posts a raw
+checkout request for one, bypassing the UI.
+
+Every `comingSoon:true` product's detail page now shows a **"Register your
+interest"** form (email required, name/phone/message optional) instead of
+just static "DM us" copy — see `renderInterestForm()`/`bindInterestFormEvents()`
+below. Submissions go via Netlify Forms (POST to `/` with
+`form-name=register-interest`), landing in the Netlify dashboard under
+Forms — **no backend/secret involved**. The static hidden replica of this
+form (`<form name="register-interest" data-netlify="true" ...>`, right after
+`<main id="app">` in the body) must stay in the raw HTML unmodified — Netlify
+only detects forms present in the deployed markup, not ones injected by JS,
+so deleting or renaming that block silently breaks submissions.
+
+**Real photos**: added a `photoMarkup(p)`/`thumbMarkup(p)` helper pair — set
+`image:'assets/xxx.jpg'` on any product in `PRODUCTS` and it renders that photo
+everywhere (shop grid, detail, cart, checkout, confirmation) instead of the
+SVG line-art icon. No template changes needed per product.
+
+### Original 2026-08-10 reorganization (superseded above for Bowls/Leather)
 Categories were reorganized so it's visually obvious what's actually for
 sale — the "All" filter chip was removed (default filter is now `Blinds`,
 the primary sellable category) and every `comingSoon:true` product now
@@ -139,6 +167,15 @@ into the `render()` route table's `setActiveNav(...)` calls.
 4. **Contact info is obfuscated in JS on purpose** (see below) — don't
    "simplify" this back to a static `mailto:`/`tel:` link without
    understanding why.
+5. **Netlify Forms email notification is configured (2026-09-05)** — sends to
+   `indohomecollective@gmail.com` on any form submission (Project
+   configuration → Notifications → Form submission notifications). Getting
+   here required two separate things, not just deploying: the per-site
+   "Enable form detection" toggle (Project navigation → Forms) had to be
+   switched on first — a deploy alone doesn't make Netlify parse forms if
+   that's off — *then* a redeploy so the parser actually ran. If a future
+   form on this site "isn't showing up" in the Forms tab, check that toggle
+   before assuming it's a deploy or markup problem.
 
 ## Stripe integration (live as of 2026-08-30)
 Business context: `indohomecollective@gmail.com`. Stripe account
