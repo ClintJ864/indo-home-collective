@@ -459,6 +459,16 @@ actually cleared once `bindConfirmationEvents()` has verified the returned
 session as paid — if the customer cancels on Stripe's page, `cancel_url`
 sends them back to `#/checkout` with their cart still intact.
 
+**Card payments are switched OFF on the live site (2026-10-07)** via
+`const PAYMENTS_ENABLED = false` in `index.html` (next to the blind pricing
+constants), because Stripe identity verification for live mode is still
+pending. While false: the cart shows "Request a quote" instead of "Proceed to
+checkout", `#/checkout` renders the quote page, and the quote form says card
+payment is coming soon. The checkout code itself is untouched. To turn
+payments on: CJ saves the `sk_live_` key in Netlify (an earlier attempt didn't
+save — check the variable's "updated" date changed), then set the flag to
+`true`, redeploy, and confirm a checkout session comes back `cs_live_`.
+
 **Current status (2026-10-07)**: working end-to-end in **test mode** —
 `STRIPE_SECRET_KEY` is set in Netlify (an `sk_test_` key; sessions come
 back `cs_test_`), and a full 4242 test purchase on the live site reached

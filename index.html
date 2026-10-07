@@ -1100,6 +1100,11 @@ const BLIND_DISCOUNT_PCT = { Timber:0.25 };
 const BLIND_DISCOUNT_THRESHOLD = 400;
 const BLIND_SHIPPING_PER_UNIT = 50;
 
+// Off until Stripe live payments are activated (identity verification
+// pending). While false, the cart's checkout button and #/checkout send
+// customers to the quote request instead of a test-mode Stripe page.
+const PAYMENTS_ENABLED = false;
+
 // Home-page gallery. Add real install photos here as they come in — keep each
 // file ~1100px wide / under ~150KB (mobile data). aiGenerated:true shows an
 // "AI-generated preview" label; never remove it from an image that isn't a
@@ -1238,7 +1243,7 @@ function render(){
     setActiveNav('cart');
     app.innerHTML = renderCart();
     bindCartEvents();
-  } else if(parts[0]==='quote'){
+  } else if(parts[0]==='quote' || (parts[0]==='checkout' && !PAYMENTS_ENABLED)){
     setActiveNav('cart');
     app.innerHTML = renderQuotePage();
     bindQuoteEvents();
@@ -1874,10 +1879,12 @@ function renderCart(){
           <div class="summary-row"><span>Subtotal (${cartCount()} items)</span><span>${money(cartTotal())}</span></div>
           <div class="summary-row"><span>Shipping</span><span>Calculated at checkout</span></div>
           <div class="summary-row total"><span>Estimated total</span><span>${money(cartTotal())}</span></div>
+          ${PAYMENTS_ENABLED ? `
           <a href="#/checkout" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Proceed to checkout</a>
-          <a href="#/quote" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Save / email a quote</a>
+          <a href="#/quote" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Save / email a quote</a>` : `
+          <a href="#/quote" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Request a quote</a>`}
           <a href="#/shop" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Continue shopping</a>
-          <p class="summary-note">Secure checkout · Free returns within 14 days</p>
+          <p class="summary-note">${PAYMENTS_ENABLED ? 'Secure checkout · ' : ''}Free returns within 14 days</p>
         </div>
       </div>
     </div>
@@ -1963,7 +1970,7 @@ function renderQuotePage(){
 
       <div class="interest-form no-print" id="quoteForm" style="margin-top:28px;">
         <h3>Email this quote to us for confirmation</h3>
-        <p class="sub">We'll get back to you to confirm pricing, lead time and shipping.</p>
+        <p class="sub">${PAYMENTS_ENABLED ? `We'll get back to you to confirm pricing, lead time and shipping.` : `Online card payment is coming soon. Send us this quote and we'll confirm pricing, lead time and shipping, and arrange payment with you directly.`}</p>
         <form id="quoteFormEl" novalidate>
           <div class="field" data-field="email">
             <label>Email</label>
