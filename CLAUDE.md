@@ -536,14 +536,16 @@ helpers rather than hardcoding the address again.
 - [ ] Confirm/adjust Decor pricing and dimensions (currently placeholders)
 - [ ] Add real domain (currently the default `.netlify.app` subdomain)
 
-## 2026-10-07: v2 "blinds-focus" redesign (this folder)
-v1 (full multi-category shop) is preserved untouched in
-`../indo-home-collective-handoff/` (git repo, linked to the live Netlify site)
-and as a plain copy in `../indo-home-collective-v1-backup/`. This folder
-(`indo-home-collective-v2-blinds/`) is the v2 working copy — **deployed to prod 2026-10-07** (folder isn't `netlify link`ed; deploy with `--site 2a01e561-cc44-4a6e-9db0-fbecaf772045` — the site name fails in the build step). Previously **not yet
-deployed**. Suggested git step: in the handoff repo run
-`git tag v1-full-shop && git push --tags`, then create a `blinds-focus`
-branch and copy this folder's files over it when v2 is approved.
+## 2026-10-07: v2 "blinds-focus" redesign
+v2 is live (deployed to prod 2026-10-07) and is `master` in this repo — this
+folder is the only working copy. It was built in a separate
+`indo-home-collective-v2-blinds/` folder, now archived (along with the old
+plain v1 copy) under `../_archive/` — don't edit those.
+
+v1 (full multi-category shop) is preserved as the git tag `v1-full-shop`
+(`git checkout v1-full-shop` to view it). Netlify also keeps the old v1
+deploys for one-click rollback (Deploys → pick a pre-2026-10-07 deploy →
+Publish deploy).
 
 What changed (all in `index.html`; Netlify functions/pricing untouched):
 - `#/shop` now renders `renderHome()` — blinds landing page: split hero
