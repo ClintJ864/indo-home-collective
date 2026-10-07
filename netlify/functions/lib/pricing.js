@@ -12,13 +12,13 @@
 // (mirroring its PRODUCTS.price in ../../../index.html) when a category goes
 // back on sale.
 const PRODUCTS = {
-  'timber-slat-blinds': { name: 'Custom Timber & Bamboo Slat Blinds', customBlind: true },
+  'timber-slat-blinds': { name: 'Custom Timber Slat Blinds', customBlind: true },
 };
 
 const BLIND_WIDTHS = [50, 100, 150, 200, 250, 300];
 const BLIND_DROPS = [50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300];
-const BLIND_COLOURS = { Timber: ['Natural Wood', 'White', 'Black'], Bamboo: ['Natural', 'White', 'Black'] };
-const BLIND_DISCOUNT_PCT = { Timber: 0.25, Bamboo: 0.30 };
+const BLIND_COLOURS = { Timber: ['Natural Wood', 'White', 'Black'] };
+const BLIND_DISCOUNT_PCT = { Timber: 0.25 };
 const BLIND_DISCOUNT_THRESHOLD = 400;
 const BLIND_SHIPPING_PER_UNIT = 50;
 

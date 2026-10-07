@@ -196,7 +196,9 @@
     background:rgba(61,92,59,0.9); color:var(--beige);
     font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase;
     padding:4px 9px; border-radius:20px;
+    max-width:calc(100% - 20px); box-sizing:border-box;
   }
+  .product-photo .handmade-badge svg, .detail-photo .handmade-badge svg{height:11px; width:11px; flex:none;}
   .handmade-badge img{height:11px; width:auto; filter:brightness(0) invert(1);}
   .product-info{padding:20px 20px 22px; flex:1; display:flex; flex-direction:column;}
   .product-info .cat{
@@ -255,22 +257,6 @@
     position:absolute; top:10px; right:10px; z-index:3;
     background:rgba(51,51,51,0.85); color:#fff; font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase;
     padding:4px 9px; border-radius:20px;
-  }
-
-  /* ---------- Two-image hover/tap swipe reveal (e.g. colour preview) ---------- */
-  .detail-photo.swipe-photo{overflow:hidden; cursor:pointer;}
-  .detail-photo.swipe-photo .base-img, .detail-photo.swipe-photo .reveal-img{position:absolute; inset:0;}
-  .detail-photo.swipe-photo .reveal-img{clip-path:inset(0 100% 0 0); transition:clip-path 0.5s cubic-bezier(.4,0,.2,1);}
-  .detail-photo.swipe-photo .ai-badge{opacity:0; transition:opacity 0.3s;}
-  .detail-photo.swipe-photo.is-revealed .reveal-img{clip-path:inset(0 0 0 0);}
-  .detail-photo.swipe-photo.is-revealed .ai-badge{opacity:1;}
-  /* Real hover only — touch devices fake a stuck :hover after tap, so the
-     hover-driven reveal is restricted to devices with an actual pointer and
-     rely on the is-revealed class (toggled by bindSwipePhoto's click
-     handler) for touch instead. */
-  @media (hover:hover) and (pointer:fine){
-    .detail-photo.swipe-photo:hover .reveal-img{clip-path:inset(0 0 0 0);}
-    .detail-photo.swipe-photo:hover .ai-badge{opacity:1;}
   }
 
   /* ---------- Product detail ---------- */
@@ -332,7 +318,7 @@
   .related-section h2{font-size:1.3rem; margin:0 0 26px;}
 
   /* ---------- Cart ---------- */
-  .cart-wrap{padding-top:40px; padding-bottom:100px;}
+  .cart-wrap{padding:40px 0 100px;}
   .cart-wrap h1{margin-bottom:6px;}
   .cart-count-note{color:#888; font-size:0.85rem; margin:0 0 10px;}
   .cart-layout{display:grid; grid-template-columns:2fr 1fr; gap:56px; margin-top:28px; align-items:flex-start;}
@@ -427,7 +413,7 @@
   .summary-box .edit-cart-link{font-size:0.78rem; color:var(--moss); text-decoration:underline; display:inline-block; margin-bottom:4px;}
 
   .order-confirm{text-align:center; padding:70px 20px 100px; max-width:640px; margin:0 auto;}
-  .order-confirm img{height:60px; width:60px; object-fit:cover; object-position:100% 50%; margin:0 auto 26px;}
+  .order-confirm img{height:60px; margin:0 auto 26px;}
   .order-confirm h1{font-size:1.8rem; margin-bottom:14px;}
   .order-confirm p{font-family:Georgia, 'Times New Roman', serif; font-size:1.1rem; line-height:1.7; color:#444; margin-bottom:30px;}
   .order-id{
@@ -455,13 +441,13 @@
 
   /* ---------- About page ---------- */
   .about-hero{padding:70px 32px 10px; text-align:center;}
-  .about-hero img.icon{height:70px; width:70px; object-fit:cover; object-position:100% 50%; margin:0 auto 20px;}
+  .about-hero img.icon{height:70px; margin:0 auto 20px;}
   .about-hero h1{font-size:2.2rem; margin-bottom:0;}
   .about-body{max-width:680px; margin:0 auto; padding:30px 32px 90px;}
   .about-body p{font-family:Georgia, 'Times New Roman', serif; font-size:1.18rem; line-height:1.85; color:#3f3f3f; margin-bottom:24px; text-align:center;}
 
   .ordering-section{background:var(--beige); padding:80px 0 90px; margin-top:40px;}
-  .ordering-section .section-head img{height:56px; width:56px; object-fit:cover; object-position:100% 50%; margin:0 auto 18px;}
+  .ordering-section .section-head img{height:56px; margin-bottom:18px;}
   .steps{max-width:640px; margin:0 auto; display:flex; flex-direction:column; gap:0;}
   .step{display:flex; gap:22px; padding:22px 0; border-bottom:1px solid rgba(61,92,59,0.15);}
   .step:last-child{border-bottom:none;}
@@ -481,6 +467,13 @@
   .value-item p{font-size:0.82rem; color:#555; line-height:1.5; margin:0;}
   .value-item .v-title{display:block; font-weight:600; color:var(--moss); margin-bottom:4px; font-size:0.88rem; letter-spacing:0.03em;}
 
+  .lifestyle-teaser{
+    text-align:center; max-width:560px; margin:56px auto 64px; padding:36px 28px;
+    background:var(--beige); border-radius:6px;
+  }
+  .lifestyle-teaser h3{font-size:1.3rem; margin:6px 0 12px; color:var(--moss-dark);}
+  .lifestyle-teaser p{color:#5a5a5a; margin:0 0 20px;}
+
   /* ---------- Utility / responsive ---------- */
   .visually-hidden{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);}
   .bottom-nav{display:none;}
@@ -492,18 +485,25 @@
     .detail-photo{position:relative; top:auto;}
     body{padding-bottom:66px;}
     .bottom-nav{
-      display:flex; position:fixed; left:0; right:0; bottom:0; z-index:60;
+      display:flex; position:fixed; left:0; right:200px; bottom:0; z-index:60;
       background:rgba(251,249,245,0.96); backdrop-filter:blur(6px);
       border-top:1px solid rgba(199,177,148,0.4);
-      padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+      padding:8px 2px calc(8px + env(safe-area-inset-bottom));
       justify-content:space-around; align-items:center;
     }
+    /* Netlify's own "Powered by Netlify" badge is a fixed, ~197x64px
+       iframe pinned to the bottom-right corner on every page (injected by
+       Netlify's hosting, not our code, so we can't resize/remove it here).
+       Stopping the bar 190px short of the right edge keeps all 4 items
+       clear of it instead of letting "About"/"Cart" sit underneath and
+       swallow the tap — see CLAUDE.md, 2026-09-13 (night) entry. */
     .bottom-nav a{
       display:flex; flex-direction:column; align-items:center; gap:3px;
-      flex:1; padding:4px 0; position:relative;
-      color:var(--charcoal); font-size:0.66rem; letter-spacing:0.01em;
+      flex:1; min-width:0; padding:4px 0; position:relative;
+      color:var(--charcoal); font-size:0.58rem; letter-spacing:0.01em;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .bottom-nav a svg{width:22px; height:22px; stroke:currentColor;}
+    .bottom-nav a svg{width:20px; height:20px; stroke:currentColor;}
     .bottom-nav a.active{color:var(--moss); font-weight:600;}
     .bottom-nav .cart-count{
       position:absolute; top:-2px; right:26%;
@@ -524,6 +524,24 @@
 
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important; animation:none !important;}
+  }
+
+  /* quote page */
+  .quote-summary{border:1px solid #e5ded4; border-radius:12px; padding:28px; margin-top:24px; max-width:640px;}
+  .quote-summary-head{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; border-bottom:1px solid #e5ded4; padding-bottom:16px; margin-bottom:16px;}
+  .quote-meta{font-size:0.85rem; color:#555; text-align:right;}
+  .quote-meta .label{color:#999; margin-right:4px;}
+  .quote-item{padding:10px 0; border-bottom:1px solid #f0ebe2;}
+  .quote-item-name{font-weight:600; margin-bottom:4px;}
+  .quote-item-line{display:flex; justify-content:space-between; color:#555; font-size:0.92rem;}
+  .quote-total-row{display:flex; justify-content:space-between; font-weight:700; font-size:1.1rem; margin-top:14px; padding-top:14px; border-top:1px solid #e5ded4;}
+  .quote-note{font-size:0.82rem; color:#888; margin-top:14px;}
+  .quote-actions{margin-top:20px; max-width:640px;}
+
+  @media print{
+    .no-print, header.site-header, #bottomNav, footer{display:none !important;}
+    .quote-summary{border:none; padding:0; max-width:none;}
+    body, .wrap{margin:0; padding:0;}
   }
 </style>
 </head>
@@ -581,6 +599,33 @@
   <textarea name="message"></textarea>
 </form>
 
+<!-- Static replica of the "quote-request" form so Netlify's build-time form
+     detector picks it up (see the comment on register-interest above — same
+     rule applies). The real, interactive version is rendered by
+     renderQuotePage() and submitted via fetch() in bindQuoteEvents(); field
+     names below must match exactly. -->
+<form name="quote-request" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="text" name="name">
+  <input type="email" name="email">
+  <input type="tel" name="phone">
+  <textarea name="cart_summary"></textarea>
+  <input type="text" name="quote_total">
+  <textarea name="message"></textarea>
+</form>
+
+<!-- Static replica of the "quote-download" form — same Netlify-detection
+     rule as the two forms above. Fired silently (no honeypot needed, it's
+     not a customer-facing form) from bindQuoteEvents() whenever someone
+     clicks "Print / Save as PDF" on the quote page, so the business gets an
+     email even though that action doesn't require the customer to submit
+     any contact details. There's no email/name field — a print/download
+     can't tell us who did it, only that it happened and what was in it. -->
+<form name="quote-download" data-netlify="true" hidden>
+  <input type="text" name="quote_ref">
+  <textarea name="cart_summary"></textarea>
+  <input type="text" name="quote_total">
+</form>
+
 <footer>
   <div class="footer-inner">
     <div>
@@ -590,8 +635,9 @@
     <div>
       <h3>Shop</h3>
       <p><a href="#/shop">All products</a></p>
-      <p><a href="#/ordering">Want to order blinds manually?</a></p>
+      <p><a href="#/ordering">How ordering works</a></p>
       <p><a href="#/about">Our story</a></p>
+      <p><a href="#/lakey-peak">Lakey Peak Surf Camp</a></p>
     </div>
     <div>
       <h3>Get in touch</h3>
@@ -620,19 +666,15 @@
 const PRODUCTS = [
   {
     id:'timber-slat-blinds',
-    name:'Custom Timber & Bamboo Slat Blinds',
+    name:'Custom Timber Slat Blinds',
     category:'Blinds',
     price:75,
     priceLabel:'From',
     unit:'per blind — priced by size',
     icon:'blinds',
     customBlind:true,
-    images:[
-      {src:'assets/timber-slat-blinds-natural.jpg', label:'Natural Wood', aiGenerated:false},
-      {src:'assets/timber-slat-blinds-white.jpg', label:'White', aiGenerated:true}
-    ],
-    desc:"Our signature piece. Real timber or bamboo slats, handcrafted by a family of makers with over thirty years of experience. Choose your type, colour, width and drop below — pricing, bulk discounts and shipping calculate instantly.",
-    meta:[['Material','Solid timber or bamboo'],['Slat width','Timber 2.5cm · Bamboo 1.2cm'],['Sizes','50–300cm wide, 50–300cm drop'],['Lead time','8–12 weeks']]
+    desc:"Our signature piece. Real timber slats, handcrafted by a family of makers with over thirty years of experience. Choose your colour, width and drop below — pricing, bulk discounts and shipping calculate instantly.",
+    meta:[['Material','Solid timber'],['Slat width','2.5cm'],['Sizes','50–300cm wide, 50–300cm drop'],['Lead time','8–12 weeks']]
   },
   {
     id:'rattan-pendant-light',
@@ -715,7 +757,7 @@ const PRODUCTS = [
     // never reads as a genuine in-pool photo. Swap in a real on-water shot
     // under the same key once one exists, and the aiGenerated flag can go.
     id:'floating-pool-tray',
-    name:'Floating Pool Tray (500mm diameter)',
+    name:'Floating Pool Trays',
     category:'Floating Pool Trays',
     comingSoon:true,
     icon:'pooltray',
@@ -723,8 +765,18 @@ const PRODUCTS = [
       {src:'assets/floating-pool-tray-land.jpg', label:'Product photo'},
       {src:'assets/floating-pool-tray-pool.jpg', label:'In the pool', aiGenerated:true}
     ],
-    desc:"A round floating tray for the pool, in the same handwoven-look finish as the rest of our collection — rest a drink or a candle on the water while you float. 500mm diameter.",
-    meta:[['Dimensions','500mm diameter']]
+    // Range being expanded beyond the original 500mm circle — shape/colour
+    // list below is a placeholder (client-supplied names, no photos/pricing
+    // yet for Heart or Rectangle or the new colourways). Photo above still
+    // shows the original circle sample. Update once real photos/pricing for
+    // each shape+colour land, and re-check whether this still belongs on one
+    // product page or should split into per-shape entries.
+    desc:"Floating trays for the pool, in the same handwoven-look finish as the rest of our collection — rest a drink or a candle on the water while you float. The range is expanding to three shapes and four colourways — register your interest below and we'll let you know as each becomes available.",
+    meta:[
+      ['Shapes','Circle (500mm diameter) · Heart · Rectangle (rounded corners)'],
+      ['Colours','White · Honey Wicker · Cuppacino · Dark Brown'],
+      ['Dimensions','500mm diameter (Circle) — Heart & Rectangle sizes to be confirmed']
+    ]
   }
 ];
 
@@ -813,30 +865,6 @@ function bindPhotoToggle(p){
   });
 }
 
-// Two-image hover-to-reveal swipe (desktop hovers the photo to preview a
-// second image, e.g. a colourway; touch devices tap to toggle instead,
-// since there's no hover) — distinct from the click-button toggle above,
-// which is for products with visible labelled photo options. Only used by
-// renderBlindDetail() today. p.images[0] is the default/base photo,
-// p.images[1] is the one revealed on hover/tap. Falls back to a plain
-// single photo if p.images isn't set.
-function renderSwipePhoto(p){
-  if(!(p.images && p.images.length > 1)) return photoMarkup(p);
-  const [base, reveal] = p.images;
-  return `
-    <img class="base-img" src="${base.src}" alt="${p.name} — ${base.label}" loading="lazy">
-    <img class="reveal-img" src="${reveal.src}" alt="${p.name} — ${reveal.label}" loading="lazy">
-    <span class="ai-badge" style="display:${reveal.aiGenerated ? 'inline-block' : 'none'};">AI-generated preview</span>
-  `;
-}
-
-function bindSwipePhoto(p){
-  if(!(p.images && p.images.length > 1)) return;
-  const photo = document.querySelector('.detail-photo.swipe-photo');
-  if(!photo) return;
-  photo.addEventListener('click', ()=>{ photo.classList.toggle('is-revealed'); });
-}
-
 /* =========================================================
    CONTACT (built at runtime, not present as plain text in the
    page source, to make it harder for basic bots to scrape)
@@ -849,7 +877,10 @@ const CONTACT = {
 };
 function contactEmail(){ return CONTACT.emailParts.join('@'); }
 function contactPhoneDisplay(){ return '+' + CONTACT.phoneDigits.replace(/^61/, '61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'); }
-function contactPhoneTel(){ return '+' + CONTACT.phoneDigits; }
+// wa.me requires the number in full international format with no leading
+// "+", no leading zeros, and no spaces/dashes — CONTACT.phoneDigits is
+// already stored in exactly that shape.
+function contactWhatsappUrl(){ return 'https://wa.me/' + CONTACT.phoneDigits; }
 
 function initContactLinks(){
   const emailEl = document.getElementById('footerEmail');
@@ -861,9 +892,13 @@ function initContactLinks(){
   }
   const phoneEl = document.getElementById('footerPhone');
   if(phoneEl){
+    // Mobile number is a WhatsApp contact, not a phone-dialer link — opens
+    // a WhatsApp chat instead of placing a call.
     const a = document.createElement('a');
-    a.href = 'tel:' + contactPhoneTel();
-    a.textContent = contactPhoneDisplay();
+    a.href = contactWhatsappUrl();
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = 'WhatsApp: ' + contactPhoneDisplay();
     phoneEl.appendChild(a);
   }
   const igEl = document.getElementById('footerInstagram');
@@ -883,11 +918,11 @@ function encodeFormData(data){
   return Object.keys(data).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(data[k])).join('&');
 }
 
-function renderInterestForm(p){
+function renderInterestForm(p, blurb){
   return `
     <div class="interest-form" id="interestForm" data-product="${p.id}">
       <h3>Register your interest</h3>
-      <p class="sub">Leave your email (and contact details if you'd like) and we'll let you know the moment this is ready to order.</p>
+      <p class="sub">${blurb || "Leave your email (and contact details if you'd like) and we'll let you know the moment this is ready to order."}</p>
       <form id="interestFormEl" novalidate>
         <div class="field" data-field="email">
           <label>Email</label>
@@ -974,8 +1009,8 @@ function bindInterestFormEvents(p){
    ========================================================= */
 const BLIND_WIDTHS = [50,100,150,200,250,300];
 const BLIND_DROPS = [50,75,100,125,150,175,200,225,250,275,300];
-const BLIND_COLOURS = { Timber:['Natural Wood','White','Black'], Bamboo:['Natural','White','Black'] };
-const BLIND_DISCOUNT_PCT = { Timber:0.25, Bamboo:0.30 };
+const BLIND_COLOURS = { Timber:['Natural Wood','White','Black'] };
+const BLIND_DISCOUNT_PCT = { Timber:0.25 };
 const BLIND_DISCOUNT_THRESHOLD = 400;
 const BLIND_SHIPPING_PER_UNIT = 50;
 
@@ -1096,6 +1131,10 @@ function render(){
     setActiveNav('cart');
     app.innerHTML = renderCart();
     bindCartEvents();
+  } else if(parts[0]==='quote'){
+    setActiveNav('cart');
+    app.innerHTML = renderQuotePage();
+    bindQuoteEvents();
   } else if(parts[0]==='checkout'){
     setActiveNav('shop');
     app.innerHTML = renderCheckout();
@@ -1110,6 +1149,10 @@ function render(){
   } else if(parts[0]==='ordering'){
     setActiveNav('ordering');
     app.innerHTML = renderOrdering();
+  } else if(parts[0]==='lakey-peak'){
+    setActiveNav(''); // not a primary nav item — deliberately not in the main/bottom nav
+    app.innerHTML = renderLakeyPeak();
+    bindLakeyPeakEvents();
   } else {
     setActiveNav('shop');
     app.innerHTML = renderShop();
@@ -1182,6 +1225,15 @@ function renderShop(){
         <p>Real timber, teak and leather — built to last, not landfill.</p>
       </div>
     </div>
+
+    <div class="wrap">
+      <div class="lifestyle-teaser">
+        <span class="eyebrow">the indo lifestyle, beyond the home</span>
+        <h3 class="brand-font">We don't just bring Indonesia into your home.</h3>
+        <p>We're also building a small surf camp at Lakey Peak, Sumbawa — register your interest and we'll let you know when it's ready.</p>
+        <a href="#/lakey-peak" class="btn btn-outline">Discover Lakey Peak →</a>
+      </div>
+    </div>
   `;
 }
 
@@ -1205,7 +1257,7 @@ function bindShopEvents(){
 function renderProductDetail(id){
   const p = findProduct(id);
   if(!p){
-    return `<div class="wrap" style="padding:100px 32px; text-align:center;"><h2>Product not found</h2><a href="#/shop" class="btn btn-outline" style="margin-top:20px;">Back to shop</a></div>`;
+    return `<div class="wrap" style="padding:100px 0; text-align:center;"><h2>Product not found</h2><a href="#/shop" class="btn btn-outline" style="margin-top:20px;">Back to shop</a></div>`;
   }
   const related = PRODUCTS.filter(r=>r.category===p.category && r.id!==p.id && !r.comingSoon).slice(0,4);
 
@@ -1223,6 +1275,10 @@ function renderProductDetail(id){
             <h1>${p.name}</h1>
             <span class="coming-soon-badge large">Coming soon</span>
             <p class="desc">${p.desc}</p>
+            ${p.meta ? `
+            <div class="meta-table">
+              ${p.meta.map(m=>`<div class="meta-row"><span class="label">${m[0]}</span><span class="value">${m[1]}</span></div>`).join('')}
+            </div>` : ''}
             ${renderInterestForm(p)}
             <a href="#/shop" class="btn btn-outline" style="margin-top:18px;">Browse available pieces</a>
           </div>
@@ -1378,22 +1434,15 @@ function renderBlindDetail(p){
     <div class="wrap">
       <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category} / ${p.name}</div>
       <div class="detail-grid">
-        <div class="detail-photo ${p.images && p.images.length > 1 ? 'swipe-photo' : ''}">
+        <div class="detail-photo">
           <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
-          ${renderSwipePhoto(p)}
+          ${photoMarkup(p)}
         </div>
         <div class="detail-info">
           <span class="cat">${p.category}</span>
           <h1>${p.name}</h1>
           <p class="desc">${p.desc}</p>
 
-          <div class="finish-row">
-            <label>Blind type</label>
-            <div class="finish-options" id="blindTypeOptions">
-              <button type="button" class="finish-chip active" data-type="Timber">Timber</button>
-              <button type="button" class="finish-chip" data-type="Bamboo">Bamboo</button>
-            </div>
-          </div>
           <div class="finish-row">
             <label>Colour</label>
             <div class="finish-options" id="blindColourOptions">
@@ -1444,8 +1493,7 @@ function renderBlindDetail(p){
 }
 
 function bindBlindDetailEvents(p){
-  bindSwipePhoto(p);
-  let type = 'Timber';
+  const type = 'Timber';
   let colour = BLIND_COLOURS[type][0];
   let qty = 1;
 
@@ -1473,12 +1521,6 @@ function bindBlindDetailEvents(p){
     return calc;
   }
 
-  function renderColourChips(){
-    colourWrap.innerHTML = BLIND_COLOURS[type].map((c,i)=>`<button type="button" class="finish-chip ${i===0?'active':''}" data-colour="${c}">${c}</button>`).join('');
-    colour = BLIND_COLOURS[type][0];
-    bindColourChips();
-  }
-
   function bindColourChips(){
     colourWrap.querySelectorAll('.finish-chip').forEach(chip=>{
       chip.addEventListener('click', ()=>{
@@ -1489,16 +1531,6 @@ function bindBlindDetailEvents(p){
     });
   }
   bindColourChips();
-
-  document.getElementById('blindTypeOptions').querySelectorAll('.finish-chip').forEach(chip=>{
-    chip.addEventListener('click', ()=>{
-      document.getElementById('blindTypeOptions').querySelectorAll('.finish-chip').forEach(c=>c.classList.remove('active'));
-      chip.classList.add('active');
-      type = chip.dataset.type;
-      renderColourChips();
-      recalc();
-    });
-  });
 
   widthSel.addEventListener('change', recalc);
   dropSel.addEventListener('change', recalc);
@@ -1514,7 +1546,7 @@ function bindBlindDetailEvents(p){
     const width = Number(widthSel.value);
     const drop = Number(dropSel.value);
     const calc = computeBlindPrice(type, width, drop);
-    const variant = `${type} · ${colour} · ${width}×${drop}cm`;
+    const variant = `${colour} · ${width}×${drop}cm`;
     addToCart(p.id, qty, variant, calc.unitPrice, {type, colour, width, drop});
     const toast = document.getElementById('addedToast');
     toast.classList.add('show');
@@ -1586,6 +1618,7 @@ function renderCart(){
           <div class="summary-row"><span>Shipping</span><span>Calculated at checkout</span></div>
           <div class="summary-row total"><span>Estimated total</span><span>${money(cartTotal())}</span></div>
           <a href="#/checkout" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Proceed to checkout</a>
+          <a href="#/quote" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Save / email a quote</a>
           <a href="#/shop" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Continue shopping</a>
           <p class="summary-note">Secure checkout · Free returns within 14 days</p>
         </div>
@@ -1611,11 +1644,190 @@ function bindCartEvents(){
 }
 
 /* =========================================================
+   VIEW: SAVE / EMAIL A QUOTE
+   Reuses the register-interest Netlify Forms pattern (encodeFormData(),
+   the static hidden "quote-request" form near the top of this file, honeypot
+   spam protection). "Save" is a browser print → save-as-PDF of the summary
+   below (see the @media print rules), not a server-generated PDF.
+   ========================================================= */
+function buildQuoteSummaryText(cartItems){
+  const lines = cartItems.map(c=>{
+    const p = findProduct(c.id);
+    const unitPrice = lineUnitPrice(c);
+    const variantPart = c.variant ? ` (${c.variant})` : '';
+    return `${p.name}${variantPart} — Qty ${c.qty} × ${money(unitPrice)} = ${money(unitPrice * c.qty)}`;
+  });
+  lines.push('');
+  lines.push(`Estimated total: ${money(cartTotal())}`);
+  return lines.join('\n');
+}
+
+function renderQuotePage(){
+  if(cart.length===0){
+    return `<div class="wrap" style="padding:100px 0; text-align:center;">
+      <h2>Your cart is empty</h2>
+      <p style="color:#777; margin:12px 0 24px;">Add something from the collection before saving a quote.</p>
+      <a href="#/shop" class="btn btn-primary">Browse the collection</a>
+    </div>`;
+  }
+  const quoteRef = 'Q-' + Date.now().toString().slice(-8);
+  const today = new Date().toLocaleDateString('en-AU', { day:'numeric', month:'long', year:'numeric' });
+  return `
+    <div class="wrap quote-wrap">
+      <span class="eyebrow no-print">your quote</span>
+      <h1 class="no-print">save or email a quote</h1>
+
+      <div class="quote-summary" id="quoteSummary">
+        <div class="quote-summary-head">
+          <h2 class="brand-font">indo home collective.</h2>
+          <div class="quote-meta">
+            <div><span class="label">Quote ref</span> <span id="quoteRef">${quoteRef}</span></div>
+            <div><span class="label">Date</span> <span>${today}</span></div>
+          </div>
+        </div>
+        <div class="quote-items">
+          ${cart.map(c=>{
+            const p = findProduct(c.id);
+            const unitPrice = lineUnitPrice(c);
+            return `
+            <div class="quote-item">
+              <div class="quote-item-name">${p.name}${c.variant ? ` <span class="variant-label">— ${c.variant}</span>` : ''}</div>
+              <div class="quote-item-line"><span>Qty ${c.qty} × ${money(unitPrice)}</span><span>${money(unitPrice * c.qty)}</span></div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="quote-total-row"><span>Estimated total</span><span>${money(cartTotal())}</span></div>
+        <p class="quote-note">This is an estimate, not a final invoice — shipping is calculated at checkout and we'll confirm final pricing by email.</p>
+      </div>
+
+      <div class="quote-actions no-print">
+        <button type="button" class="btn btn-outline" id="printQuoteBtn">Print / save as PDF</button>
+      </div>
+
+      <div class="interest-form no-print" id="quoteForm" style="margin-top:28px;">
+        <h3>Email this quote to us for confirmation</h3>
+        <p class="sub">We'll get back to you to confirm pricing, lead time and shipping.</p>
+        <form id="quoteFormEl" novalidate>
+          <div class="field" data-field="email">
+            <label>Email</label>
+            <input required type="email" name="email" placeholder="jane@example.com">
+            <span class="field-error-msg">Please enter a valid email address</span>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Name <span class="optional-tag">(optional)</span></label><input type="text" name="name" placeholder="Jane Smith"></div>
+            <div class="field"><label>Phone <span class="optional-tag">(optional)</span></label><input type="tel" name="phone" placeholder="04xx xxx xxx"></div>
+          </div>
+          <div class="field">
+            <label>Message <span class="optional-tag">(optional)</span></label>
+            <textarea name="message" placeholder="Anything specific you're after…"></textarea>
+          </div>
+          <p class="hp-field"><label>Leave this field blank<input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+          <p id="quoteError" class="field-error-msg" style="display:none; margin-bottom:10px;"></p>
+          <button type="submit" class="btn btn-primary" id="quoteSubmitBtn">Email this quote to us</button>
+        </form>
+        <div class="interest-success" id="quoteSuccess" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>Sent — we'll be in touch to confirm your quote.</span>
+        </div>
+      </div>
+
+      <a href="#/cart" class="btn btn-outline no-print" style="margin-top:20px; display:inline-block;">Back to cart</a>
+    </div>
+  `;
+}
+
+// Fire-and-forget notification to the business whenever someone downloads
+// (prints/saves as PDF) their quote — separate from the "email this quote
+// to us" submission below, since printing doesn't require the customer to
+// fill in any contact details. Never awaited/blocking — the print dialog
+// should open immediately regardless of whether this succeeds.
+function notifyQuoteDownload(){
+  const refEl = document.getElementById('quoteRef');
+  const ref = refEl ? refEl.textContent : '';
+  fetch('/', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: encodeFormData({
+      'form-name': 'quote-download',
+      quote_ref: ref,
+      cart_summary: buildQuoteSummaryText(cart),
+      quote_total: money(cartTotal())
+    })
+  }).catch(()=>{ /* best-effort only — never blocks the print action */ });
+}
+
+function bindQuoteEvents(){
+  const printBtn = document.getElementById('printQuoteBtn');
+  if(printBtn) printBtn.addEventListener('click', ()=>{
+    notifyQuoteDownload();
+    window.print();
+  });
+
+  const wrap = document.getElementById('quoteForm');
+  if(!wrap) return; // empty-cart state has no form
+  const form = document.getElementById('quoteFormEl');
+  const errorEl = document.getElementById('quoteError');
+  const emailField = form.querySelector('[data-field="email"]');
+  const emailInput = emailField.querySelector('input');
+
+  emailInput.addEventListener('blur', ()=> emailField.classList.toggle('error', !emailInput.checkValidity()));
+  emailInput.addEventListener('input', ()=>{
+    if(emailField.classList.contains('error')) emailField.classList.toggle('error', !emailInput.checkValidity());
+  });
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    errorEl.style.display = 'none';
+
+    if(!emailInput.checkValidity()){
+      emailField.classList.add('error');
+      emailInput.focus();
+      return;
+    }
+
+    const fd = new FormData(form);
+    if(fd.get('bot-field')) return; // honeypot tripped — silently drop
+
+    const btn = document.getElementById('quoteSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    const refEl = document.getElementById('quoteRef');
+    const ref = refEl ? refEl.textContent : '';
+    const summary = buildQuoteSummaryText(cart);
+
+    try{
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: encodeFormData({
+          'form-name': 'quote-request',
+          email: fd.get('email'),
+          name: fd.get('name') || '',
+          phone: fd.get('phone') || '',
+          cart_summary: `Quote ${ref}\n\n${summary}`,
+          quote_total: money(cartTotal()),
+          message: fd.get('message') || ''
+        })
+      });
+      if(!res.ok) throw new Error('Submission failed');
+      form.style.display = 'none';
+      document.getElementById('quoteSuccess').style.display = 'flex';
+    }catch(err){
+      btn.disabled = false;
+      btn.textContent = 'Email this quote to us';
+      errorEl.textContent = "Something went wrong sending that — please try again, or email us directly.";
+      errorEl.style.display = 'block';
+    }
+  });
+}
+
+/* =========================================================
    VIEW: CHECKOUT
    ========================================================= */
 function renderCheckout(){
   if(cart.length===0){
-    return `<div class="wrap" style="padding:100px 32px; text-align:center;">
+    return `<div class="wrap" style="padding:100px 0; text-align:center;">
       <h2>Your cart is empty</h2>
       <p style="color:#777; margin:12px 0 24px;">Add something from the collection before checking out.</p>
       <a href="#/shop" class="btn btn-primary">Browse the collection</a>
@@ -1945,7 +2157,7 @@ function renderOrdering(){
         <div class="section-head">
           <img src="assets/icon.jpg" alt="">
           <span class="eyebrow">for custom blinds</span>
-          <h2>prefer to order manually, follow these steps ✦</h2>
+          <h2>ordering is easy ✦</h2>
         </div>
         <div class="steps">
           <div class="step">
@@ -1974,6 +2186,51 @@ function renderOrdering(){
       </div>
     </section>
   `;
+}
+
+/* =========================================================
+   VIEW: LAKEY PEAK (brand-extension page, not a shop product)
+   Deliberately kept OUT of the PRODUCTS array/shop grid/category filters —
+   this isn't something to buy, it's a separate lifestyle page the site
+   quietly links to (homepage teaser + footer), never placed alongside
+   blinds/homewares as if it were an equal product line. Reuses the exact
+   register-interest Netlify Forms pattern already wired up elsewhere on the
+   site (same form, same email/push notifications) via a small pseudo-
+   product object that only needs the {id, name, category} renderInterestForm()
+   already reads — no new form/notification setup required.
+   Content is honestly placeholder: the camp is still mid-build (main house,
+   then the 4 guest huts, then the pool), so this reads as "register your
+   interest" rather than "book now," and there are no real photos yet.
+   ========================================================= */
+const LAKEY_PEAK = { id:'lakey-peak', name:'Lakey Peak Surf Camp', category:'Sumbawa, Indonesia' };
+
+function renderLakeyPeak(){
+  return `
+    <section class="about-hero">
+      <img class="icon" src="assets/icon.jpg" alt="">
+      <span class="eyebrow">the indo lifestyle, beyond the home</span>
+      <h1>lakey peak surf camp</h1>
+    </section>
+    <section class="about-body">
+      <p>We don't just bring the Indonesian lifestyle into your home — sometimes we take you there. We're building a small surf camp at Lakey Peak in Sumbawa, one of Indonesia's most iconic and uncrowded breaks, in the same spirit of natural materials and relaxed island living behind Indo Home Collective.</p>
+      <p>It's early days — the camp is currently under construction, starting with the main house, then a handful of guest huts and a pool. There's no opening date yet and nothing bookable just yet, but if you'd like to know the moment that changes, register your interest below.</p>
+      <div class="meta-table" style="max-width:520px; margin:0 auto 32px;">
+        <div class="meta-row"><span class="label">Location</span><span class="value">Lakey Peak, Sumbawa, Indonesia</span></div>
+        <div class="meta-row"><span class="label">Status</span><span class="value">Under construction</span></div>
+        <div class="meta-row"><span class="label">Opening</span><span class="value">To be confirmed</span></div>
+      </div>
+      <div style="max-width:520px; margin:0 auto;">
+        ${renderInterestForm(LAKEY_PEAK, "Leave your email (and contact details if you'd like) and we'll let you know as soon as Lakey Peak is open for bookings.")}
+      </div>
+      <div style="text-align:center; margin-top:10px;">
+        <a href="#/shop" class="btn btn-outline">Back to the collection</a>
+      </div>
+    </section>
+  `;
+}
+
+function bindLakeyPeakEvents(){
+  bindInterestFormEvents(LAKEY_PEAK);
 }
 </script>
 </body>

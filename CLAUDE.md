@@ -47,6 +47,208 @@ for blinds carry an explicit `price` field (see `lineUnitPrice()`) that
 overrides the product's flat `price` — this is what lets one product have a
 different price per cart line depending on type/colour/size.
 
+## 2026-09-13 changes: Timber-only blinds, save/email a quote, push alerts
+
+**1. Bamboo removed — Timber is the only blind type.** In `index.html`:
+the `PRODUCTS` blind entry, `BLIND_COLOURS`, `BLIND_DISCOUNT_PCT` all lost
+their `Bamboo` key/values; the "Blind type" chip selector was deleted from
+`renderBlindDetail()`/`bindBlindDetailEvents()` entirely (nothing to choose
+with one option); the add-to-cart variant label dropped its now-redundant
+`Timber ·` prefix. Mirrored in `netlify/functions/lib/pricing.js` (same
+keys removed) — its `priceCartItem()` now throws "Invalid blind type" if a
+stale `Bamboo` spec somehow reaches checkout (e.g. an old cart in someone's
+`localStorage` from before this change), which is the correct/safe
+behaviour, not a bug.
+
+**2. "Save / email a quote" from the cart** (`#/quote` route). Lets a
+customer get a printable copy of their cart and send the same summary to
+the business for confirmation. New functions in `index.html`:
+`buildQuoteSummaryText()` (plain-text breakdown, reused for the emailed
+field), `renderQuotePage()`, `bindQuoteEvents()`. "Save" is a real browser
+Print → Save as PDF of the on-page summary (`.quote-summary` block), not a
+server-generated PDF — a `@media print` CSS block hides everything else
+(`.no-print`, header, bottom nav, footer) so printing produces a clean
+document. The emailed side reuses the exact `register-interest` Netlify
+Forms pattern: a new static hidden `<form name="quote-request" ...>` sits
+next to the existing `register-interest` one right after `<main id="app">`
+— **must stay in the raw HTML unmodified**, same reason as
+`register-interest` (Netlify only detects forms present in the deployed
+markup). Entry point is a "Save / email a quote" button on `#/cart`
+alongside "Proceed to checkout".
+
+**3. Phone push alert on form submissions.** New
+`netlify/functions/notify-push.js` — a Netlify Function that receives a
+Netlify Forms "Outgoing webhook" notification (configured per-form in the
+dashboard, not in code — see Known limitations below) and forwards a short
+message to Pushover (or a similar push app) using `PUSHOVER_APP_TOKEN` /
+`PUSHOVER_USER_KEY` env vars, same secrets-in-env-vars pattern as
+`STRIPE_SECRET_KEY`. **Not yet confirmed against a real submission**: the
+exact JSON shape Netlify's outgoing webhook sends wasn't pinned down from
+the docs, so the function tries a couple of likely shapes and logs the raw
+body every call — check this function's logs in the Netlify dashboard after
+the first real test submission and adjust the `data`/`form_name`
+extraction at the top of the file if the logged shape differs. A failure
+here never blocks the actual form submission or its email notification —
+those are independent.
+
+An SMS-via-carrier-email-gateway approach was considered and dropped:
+Vodafone/TPG's email-to-SMS now requires registering as an account
+administrator on their business Messaging Hub, not a free personal gateway
+address — not worth the setup for this use case.
+
+## 2026-09-13 (evening): Lakey Peak surf camp brand-extension page
+
+Client got marketing advice from ChatGPT about promoting a surf camp
+(Lakey Peak, Sumbawa — a separate build/investor project, see the "Lakey
+Peak" area notes outside this repo) on this site "without taking away from
+the page." Reviewed that advice, kept the good part (position it as a
+lifestyle extension, not a co-equal product line — don't put it in main
+nav, don't turn the homepage into a travel site) and deliberately scaled
+back the rest (no sitewide announcement banner, no "Indo Experiences" hub
+umbrella brand for a single item) to match how conservatively this site
+already treats anything without real content yet.
+
+**New standalone page, not a shop product.** `LAKEY_PEAK` is a small
+pseudo-product object (`{id, name, category}`) — deliberately **not** added
+to the `PRODUCTS` array, so it never appears in the shop grid or category
+filters. `renderLakeyPeak()`/`bindLakeyPeakEvents()` are a new, separate
+view (styled like `renderAbout()`, not like a product detail page), routed
+at `#/lakey-peak`. It reuses `renderInterestForm()`/`bindInterestFormEvents()`
+as-is — those functions only ever needed `p.id`/`p.name`/`p.category` — so
+submissions land in the exact same `register-interest` Netlify Form/
+notifications already configured, no new form or notification setup
+required. `renderInterestForm()` gained an optional second `blurb` param
+(default preserves the original "ready to order" copy for real products)
+so this page could use wording that fits a travel experience instead
+("...as soon as Lakey Peak is open for bookings").
+
+**Content is honestly placeholder**, because the camp itself is honestly
+placeholder — still under construction (main house, then guest huts, then
+pool), no opening date. Copy reflects that directly ("under construction,"
+"register your interest") rather than implying it's bookable. No real
+photos exist yet, so the page reuses `assets/icon.jpg` (same as About/
+Ordering) instead of inventing stock surf imagery.
+
+**Entry points, deliberately minimal**: a quiet `.lifestyle-teaser` card on
+the homepage (`renderShop()`, right after `.value-strip`) and one link in
+the footer's existing "Shop" column. **Not** added to `#mainNav`/
+`#bottomNav` — those stay Shop/Ordering/About/Cart only, matching the
+"don't treat it as a product line" positioning. `setActiveNav('')` on this
+route clears nav highlighting rather than forcing a false match.
+
+If real content (photos, dates, pricing) arrives later, revisit whether
+this stays a single page or needs more structure — don't build that
+structure ahead of having something real to put in it.
+
+## 2026-09-13 (later same day): WhatsApp contact, quote-download alert, tray range
+
+**1. Mobile number is now a WhatsApp contact, not a phone-dialer link.**
+`initContactLinks()`'s footer phone link now points to
+`contactWhatsappUrl()` (`https://wa.me/<digits>`, opens in a new tab) instead
+of `tel:...`, and its label reads "WhatsApp: +61 410 495 924". The old
+`contactPhoneTel()` helper was removed as dead code. This was the only place
+the mobile number was referenced as a contact method.
+
+**2. "Quote downloaded" business notification.** Printing/saving a quote
+(the "Print / Save as PDF" button on `#/quote`) now also fires a silent,
+best-effort POST to a new `quote-download` Netlify Form (`notifyQuoteDownload()`
+in `index.html`, called from `bindQuoteEvents()` right before `window.print()`)
+carrying the quote ref, cart summary and total — **no customer identity**,
+since a print action doesn't involve the customer entering any contact
+details (that's still only captured if they separately use the "Email this
+quote to us" form on the same page). The new static hidden
+`<form name="quote-download" data-netlify="true" hidden>` sits next to
+`quote-request`/`register-interest` after `<main id="app">` — same "don't
+remove or rename" rule applies. **Needs its own Netlify Forms email
+notification added** (Site configuration → Forms → Form notifications) once
+it's visible in the dashboard after the next deploy — see Known limitations.
+
+**3. Floating Pool Trays is now a range, not a single product.** Updated the
+`floating-pool-tray` entry in `PRODUCTS`: renamed to "Floating Pool Trays",
+`desc` now mentions the expanding range, and a new `meta` array lists
+**Shapes** (Circle 500mm / Heart / Rectangle with rounded corners) and
+**Colours** (White / Honey Wicker / Cuppacino / Dark Brown) as placeholders —
+no real photos or pricing exist yet for anything but the original Circle, so
+this is descriptive-only text, not an interactive shape/colour selector (the
+product is still `comingSoon:true`, not purchasable, so there's nothing to
+actually select yet). While making this change, noticed the `comingSoon`
+branch of `renderProductDetail()` was silently dropping `p.meta` entirely
+(no meta table in that template) — **fixed**: it now renders the meta table
+when present, which also means the four Wooden Bowls & Leather Goods
+products (which already had `meta` set) now show their
+material/dimensions/care info on their coming-soon pages too, previously
+hidden. When real photos/pricing/sizes land for Heart and Rectangle, revisit
+whether this stays one product page or splits into per-shape entries with
+an actual finish-chip-style selector (see `p.finishOptions` pattern used by
+other non-blind products) once there's real data to select between.
+
+## 2026-09-13 (night): Mobile layout bug fix — "Handmade" badge escaping the photo box
+CJ asked whether the live site had actually been checked on a phone. It
+hadn't (only desktop-width Playwright screenshots had been reviewed
+before), so this was verified properly at a 375×812 mobile viewport —
+found and fixed a real bug, plus flagged one that needs CJ's decision
+(see Known limitations).
+
+**The bug:** on any product detail page (`#/product/...`), at mobile
+widths (≤860px) the green "Handmade" ribbon badge rendered as an
+oversized bar overlapping the breadcrumb/header instead of sitting neatly
+in the corner of the photo. Root cause was two separate CSS issues that
+compounded:
+1. `.detail-photo` is `position:sticky` on desktop (so the photo follows
+   you down the page) and the mobile media query correctly turns that off
+   — but it did so with `position:static`, which does **not** establish a
+   containing block for the badge's `position:absolute`. With no
+   positioned ancestor, the badge positioned itself relative to the
+   viewport instead of the photo box. **Fixed** by using
+   `position:relative` instead of `static` in that media query
+   (`.detail-photo{position:relative; top:auto;}`) — keeps the
+   "un-stick on mobile" behaviour while fixing containment.
+2. Independently, the `.handmade-badge`'s inline SVG icon (`ARCH_MARK`)
+   has no `width`/`height` attributes, so with no CSS constraint it falls
+   back to the browser's ~300×150px default replaced-element size,
+   ballooning the whole badge. There was already a
+   `.handmade-badge img{height:11px}` rule but it only matches `<img>`
+   tags, not raw inline `<svg>`. **Fixed** by adding
+   `.product-photo .handmade-badge svg, .detail-photo .handmade-badge svg{height:11px; width:11px; flex:none;}`
+   (needs to out-specificity the existing `.detail-photo svg{width:42%;
+   height:42%}` rule, hence the compound selector) plus a `max-width` /
+   `box-sizing:border-box` safety net on `.handmade-badge` itself so it
+   can never overflow the photo box even with longer text.
+
+Verified with local Playwright at 375×812 (blind detail, Floating Pool
+Trays detail with its `photo-toggle`/`ai-badge`, shop grid cards, cart,
+quote) — no horizontal overflow anywhere, badge now a small pill in the
+photo's top-left corner on every page that shows it. Committed to the
+live file and confirmed the write persisted (re-staged and byte/grep
+-checked, per the OneDrive-sync caution noted elsewhere in this file) —
+**still needs `netlify deploy --prod --dir=.` to go live**, not deployed
+as part of this session (no working terminal access this session — see
+Known limitations).
+
+**Found, then fixed a different way — CJ's call.** The free-tier "Powered
+by Netlify" badge (bottom-right corner) sits in a fixed iframe
+(`#nl-badge-frame`, `z-index:2147483645`, injected by Netlify's hosting —
+not in our source, so it can't be resized/removed from here) that, at
+mobile widths, lands directly on top of the "About" and "Cart" buttons in
+the custom bottom mobile nav bar and actually intercepts the tap
+(confirmed via `elementFromPoint` — clicks meant for those buttons hit the
+iframe, not the nav). Rather than touch the badge itself (the
+officially-supported way to remove it is a Netlify plan/dashboard setting,
+possibly paid-plan-only), CJ opted to just move our own nav out of its
+way: `.bottom-nav` now stops 200px short of the right edge
+(`right:200px` in the `≤860px` media query, badge measured at ~197px
+wide) and its 4 links use `flex:1` with `white-space:nowrap;
+overflow:hidden; text-overflow:ellipsis` instead of the old
+`justify-content:space-around` full-width layout, so "Shop / Ordering /
+About / Cart" now sit packed into the left ~55% of the bar, entirely
+clear of the badge on any phone ≥360px wide. Verified with a simulated
+197×64 badge overlay at 320/375/414px — no overlap at any width; labels
+stay fully readable at 375px+, "Ordering" truncates to "Orderin…" at the
+rare 320px width (old iPhone SE-class devices) which is an acceptable
+trade-off. The badge itself is untouched and still fully visible — this
+only repositions our own nav, so it doesn't raise the same
+Netlify-plan/ToS question as hiding or obscuring the badge would.
+
 ## Category status (updated 2026-09-05)
 **Site now launches with Blinds as the only purchasable category.** Wooden
 Bowls & Leather Goods (previously real/purchasable) was switched to
@@ -98,12 +300,13 @@ When adding the real Floating Pool Trays product, just clear its
 `comingSoon` flag — no chip-list change needed.
 
 - **Blinds** — the one real, purchasable product, and fully priced.
+  **Timber only as of 2026-09-13** — Bamboo was removed as an option (see
+  dated section below); there is no type selector any more, just colour.
   Pricing was sourced from the client's `Blind order form.xlsx`
   (`../Blind order form.xlsx`, one level up from this folder): base price =
   `width_cm × drop_cm / 100`, a bulk discount kicks in once that base price
-  hits $400 (25% off Timber, 30% off Bamboo), and shipping is a flat $50 per
-  blind unit. Colours are Natural Wood/White/Black (Timber) or
-  Natural/White/Black (Bamboo). See `computeBlindPrice()` in `index.html`
+  hits $400 (25% off), and shipping is a flat $50 per blind unit. Colours
+  are Natural Wood/White/Black. See `computeBlindPrice()` in `index.html`
   for the exact formula, and the standalone
   [Blind Order Calculator artifact](https://claude.ai/code/artifact/a51dc46d-63e9-47df-833f-38c6fcb0ace0)
   for a share-able version of the same calculator outside the site.
@@ -167,15 +370,36 @@ into the `render()` route table's `setActiveNav(...)` calls.
 4. **Contact info is obfuscated in JS on purpose** (see below) — don't
    "simplify" this back to a static `mailto:`/`tel:` link without
    understanding why.
-5. **Netlify Forms email notification is configured (2026-09-05)** — sends to
-   `indohomecollective@gmail.com` on any form submission (Project
-   configuration → Notifications → Form submission notifications). Getting
-   here required two separate things, not just deploying: the per-site
-   "Enable form detection" toggle (Project navigation → Forms) had to be
-   switched on first — a deploy alone doesn't make Netlify parse forms if
-   that's off — *then* a redeploy so the parser actually ran. If a future
-   form on this site "isn't showing up" in the Forms tab, check that toggle
-   before assuming it's a deploy or markup problem.
+5. **Netlify Forms notifications aren't fully configured yet.** Submissions
+   land in the Netlify dashboard (Forms tab) regardless, but nothing emails
+   or pings anyone until notifications are added — do this after the next
+   deploy (Netlify only shows a form in that tab once it's seen it in a
+   deployed build), for **all three** forms — `register-interest`,
+   `quote-request`, and `quote-download`. Repeat the same 3 email
+   notifications on each of the three forms (Netlify notifications are
+   per-form, not site-wide):
+   - Site configuration → Forms → Form notifications → Add notification →
+     Email notification → recipient = `indohomecollective@gmail.com`.
+   - Add notification → Email notification → recipient =
+     `c.nikhomes@live.com.au` (alternate #1).
+   - Add notification → Email notification → recipient =
+     `clintnic01@hotmail.com` (alternate #2).
+   - (A possible 3rd alternate address was mentioned but not confirmed yet —
+     add it the same way if/when supplied.)
+   - Add notification → Outgoing webhook →
+     `https://indo-home-collective.netlify.app/.netlify/functions/notify-push`
+     for the phone push alert (see the 2026-09-13 section above) — first
+     requires a Pushover account/app set up and its `PUSHOVER_APP_TOKEN` /
+     `PUSHOVER_USER_KEY` added as Netlify env vars.
+6. ~~The free-tier "Powered by Netlify" badge blocks the mobile bottom
+   nav~~ — **fixed 2026-09-13 (night), CJ's call.** Found via
+   `elementFromPoint` that the badge iframe was swallowing taps on
+   "About"/"Cart" in the bottom mobile nav. Rather than touch the badge
+   (dashboard/plan-gated), the bottom nav itself was narrowed to stop
+   200px short of the right edge so all 4 items sit clear of it — see the
+   2026-09-13 (night) section above for the exact CSS and how it was
+   verified. The badge is still there and still fully visible, just no
+   longer overlapping our own nav.
 
 ## Stripe integration (live as of 2026-08-30)
 Business context: `indohomecollective@gmail.com`. Stripe account
