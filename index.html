@@ -64,6 +64,13 @@
   }
   .logo-link{display:flex; align-items:center; gap:10px;}
   .logo-link img{height:44px; width:auto;}
+  /* 3D spinning logo (v2) — two faces so the logo reads correctly front and back */
+  .logo-spin{perspective:600px; display:block;}
+  .logo-spin .spinner{position:relative; display:block; transform-style:preserve-3d; animation:logoSpin 9s linear infinite;}
+  .logo-spin .spinner img{backface-visibility:hidden; -webkit-backface-visibility:hidden;}
+  .logo-spin .spinner img.back{position:absolute; inset:0; transform:rotateY(180deg);}
+  .logo-spin:hover .spinner{animation-play-state:paused;}
+  @keyframes logoSpin{from{transform:rotateY(0deg);} to{transform:rotateY(360deg);}}
   nav.main-nav{display:flex; align-items:center; gap:34px;}
   nav.main-nav a{
     font-size:0.82rem; letter-spacing:0.12em; text-transform:uppercase;
@@ -474,6 +481,82 @@
   .lifestyle-teaser h3{font-size:1.3rem; margin:6px 0 12px; color:var(--moss-dark);}
   .lifestyle-teaser p{color:#5a5a5a; margin:0 0 20px;}
 
+
+  /* ---------- v2: blinds-first home ---------- */
+  .home-hero{display:grid; grid-template-columns:1.05fr 1fr; gap:48px; align-items:center; padding:56px 0 64px;}
+  .home-hero .eyebrow{display:block; margin-bottom:12px;}
+  .home-hero h1{font-size:clamp(2rem, 4.4vw, 3rem); line-height:1.2; margin:0 0 18px;}
+  .home-hero p.sub{font-family:Georgia, 'Times New Roman', serif; font-size:1.12rem; line-height:1.7; color:#4a4a4a; margin:0 0 26px;}
+  .hero-actions{display:flex; gap:12px; flex-wrap:wrap;}
+  .hero-facts{display:flex; gap:22px; flex-wrap:wrap; margin-top:26px; font-size:0.8rem; color:#666; letter-spacing:0.03em;}
+  .hero-facts strong{color:var(--moss); font-weight:600;}
+  .hero-photo{position:relative; border-radius:6px; overflow:hidden; aspect-ratio:4/3; background:var(--beige);}
+  .hero-photo img{width:100%; height:100%; object-fit:cover;}
+  /* Bali-style carved frame (CSS only, no image download): moss outer band
+     with tan "tumpal" triangles and beige dots, then a beige/tan inner fillet */
+  .home-section{padding:64px 0; border-top:1px solid rgba(199,177,148,0.4);}
+  .swatch-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;}
+  .swatch-card{background:var(--white); border:1px solid rgba(199,177,148,0.35); border-radius:6px; overflow:hidden; display:flex; flex-direction:column; transition:transform .25s ease, box-shadow .25s ease;}
+  .swatch-card:hover{transform:translateY(-4px); box-shadow:0 14px 26px rgba(61,92,59,0.12);}
+  .swatch{aspect-ratio:16/10;}
+  .swatch.natural{background:repeating-linear-gradient(180deg,#9a6a3f 0 18px,#7d532e 18px 20px);}
+  .swatch.white{background:repeating-linear-gradient(180deg,#f4f1ec 0 18px,#d9d3c9 18px 20px);}
+  .swatch.black{background:repeating-linear-gradient(180deg,#2e2b28 0 18px,#141210 18px 20px);}
+  .swatch-info{padding:16px 18px 18px;}
+  .swatch-info h3{margin:0 0 4px; font-size:1.02rem; text-transform:none;}
+  .swatch-info span{font-size:0.78rem; color:var(--moss); letter-spacing:0.04em;}
+  .gallery-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
+  .gallery-item{position:relative; margin:0; border-radius:6px; overflow:hidden; background:var(--beige); aspect-ratio:4/3;}
+  .gallery-item img{width:100%; height:100%; object-fit:cover;}
+  .gallery-item figcaption{position:absolute; left:0; right:0; bottom:0; padding:22px 14px 10px; font-size:0.78rem; color:#fff; background:linear-gradient(transparent, rgba(0,0,0,0.55));}
+  .gallery-item.placeholder{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; text-align:center; color:var(--tan); font-family:Georgia, 'Times New Roman', serif; font-style:italic; font-size:0.95rem; padding:20px;}
+  .gallery-item.placeholder svg{width:56px; height:56px; opacity:0.6;}
+  .also-strip{padding:56px 0 10px; border-top:1px solid rgba(199,177,148,0.4);}
+  .also-head{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:20px;}
+  .also-head h2{font-size:1.3rem; margin:0;}
+  .also-head a{font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--moss); border-bottom:1px solid var(--aqua);}
+  .also-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:16px;}
+  .also-card{display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid rgba(199,177,148,0.35); border-radius:6px; padding:10px; transition:border-color .2s ease;}
+  .also-card:hover{border-color:var(--moss);}
+  .also-card .thumb{flex:none; width:56px; height:56px; border-radius:4px; overflow:hidden; background:var(--beige); display:flex; align-items:center; justify-content:center;}
+  .also-card .thumb svg{width:60%; height:60%;}
+  .also-card .thumb img{width:100%; height:100%; object-fit:cover;}
+  .also-card .t{font-size:0.86rem; font-weight:600; line-height:1.3;}
+  .also-card .s{font-size:0.72rem; color:var(--tan); font-style:italic; font-family:Georgia, 'Times New Roman', serif;}
+  .page-head{text-align:center; padding:56px 0 8px;}
+  .page-head h1{font-size:2rem; margin:6px 0 10px;}
+  .page-head p{color:#666; max-width:520px; margin:0 auto;}
+  @media (max-width: 860px){
+    .home-hero{grid-template-columns:1fr; gap:28px; padding:28px 0 44px;}
+    .hero-photo{order:-1;}
+    .swatch-grid{grid-template-columns:1fr 1fr 1fr; gap:12px;}
+    .swatch-info{padding:10px 10px 12px;}
+    .swatch-info h3{font-size:0.88rem;}
+    .swatch-info span{font-size:0.68rem;}
+    .also-grid{grid-template-columns:1fr 1fr;}
+    .gallery-grid{grid-template-columns:1fr;}
+    .home-section{padding:44px 0;}
+  }
+  @media (max-width: 480px){
+    .also-grid{grid-template-columns:1fr;}
+  }
+
+
+  /* ---------- Squirrel mascot peek (v2) ---------- */
+  .sq-host{position:absolute; z-index:40; overflow:hidden; pointer-events:none; width:72px; height:76px;}
+  .sq-host .peek{position:absolute; left:0; bottom:0; width:100%; transform:translateY(105%);}
+  .sq-host .sq-svg{width:100%; height:auto; display:block;}
+  .sq-host .peek.go{animation:sqDart calc(8s * var(--spd,1)) both;}
+  .sq-host .peek.go .flip{animation:sqLook calc(8s * var(--spd,1)) both;}
+  @keyframes sqDart{
+    0%,8%{transform:translateY(105%)}
+    11%{transform:translateY(0)} 13%{transform:translateY(12%)} 14.5%{transform:translateY(8%)}
+    30%{transform:translateY(8%)} 31.5%{transform:translateY(10%)}
+    52%{transform:translateY(8%)} 54%{transform:translateY(-2%)} 56%{transform:translateY(8%)} 57%{transform:translateY(6%)}
+    68%{transform:translateY(8%)} 69%{transform:translateY(5%)} 72%,100%{transform:translateY(105%)}}
+  @keyframes sqLook{0%,32%{transform:scaleX(1)} 33%,46%{transform:scaleX(-1)} 47%,100%{transform:scaleX(1)}}
+  @media (max-width: 860px){ .sq-host{width:58px; height:62px;} }
+
   /* ---------- Utility / responsive ---------- */
   .visually-hidden{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);}
   .bottom-nav{display:none;}
@@ -550,12 +633,13 @@
 <header class="site-header">
   <div class="header-inner">
     <a href="#/shop" class="logo-link">
-      <img src="assets/logo.jpg" alt="indo home collective — balinese inspired living">
+      <span class="logo-spin"><span class="spinner"><img src="assets/logo-transparent.png" alt="indo home collective — balinese inspired living"><img class="back" src="assets/logo-transparent.png" alt="" aria-hidden="true"></span></span>
     </a>
     <nav class="main-nav" id="mainNav">
-      <a href="#/shop" data-route="shop">Shop</a>
-      <a href="#/about" data-route="about">About</a>
+      <a href="#/shop" data-route="shop">Blinds</a>
+      <a href="#/homewares" data-route="homewares">Homewares</a>
       <a href="#/ordering" data-route="ordering">Ordering</a>
+      <a href="#/about" data-route="about">About</a>
     </nav>
     <button class="cart-btn" onclick="location.hash='#/cart'">
       Cart <span class="cart-count" id="cartCount">0</span>
@@ -565,12 +649,12 @@
 
 <nav class="bottom-nav" id="bottomNav">
   <a href="#/shop" data-route="shop">
-    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 40 H78 L70 84 H30 Z"/><path d="M22 40 Q50 30 78 40"/><line x1="32" y1="48" x2="38" y2="78"/><line x1="50" y1="48" x2="50" y2="80"/><line x1="68" y1="48" x2="62" y2="78"/></svg>
-    <span>Shop</span>
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="14" width="60" height="72" rx="4"/><line x1="28" y1="32" x2="72" y2="32"/><line x1="28" y1="50" x2="72" y2="50"/><line x1="28" y1="68" x2="72" y2="68"/></svg>
+    <span>Blinds</span>
   </a>
-  <a href="#/ordering" data-route="ordering">
-    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><rect x="26" y="14" width="48" height="72" rx="4"/><line x1="36" y1="30" x2="64" y2="30"/><line x1="36" y1="44" x2="64" y2="44"/><line x1="36" y1="58" x2="54" y2="58"/></svg>
-    <span>Ordering</span>
+  <a href="#/homewares" data-route="homewares">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="50" cy="42" rx="34" ry="10"/><path d="M16 42 Q20 70 50 72 Q80 70 84 42"/></svg>
+    <span>Decor</span>
   </a>
   <a href="#/about" data-route="about">
     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="34"/><line x1="50" y1="46" x2="50" y2="70"/><circle cx="50" cy="32" r="3" fill="currentColor" stroke="none"/></svg>
@@ -634,7 +718,8 @@
     </div>
     <div>
       <h3>Shop</h3>
-      <p><a href="#/shop">All products</a></p>
+      <p><a href="#/shop">Timber slat blinds</a></p>
+      <p><a href="#/homewares">Homewares</a></p>
       <p><a href="#/ordering">How ordering works</a></p>
       <p><a href="#/about">Our story</a></p>
       <p><a href="#/lakey-peak">Lakey Peak Surf Camp</a></p>
@@ -672,6 +757,7 @@ const PRODUCTS = [
     priceLabel:'From',
     unit:'per blind — priced by size',
     icon:'blinds',
+    image:'assets/blinds-natural-web.jpg',
     customBlind:true,
     desc:"Our signature piece. Real timber slats, handcrafted by a family of makers with over thirty years of experience. Choose your colour, width and drop below — pricing, bulk discounts and shipping calculate instantly.",
     meta:[['Material','Solid timber'],['Slat width','2.5cm'],['Sizes','50–300cm wide, 50–300cm drop'],['Lead time','8–12 weeks']]
@@ -1014,6 +1100,20 @@ const BLIND_DISCOUNT_PCT = { Timber:0.25 };
 const BLIND_DISCOUNT_THRESHOLD = 400;
 const BLIND_SHIPPING_PER_UNIT = 50;
 
+// Home-page gallery. Add real install photos here as they come in — keep each
+// file ~1100px wide / under ~150KB (mobile data). aiGenerated:true shows an
+// "AI-generated preview" label; never remove it from an image that isn't a
+// genuine photo of our product.
+const BLIND_GALLERY = [
+  {src:'assets/blinds-natural-web.jpg', caption:'Natural Wood'},
+  {src:'assets/blinds-white-web.jpg', caption:'White', aiGenerated:true}
+];
+const BLIND_SWATCHES = [
+  {colour:'Natural Wood', cls:'natural', note:'Warm, natural grain'},
+  {colour:'White', cls:'white', note:'Light & coastal'},
+  {colour:'Black', cls:'black', note:'Bold & modern'}
+];
+
 function computeBlindPrice(type, width, drop){
   const base = (width * drop) / 100;
   const eligible = base >= BLIND_DISCOUNT_THRESHOLD;
@@ -1114,6 +1214,7 @@ function setActiveNav(routeName){
 }
 
 function render(){
+  stopSquirrel();
   const hash = location.hash || '#/shop';
   const parts = hash.replace('#/','').split('/');
   const app = document.getElementById('app');
@@ -1121,11 +1222,17 @@ function render(){
 
   if(parts[0]==='shop' && !parts[1]){
     setActiveNav('shop');
+    app.innerHTML = renderHome();
+    bindHomeEvents();
+  } else if(parts[0]==='homewares'){
+    if(parts[1]) activeCategory = decodeURIComponent(parts[1]);
+    setActiveNav('homewares');
     app.innerHTML = renderShop();
     bindShopEvents();
   } else if(parts[0]==='product' && parts[1]){
-    setActiveNav('shop');
-    app.innerHTML = renderProductDetail(parts[1]);
+    const prod = findProduct(parts[1]);
+    setActiveNav(prod && prod.category!=='Blinds' ? 'homewares' : 'shop');
+    app.innerHTML = renderProductDetail(parts[1], parts[2] ? decodeURIComponent(parts[2]) : null);
     bindDetailEvents(parts[1]);
   } else if(parts[0]==='cart'){
     setActiveNav('cart');
@@ -1155,8 +1262,8 @@ function render(){
     bindLakeyPeakEvents();
   } else {
     setActiveNav('shop');
-    app.innerHTML = renderShop();
-    bindShopEvents();
+    app.innerHTML = renderHome();
+    bindHomeEvents();
   }
   updateCartCount();
 }
@@ -1164,28 +1271,24 @@ function render(){
 /* =========================================================
    VIEW: SHOP
    ========================================================= */
-let activeCategory = 'Blinds';
+// v2: Blinds have their own home page (renderHome). This grid is now the
+// secondary "Homewares" page — Blinds excluded, defaults to Floating Pool Trays.
+const HOMEWARE_CATEGORIES = CATEGORIES.filter(c=>c!=='Blinds');
+let activeCategory = 'Floating Pool Trays';
 
 function renderShop(){
+  if(!HOMEWARE_CATEGORIES.includes(activeCategory)) activeCategory = HOMEWARE_CATEGORIES[0];
   const filtered = PRODUCTS.filter(p=>p.category===activeCategory);
   return `
-    <section class="hero">
-      <div class="hero-content">
-        <span class="eyebrow">balinese inspired living.</span>
-        <h1>bring the calm of bali<br>into your home.</h1>
-        <p class="sub">Handcrafted timber blinds and curated homewares, made by artisan hands and shipped from our hearts in Bali to yours.</p>
-        <a href="#shop-grid" class="btn btn-primary">Shop the collection</a>
-      </div>
-    </section>
-
-    <section class="shop-section" id="shop-grid">
+    <section class="shop-section" id="shop-grid" style="padding-top:48px;">
       <div class="wrap">
         <div class="section-head">
-          <span class="eyebrow">the collection</span>
-          <h2>curated for the home</h2>
+          <span class="eyebrow">also from us</span>
+          <h2>homewares</h2>
+          <p style="color:#666; margin:8px 0 0;">Bali homewares we're bringing in alongside our blinds. Most are still on their way — register your interest on any piece and we'll let you know when it lands.</p>
         </div>
         <div class="filter-row" id="filterRow">
-          ${CATEGORIES.map(c=>`<button class="filter-chip ${c===activeCategory?'active':''} ${CHIP_MUTED_CATEGORIES.includes(c)?'chip-coming-soon':''}" data-cat="${c}">${c}</button>`).join('')}
+          ${HOMEWARE_CATEGORIES.map(c=>`<button class="filter-chip ${c===activeCategory?'active':''} ${CHIP_MUTED_CATEGORIES.includes(c)?'chip-coming-soon':''}" data-cat="${c}">${c}</button>`).join('')}
         </div>
         <div class="product-grid">
           ${filtered.map(p=>`
@@ -1208,32 +1311,6 @@ function renderShop(){
       </div>
     </section>
 
-    <div class="value-strip">
-      <div class="value-item">
-        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><path d="${'M20 50 L42 72 L82 28'}"/></svg>
-        <span class="v-title">Handcrafted</span>
-        <p>Every piece made by hand, by artisans with decades of craft.</p>
-      </div>
-      <div class="value-item">
-        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><circle cx="50" cy="50" r="34"/><path d="M50 30 V50 L64 60"/></svg>
-        <span class="v-title">Made to order</span>
-        <p>Custom blinds cut and finished to your exact measurements.</p>
-      </div>
-      <div class="value-item">
-        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><path d="M50 14 L80 30 V56 Q80 78 50 90 Q20 78 20 56 V30 Z"/></svg>
-        <span class="v-title">Natural materials</span>
-        <p>Real timber, teak and leather — built to last, not landfill.</p>
-      </div>
-    </div>
-
-    <div class="wrap">
-      <div class="lifestyle-teaser">
-        <span class="eyebrow">the indo lifestyle, beyond the home</span>
-        <h3 class="brand-font">We don't just bring Indonesia into your home.</h3>
-        <p>We're also building a small surf camp at Lakey Peak, Sumbawa — register your interest and we'll let you know when it's ready.</p>
-        <a href="#/lakey-peak" class="btn btn-outline">Discover Lakey Peak →</a>
-      </div>
-    </div>
   `;
 }
 
@@ -1246,15 +1323,194 @@ function bindShopEvents(){
       activeCategory = chip.dataset.cat;
       document.getElementById('app').innerHTML = renderShop();
       bindShopEvents();
+      history.replaceState(null, '', '#/homewares/' + encodeURIComponent(activeCategory));
       document.getElementById('shop-grid').scrollIntoView({behavior:'smooth'});
     });
   });
 }
 
+
+/* =========================================================
+   VIEW: HOME (v2 — blinds-first landing page, route #/shop)
+   Blinds are the core product, so the home page is about them: hero,
+   colour showcase, photo gallery, then a small "Also from us" strip linking
+   to the secondary #/homewares page. Keep heavy imagery to BLIND_GALLERY
+   (lazy-loaded, compressed) to stay light on mobile data.
+   ========================================================= */
+function renderHome(){
+  const blind = findProduct('timber-slat-blinds');
+  return `
+    <div class="wrap">
+      <section class="home-hero">
+        <div>
+          <span class="eyebrow">handcrafted in bali, made to measure</span>
+          <h1>timber slat blinds,<br>made for your home.</h1>
+          <p class="sub">Real timber slats, handmade by a family of craftsmen with over thirty years of experience. Choose your colour and size, see your price instantly, and we'll build them for you.</p>
+          <div class="hero-actions">
+            <a href="#/product/timber-slat-blinds" class="btn btn-primary">Design your blind</a>
+            <a href="#/ordering" class="btn btn-outline">How ordering works</a>
+          </div>
+          <div class="hero-facts">
+            <span><strong>From ${money(blind.price)}</strong> per blind</span>
+            <span><strong>8–12 weeks</strong> made to order</span>
+            <span><strong>Shipping</strong> included</span>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <img src="${primaryImageSrc(blind)}" alt="Natural timber slat blind installed on a patio" fetchpriority="high">
+        </div>
+      </section>
+    </div>
+
+    <section class="home-section">
+      <div class="wrap">
+        <div class="section-head" style="margin-bottom:32px;">
+          <span class="eyebrow">three finishes</span>
+          <h2>choose your colour</h2>
+        </div>
+        <div class="swatch-grid">
+          ${BLIND_SWATCHES.map(sw=>`
+            <a class="swatch-card" href="#/product/timber-slat-blinds/${encodeURIComponent(sw.colour)}">
+              <div class="swatch ${sw.cls}" role="img" aria-label="${sw.colour} slat colour sample"></div>
+              <div class="swatch-info">
+                <h3>${sw.colour}</h3>
+                <span>${sw.note} →</span>
+              </div>
+            </a>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="home-section">
+      <div class="wrap">
+        <div class="section-head" style="margin-bottom:32px;">
+          <span class="eyebrow">in real homes</span>
+          <h2>gallery</h2>
+        </div>
+        <div class="gallery-grid">
+          ${BLIND_GALLERY.map(g=>`
+            <figure class="gallery-item">
+              <img src="${g.src}" alt="${g.caption}" loading="lazy">
+              ${g.aiGenerated ? `<span class="ai-badge">AI-generated preview</span>` : ''}
+              <figcaption>${g.caption}</figcaption>
+            </figure>`).join('')}
+          <div class="gallery-item placeholder">
+            ${icon('blinds')}
+            <span>More install photos coming soon</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="value-strip">
+      <div class="value-item">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><path d="M20 50 L42 72 L82 28"/></svg>
+        <span class="v-title">Handcrafted</span>
+        <p>Every blind made by hand by artisans with decades of craft.</p>
+      </div>
+      <div class="value-item">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><circle cx="50" cy="50" r="34"/><path d="M50 30 V50 L64 60"/></svg>
+        <span class="v-title">Made to measure</span>
+        <p>Cut and finished to your exact width and drop.</p>
+      </div>
+      <div class="value-item">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--moss)" stroke-width="3"><path d="M50 14 L80 30 V56 Q80 78 50 90 Q20 78 20 56 V30 Z"/></svg>
+        <span class="v-title">Real timber</span>
+        <p>Natural insulation and a finish that lasts.</p>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section class="also-strip" style="padding-bottom:0;">
+        <div class="also-head">
+          <h2>also from us</h2>
+          <a href="#/homewares">View homewares →</a>
+        </div>
+      </section>
+
+      <div class="lifestyle-teaser">
+        <span class="eyebrow">the indo lifestyle, beyond the home</span>
+        <h3 class="brand-font">We don't just bring Indonesia into your home.</h3>
+        <p>We're also building a small surf camp at Lakey Peak, Sumbawa — register your interest and we'll let you know when it's ready.</p>
+        <a href="#/lakey-peak" class="btn btn-outline">Discover Lakey Peak →</a>
+      </div>
+    </div>
+  `;
+}
+
+function bindHomeEvents(){ startSquirrel(); }
+
+/* =========================================================
+   SQUIRREL MASCOT — hides behind things on the home page and pops up over
+   the top edge of a random target (hero photo, "Design your blind" button,
+   colour cards, gallery photos) at one of 3 random speeds. The drawing is
+   assets/squirrel-mascot.svg (~8KB, fetched once and cached); its own idle
+   motion scales with the --spd CSS variable. Skipped entirely for visitors
+   who ask for reduced motion. pointer-events:none so it never blocks a tap.
+   ========================================================= */
+const SQ_SPEEDS = [0.6, 1, 1.6]; // fast, normal, slow
+const SQ_TARGETS = '.hero-photo, .hero-actions .btn-primary, .swatch-card, .gallery-item:not(.placeholder)';
+let sqSvgText = null, sqTimer = null, sqHost = null;
+
+function stopSquirrel(){
+  clearTimeout(sqTimer); sqTimer = null;
+  if(sqHost){ sqHost.remove(); sqHost = null; }
+}
+
+async function startSquirrel(){
+  stopSquirrel();
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!sqSvgText){
+    try{
+      const res = await fetch('assets/squirrel-mascot.svg');
+      if(!res.ok) return;
+      sqSvgText = (await res.text()).replace('<svg ', '<svg class="sq-svg" aria-hidden="true" ');
+    }catch(e){ return; }
+  }
+  sqTimer = setTimeout(squirrelPeek, 2500 + Math.random()*3000);
+}
+
+function squirrelPeek(){
+  sqTimer = null;
+  if(!document.querySelector('.home-hero')) return; // left the home page
+  if(document.hidden){ sqTimer = setTimeout(squirrelPeek, 3000); return; }
+  // only targets currently on screen (with room above them for the squirrel)
+  const vh = window.innerHeight;
+  const hdr = document.querySelector('.site-header');
+  const clearTop = (hdr ? hdr.getBoundingClientRect().bottom : 0) + (window.innerWidth <= 860 ? 66 : 80);
+  const targets = Array.from(document.querySelectorAll(SQ_TARGETS)).filter(el=>{
+    const r = el.getBoundingClientRect();
+    return r.width > 60 && r.top > clearTop && r.top < vh - 80;
+  });
+  if(!targets.length){ sqTimer = setTimeout(squirrelPeek, 2000); return; }
+  const el = targets[Math.floor(Math.random()*targets.length)];
+  const r = el.getBoundingClientRect();
+
+  if(sqHost) sqHost.remove();
+  sqHost = document.createElement('div');
+  sqHost.className = 'sq-host';
+  sqHost.innerHTML = `<div class="peek"><div class="flip">${sqSvgText}</div></div>`;
+  document.body.appendChild(sqHost);
+  const w = sqHost.offsetWidth, h = sqHost.offsetHeight;
+  const x = r.left + window.scrollX + 8 + Math.random() * Math.max(0, r.width - w - 16);
+  sqHost.style.left = x + 'px';
+  sqHost.style.top = (r.top + window.scrollY - h + 1) + 'px';
+
+  const peek = sqHost.querySelector('.peek');
+  peek.style.setProperty('--spd', SQ_SPEEDS[Math.floor(Math.random()*SQ_SPEEDS.length)]);
+  peek.addEventListener('animationend', e=>{
+    if(e.target !== peek) return;
+    if(sqHost){ sqHost.remove(); sqHost = null; }
+    sqTimer = setTimeout(squirrelPeek, 3000 + Math.random()*7000);
+  });
+  requestAnimationFrame(()=> peek.classList.add('go'));
+}
+
+
 /* =========================================================
    VIEW: PRODUCT DETAIL
    ========================================================= */
-function renderProductDetail(id){
+function renderProductDetail(id, preColour){
   const p = findProduct(id);
   if(!p){
     return `<div class="wrap" style="padding:100px 0; text-align:center;"><h2>Product not found</h2><a href="#/shop" class="btn btn-outline" style="margin-top:20px;">Back to shop</a></div>`;
@@ -1264,7 +1520,7 @@ function renderProductDetail(id){
   if(p.comingSoon){
     return `
       <div class="wrap">
-        <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category}</div>
+        <div class="breadcrumb"><a href="#/homewares">Homewares</a> / ${p.category}</div>
         <div class="detail-grid">
           <div class="detail-photo ${primaryImageSrc(p) ? '' : 'is-coming-soon'}">
             ${renderDetailPhotoBlock(p)}
@@ -1280,7 +1536,7 @@ function renderProductDetail(id){
               ${p.meta.map(m=>`<div class="meta-row"><span class="label">${m[0]}</span><span class="value">${m[1]}</span></div>`).join('')}
             </div>` : ''}
             ${renderInterestForm(p)}
-            <a href="#/shop" class="btn btn-outline" style="margin-top:18px;">Browse available pieces</a>
+            <a href="#/homewares" class="btn btn-outline" style="margin-top:18px;">Back to homewares</a>
           </div>
         </div>
       </div>
@@ -1288,14 +1544,14 @@ function renderProductDetail(id){
   }
 
   if(p.customBlind){
-    return renderBlindDetail(p);
+    return renderBlindDetail(p, preColour);
   }
 
   const defaultFinish = p.finishOptions ? p.finishOptions[0] : null;
   const inCart = findCartLine(id, defaultFinish);
   return `
     <div class="wrap">
-      <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category} / ${p.name}</div>
+      <div class="breadcrumb"><a href="#/homewares">Homewares</a> / ${p.category} / ${p.name}</div>
       <div class="detail-grid">
         <div class="detail-photo">
           <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
@@ -1423,16 +1679,16 @@ function bindDetailEvents(id){
 /* =========================================================
    VIEW: PRODUCT DETAIL — CUSTOM BLINDS
    ========================================================= */
-function renderBlindDetail(p){
+function renderBlindDetail(p, preColour){
   const defaultType = 'Timber';
-  const defaultColour = BLIND_COLOURS[defaultType][0];
+  const defaultColour = BLIND_COLOURS[defaultType].includes(preColour) ? preColour : BLIND_COLOURS[defaultType][0];
   const defaultWidth = 100;
   const defaultDrop = 150;
   const calc = computeBlindPrice(defaultType, defaultWidth, defaultDrop);
 
   return `
     <div class="wrap">
-      <div class="breadcrumb"><a href="#/shop">Shop</a> / ${p.category} / ${p.name}</div>
+      <div class="breadcrumb"><a href="#/shop">Blinds</a> / ${p.name}</div>
       <div class="detail-grid">
         <div class="detail-photo">
           <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
@@ -1446,7 +1702,7 @@ function renderBlindDetail(p){
           <div class="finish-row">
             <label>Colour</label>
             <div class="finish-options" id="blindColourOptions">
-              ${BLIND_COLOURS[defaultType].map((c,i)=>`<button type="button" class="finish-chip ${i===0?'active':''}" data-colour="${c}">${c}</button>`).join('')}
+              ${BLIND_COLOURS[defaultType].map(c=>`<button type="button" class="finish-chip ${c===defaultColour?'active':''}" data-colour="${c}">${c}</button>`).join('')}
             </div>
           </div>
           <div class="field-row">
@@ -1494,13 +1750,14 @@ function renderBlindDetail(p){
 
 function bindBlindDetailEvents(p){
   const type = 'Timber';
-  let colour = BLIND_COLOURS[type][0];
   let qty = 1;
 
   const widthSel = document.getElementById('blindWidth');
   const dropSel = document.getElementById('blindDrop');
   const qtyVal = document.getElementById('qtyVal');
   const colourWrap = document.getElementById('blindColourOptions');
+  const activeChip = colourWrap.querySelector('.finish-chip.active');
+  let colour = activeChip ? activeChip.dataset.colour : BLIND_COLOURS[type][0];
   const bpList = document.getElementById('bpList');
   const bpDiscountRow = document.getElementById('bpDiscountRow');
   const bpDiscount = document.getElementById('bpDiscount');
@@ -2181,7 +2438,7 @@ function renderOrdering(){
           </div>
         </div>
         <div style="text-align:center; margin-top:44px;">
-          <a href="#/shop" class="btn btn-dark">Browse ready-to-ship pieces</a>
+          <a href="#/product/timber-slat-blinds" class="btn btn-dark">Design your blind</a>
         </div>
       </div>
     </section>

@@ -523,3 +523,48 @@ helpers rather than hardcoding the address again.
       available
 - [ ] Confirm/adjust Decor pricing and dimensions (currently placeholders)
 - [ ] Add real domain (currently the default `.netlify.app` subdomain)
+
+## 2026-10-07: v2 "blinds-focus" redesign (this folder)
+v1 (full multi-category shop) is preserved untouched in
+`../indo-home-collective-handoff/` (git repo, linked to the live Netlify site)
+and as a plain copy in `../indo-home-collective-v1-backup/`. This folder
+(`indo-home-collective-v2-blinds/`) is the v2 working copy — **deployed to prod 2026-10-07** (folder isn't `netlify link`ed; deploy with `--site 2a01e561-cc44-4a6e-9db0-fbecaf772045` — the site name fails in the build step). Previously **not yet
+deployed**. Suggested git step: in the handoff repo run
+`git tag v1-full-shop && git push --tags`, then create a `blinds-focus`
+branch and copy this folder's files over it when v2 is approved.
+
+What changed (all in `index.html`; Netlify functions/pricing untouched):
+- `#/shop` now renders `renderHome()` — blinds landing page: split hero
+  (real natural-timber photo), colour cards (`BLIND_SWATCHES`, CSS-drawn
+  slats, link to `#/product/timber-slat-blinds/<Colour>` which preselects
+  the colour chip), gallery (`BLIND_GALLERY`, add photos there), value strip,
+  small "also from us" strip (non-muted categories first), Lakey Peak teaser.
+- New `#/homewares` (and `#/homewares/<Category>`) route = the old
+  `renderShop()` grid minus Blinds (`HOMEWARE_CATEGORIES`), default
+  category Floating Pool Trays. Non-blind breadcrumbs/links point here.
+- Nav: header = Blinds / Homewares / Ordering / About; mobile bottom nav =
+  Blinds / Decor / About / Cart (Ordering dropped from bottom nav to keep
+  4 items clear of the Netlify badge — still in header + footer).
+- Blind product now has `image:'assets/blinds-natural-web.jpg'`.
+- New compressed assets `blinds-natural-web.jpg` (~120KB, real photo) and
+  `blinds-white-web.jpg` (~84KB, **AI-generated** — shown with the
+  "AI-generated preview" badge; replace with a real photo when available).
+  No Black photo yet.
+
+### 2026-10-07 (later): spinning logo, squirrel mascot
+- Header logo is now `assets/logo-transparent.png` (white background
+  removed) in a `.logo-spin` wrapper: slow 3D Y-axis spin (two faces so it
+  reads correctly both sides), pauses on hover, off for reduced-motion.
+- "Also from us" on the home page is now just the heading + "View
+  homewares →" link (thumbnail cards removed at CJ's request).
+- Squirrel mascot: `assets/squirrel-mascot.svg` (~8KB, cartoon of CJ's
+  squirrel photo `assets/squirrel.jpg`). Has built-in idle motion (tail,
+  blink, nose, ear, head tilt, nibbling) whose timings scale with the CSS
+  variable `--spd`. On the home page only, `startSquirrel()` (called from
+  `bindHomeEvents()`) fetches the SVG once, then `squirrelPeek()` picks a
+  random on-screen target (`SQ_TARGETS`: hero photo, Design your blind
+  button, colour cards, gallery photos) and pops the squirrel up over its
+  top edge in a clipped `.sq-host` box, at a random speed from
+  `SQ_SPEEDS` (0.6 fast / 1 normal / 1.6 slow). `render()` calls
+  `stopSquirrel()` on every route change. `pointer-events:none` so it never
+  blocks a tap; skipped entirely under prefers-reduced-motion.
