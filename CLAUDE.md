@@ -307,7 +307,11 @@ When adding the real Floating Pool Trays product, just clear its
   `width_cm × drop_cm / 100`, a bulk discount kicks in once that base price
   hits $400 (25% off), and shipping is a flat $50 per blind unit. Colours
   are Natural Wood/White/Black. See `computeBlindPrice()` in `index.html`
-  for the exact formula, and the standalone
+  for the exact formula. **Price check 2026-10-07**: all 66 Timber sizes
+  match the workbook's grid (prices, grey-cell discount eligibility,
+  shipping, colours) except 50×175, which the supplier grid lists as $86
+  (looks like a typo — every other cell is width×drop/100). CJ chose to keep
+  the formula's $87.50; don't "fix" it to $86. See also the standalone
   [Blind Order Calculator artifact](https://claude.ai/code/artifact/a51dc46d-63e9-47df-833f-38c6fcb0ace0)
   for a share-able version of the same calculator outside the site.
 - **Wooden Bowls & Leather Goods** (renamed from "Decor") — four real
