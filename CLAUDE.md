@@ -370,7 +370,12 @@ into the `render()` route table's `setActiveNav(...)` calls.
 4. **Contact info is obfuscated in JS on purpose** (see below) — don't
    "simplify" this back to a static `mailto:`/`tel:` link without
    understanding why.
-5. **Netlify Forms notifications aren't fully configured yet.** Submissions
+5. **Email alerts done 2026-10-07; phone push still pending.** Three
+   site-wide email hooks (form = any, so they cover all three forms):
+   indohomecollective@gmail.com, c.nikhomes@live.com.au,
+   clintnic01@hotmail.com — test submission confirmed all three arrive.
+   Remaining: the Pushover webhook below. Original notes:
+   Submissions
    land in the Netlify dashboard (Forms tab) regardless, but nothing emails
    or pings anyone until notifications are added — do this after the next
    deploy (Netlify only shows a form in that tab once it's seen it in a
@@ -450,7 +455,13 @@ actually cleared once `bindConfirmationEvents()` has verified the returned
 session as paid — if the customer cancels on Stripe's page, `cancel_url`
 sends them back to `#/checkout` with their cart still intact.
 
-**Current status**: code is deployed and working end-to-end *except* the
+**Current status (2026-10-07)**: working end-to-end in **test mode** —
+`STRIPE_SECRET_KEY` is set in Netlify (an `sk_test_` key; sessions come
+back `cs_test_`), and a full 4242 test purchase on the live site reached
+"Order confirmed" with the cart cleared. Steps 1–4 below are done; only
+step 5 (swap in the live key, then redeploy) remains.
+
+Earlier status: code is deployed and working end-to-end *except* the
 `STRIPE_SECRET_KEY` env var isn't set in Netlify yet, so
 `create-checkout-session` currently 500s (verified this fails gracefully —
 the "Place order" button shows an inline error and re-enables, cart is
@@ -517,8 +528,9 @@ helpers rather than hardcoding the address again.
       per-size/type/colour pricing for the Blinds product
 - [x] Cart persistence across refresh (`localStorage`, see above)
 - [x] Deploy to GitHub + Netlify (see above)
-- [x] Wire up Stripe Checkout (see Stripe integration section) — just
-      needs `STRIPE_SECRET_KEY` set in Netlify to go live, see steps above
+- [x] Wire up Stripe Checkout (see Stripe integration section) — working
+      in test mode; swap in the live key to take real payments
+- [x] Form email alerts (3 recipients, all forms) — phone push still to do
 - [ ] Swap placeholder icons for real product photography as it becomes
       available
 - [ ] Confirm/adjust Decor pricing and dimensions (currently placeholders)
