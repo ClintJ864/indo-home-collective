@@ -541,7 +541,10 @@ helpers rather than hardcoding the address again.
   A `@` → `75.2.60.5`, CNAME `www` → `indo-home-collective.netlify.app`.
   Email: no mailbox — ImprovMX free forwarding (account
   indohomecollective@gmail.com), catch-all `*@indohomecollective.com.au` →
-  indohomecollective@gmail.com; GoDaddy has MX `mx1/mx2.improvmx.com`
+  indohomecollective@gmail.com, plus aliases `admin@` → swb2@optusnet.com.au,
+  `nikki@` → clintnic01@hotmail.com, `clint@` → c.nikhomes@live.com.au
+  (receive-only on the free plan; replies come from the personal inboxes).
+  Stripe support email is `hello@`. GoDaddy has MX `mx1/mx2.improvmx.com`
   (10/20) and TXT SPF `v=spf1 include:spf.improvmx.com ~all`. Leave the
   `_dmarc` and `_domainconnect` records alone. GoDaddy asks for an
   identity code on every DNS change. Stripe's business website is set to the
