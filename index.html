@@ -528,8 +528,9 @@
   .swatch-card{background:var(--white); border:1px solid rgba(199,177,148,0.35); border-radius:6px; overflow:hidden; display:flex; flex-direction:column; transition:transform .25s ease, box-shadow .25s ease;}
   .swatch-card:hover{transform:translateY(-4px); box-shadow:0 14px 26px rgba(61,92,59,0.12);}
   .swatch{aspect-ratio:16/10;}
-  .swatch.natural{background:repeating-linear-gradient(180deg,#9a6a3f 0 18px,#7d532e 18px 20px);}
-  .swatch.white{background:repeating-linear-gradient(180deg,#f4f1ec 0 18px,#d9d3c9 18px 20px);}
+  /* Slat colours sampled from the real product photos (blinds-natural-web.jpg / blinds-white-web.jpg) */
+  .swatch.natural{background:repeating-linear-gradient(180deg,#a8744f 0,#8d5d40 9px,#6e4530 17px,#3d2418 17px 20px);}
+  .swatch.white{background:repeating-linear-gradient(180deg,#ffffff 0,#fafaf8 9px,#f0efec 17px,#cfcdc8 17px 20px); box-shadow:inset 0 0 0 1px rgba(0,0,0,0.05);}
   .swatch.black{background:repeating-linear-gradient(180deg,#2e2b28 0 18px,#141210 18px 20px);}
   .swatch-info{padding:16px 18px 18px;}
   .swatch-info h3{margin:0 0 4px; font-size:1.02rem; text-transform:none;}
