@@ -519,6 +519,15 @@
   }
   .step-text p{margin:0; font-size:1.02rem; line-height:1.6;}
 
+  /* Ordering page: returns & faulty items policy */
+  .policy{max-width:640px; margin:70px auto 0; padding-top:44px; border-top:1px solid rgba(61,92,59,0.15);}
+  .policy h3{font-size:1.4rem; color:var(--moss); margin:0 0 18px; text-transform:none; letter-spacing:0;}
+  .policy p{margin:0 0 14px; font-size:0.95rem; line-height:1.65;}
+  .policy strong{color:var(--moss);}
+  .policy a{color:var(--moss); text-decoration:underline;}
+  .policy .acl{margin-top:22px; font-size:0.82rem; color:#6e665b; font-style:italic;}
+  .summary-note a{color:var(--moss); text-decoration:underline;}
+
   /* ---------- Contact us page (#/contact): business cards ---------- */
   .contact-section{margin-top:0;}
   .contact-cards{max-width:860px; margin:0 auto;}
@@ -1348,6 +1357,7 @@ function render(){
   } else if(parts[0]==='ordering'){
     setActiveNav('ordering');
     app.innerHTML = renderOrdering();
+    if(parts[1]==='returns') document.getElementById('returns').scrollIntoView();
   } else if(parts[0]==='contact'){
     setActiveNav(''); // reached from the footer's "Contact cards" link
     app.innerHTML = renderContactPage();
@@ -1971,14 +1981,14 @@ function renderCart(){
         <div class="summary-box">
           <h2>Order summary</h2>
           <div class="summary-row"><span>Subtotal (${cartCount()} items)</span><span>${money(cartTotal())}</span></div>
-          <div class="summary-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+          <div class="summary-row"><span>Shipping</span><span>Included</span></div>
           <div class="summary-row total"><span>Estimated total</span><span>${money(cartTotal())}</span></div>
           ${PAYMENTS_ENABLED ? `
           <a href="#/checkout" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Proceed to checkout</a>
           <a href="#/quote" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Save / email a quote</a>` : `
           <a href="#/quote" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Request a quote</a>`}
           <a href="#/shop" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Continue shopping</a>
-          <p class="summary-note">${PAYMENTS_ENABLED ? 'Secure checkout · ' : ''}${RETURNS_NOTE}</p>
+          <p class="summary-note">${PAYMENTS_ENABLED ? 'Secure checkout · ' : ''}${RETURNS_NOTE} <a href="#/ordering/returns">Returns policy</a></p>
         </div>
       </div>
     </div>
@@ -2055,7 +2065,7 @@ function renderQuotePage(){
           }).join('')}
         </div>
         <div class="quote-total-row"><span>Estimated total</span><span>${money(cartTotal())}</span></div>
-        <p class="quote-note">This is an estimate, not a final invoice — shipping is calculated at checkout and we'll confirm final pricing by email.</p>
+        <p class="quote-note">This is an estimate, not a final invoice — shipping is included in the prices above and we'll confirm final pricing by email.</p>
       </div>
 
       <div class="quote-actions no-print">
@@ -2254,11 +2264,11 @@ function renderCheckout(){
             }).join('')}
           </div>
           <div class="summary-row" style="margin-top:16px;"><span>Subtotal</span><span>${money(cartTotal())}</span></div>
-          <div class="summary-row"><span>Shipping</span><span>Free</span></div>
+          <div class="summary-row"><span>Shipping</span><span>Included</span></div>
           <div class="summary-row total"><span>Total</span><span>${money(cartTotal())}</span></div>
           <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; margin-top:18px;">Place order</button>
           <a href="#/cart" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Back to cart</a>
-          <p class="summary-note">Secure checkout · ${RETURNS_NOTE}</p>
+          <p class="summary-note">Secure checkout · ${RETURNS_NOTE} <a href="#/ordering/returns">Returns policy</a></p>
         </div>
       </div>
     </div>
@@ -2543,9 +2553,25 @@ function renderOrdering(){
         <div style="text-align:center; margin-top:44px;">
           <a href="#/product/timber-slat-blinds" class="btn btn-dark">Design your blind</a>
         </div>
+        ${renderReturnsPolicy()}
       </div>
     </section>
   `;
+}
+
+// Returns & faulty items policy (Ordering page). The last paragraph is the
+// standard Australian Consumer Law statement — keep it word for word.
+function renderReturnsPolicy(){
+  return `
+    <div class="policy" id="returns">
+      <h3 class="brand-font">returns &amp; faulty items</h3>
+      <p><strong>Made to order.</strong> Every blind is handmade to your measurements, and our other pieces are shipped to order, so we can't offer returns or refunds for change of mind.</p>
+      <p><strong>Please double-check your measurements.</strong> We make each blind to the sizes you give us, so a blind made to the measurements supplied isn't considered faulty. Not sure how to measure? Ask us before you order.</p>
+      <p><strong>Natural timber.</strong> Grain, tone and small knots vary from blind to blind. That's the character of real timber, not a fault.</p>
+      <p><strong>Faulty, damaged or not what you ordered?</strong> Please check your order when it arrives and contact us within 7 days at <a href="mailto:${contactEmail()}">${contactEmail()}</a> with your order number and photos. We'll arrange a repair, replacement or refund as appropriate.</p>
+      <p><strong>Cancellations.</strong> Contact us as soon as possible. Once production of your made-to-order blind has started, the order can't be cancelled.</p>
+      <p class="acl">Our goods come with guarantees that cannot be excluded under the Australian Consumer Law. You are entitled to a replacement or refund for a major failure and compensation for any other reasonably foreseeable loss or damage. You are also entitled to have the goods repaired or replaced if the goods fail to be of acceptable quality and the failure does not amount to a major failure.</p>
+    </div>`;
 }
 
 /* ---------- Contact us page (#/contact): business cards ----------
