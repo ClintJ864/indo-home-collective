@@ -633,3 +633,22 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
   `SQ_SPEEDS` (0.6 fast / 1 normal / 1.6 slow). `render()` calls
   `stopSquirrel()` on every route change. `pointer-events:none` so it never
   blocks a tap; skipped entirely under prefers-reduced-motion.
+
+## Search (SEO) basics — 2026-10-09
+- Target: Gold Coast & surrounds, delivering across **Queensland and NSW only**.
+- `<head>` of `index.html` has the title, meta description, canonical, Open
+  Graph/Twitter tags (preview image `assets/og-image.jpg`, 1200×630) and a
+  `HomeGoodsStore` JSON-LD block (Gold Coast address locality only — no street,
+  no email/phone, per the anti-scraping rule; areaServed Gold Coast/QLD/NSW;
+  sameAs Instagram + Facebook). `assets/logo-full-hires.png` is referenced there.
+- **Name clash to avoid:** "Indie Home Collective" is an Auckland (NZ) interiors
+  store. Always pair our name with "timber slat blinds" + "Gold Coast" and the
+  Bali/Indonesia story; avoid their vocabulary ("concept store", "eclectic",
+  "curated interiors").
+- `robots.txt` + `sitemap.xml` (home page only). Netlify serves these static
+  files ahead of the `/*` → index.html rewrite.
+- Known limitation: all views are hash routes (`/#/about` etc.), so Google sees
+  one page. Moving to path routes (`/about`, `/ordering`, `/contact`) is the next
+  SEO step; add those URLs to `sitemap.xml` when it happens.
+- Hi-res print logos (`assets/logo-full-hires*.png`, `logo-mark-hires.png`)
+  were made for the Canva stationery set.

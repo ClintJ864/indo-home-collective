@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://indohomecollective.com.au/sitemap.xml

@@ -1,12 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- The site is light-only: stops phone browsers' auto dark mode from darkening
      it (that turned the White colour swatch dark on phones). -->
 <meta name="color-scheme" content="only light">
-<title>indo home collective. — balinese inspired living</title>
+<!-- Search & sharing. Wording deliberately pairs the name with "timber slat
+     blinds" + "Gold Coast" so Google doesn't confuse us with the NZ store
+     Indie Home Collective. Service area: Gold Coast, delivering QLD & NSW. -->
+<title>Timber Slat Blinds Gold Coast | Indo Home Collective – Handcrafted in Bali</title>
+<meta name="description" content="Custom timber slat blinds, handcrafted in Bali and made to measure. Gold Coast based, delivering across Queensland and NSW. Natural Wood, White &amp; Black.">
+<link rel="canonical" href="https://indohomecollective.com.au/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Indo Home Collective">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://indohomecollective.com.au/">
+<meta property="og:title" content="Timber Slat Blinds Gold Coast | Indo Home Collective">
+<meta property="og:description" content="Custom timber slat blinds, handcrafted in Bali and made to measure. Gold Coast based, delivering across Queensland and NSW.">
+<meta property="og:image" content="https://indohomecollective.com.au/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Indo Home Collective logo beside a natural timber slat blind">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Email/phone are deliberately left out of this block, matching the site's
+     anti-scraping approach (see "Contact info handling" in CLAUDE.md). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeGoodsStore",
+  "name": "Indo Home Collective",
+  "url": "https://indohomecollective.com.au/",
+  "logo": "https://indohomecollective.com.au/assets/logo-full-hires.png",
+  "image": "https://indohomecollective.com.au/assets/og-image.jpg",
+  "description": "Custom timber slat blinds, handcrafted in Bali and made to measure, plus Balinese-inspired homewares. Gold Coast based, delivering across Queensland and New South Wales.",
+  "slogan": "Balinese inspired living.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Gold Coast",
+    "addressRegion": "QLD",
+    "addressCountry": "AU"
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Gold Coast" },
+    { "@type": "State", "name": "Queensland" },
+    { "@type": "State", "name": "New South Wales" }
+  ],
+  "priceRange": "From A$75",
+  "currenciesAccepted": "AUD",
+  "sameAs": [
+    "https://www.instagram.com/indohomecollective",
+    "https://www.facebook.com/profile.php?id=61589068032578"
+  ]
+}
+</script>
 <link rel="icon" href="assets/logo-mark.png" type="image/png">
 <style>
   :root{
@@ -1144,8 +1191,8 @@ const PAYMENTS_ENABLED = true;
 // "AI-generated preview" label; never remove it from an image that isn't a
 // genuine photo of our product.
 const BLIND_GALLERY = [
-  {src:'assets/blinds-natural-web.jpg', caption:'Natural Wood'},
-  {src:'assets/blinds-white-web.jpg', caption:'White', aiGenerated:true}
+  {src:'assets/blinds-natural-web.jpg', caption:'Natural Wood', alt:'Natural wood timber slat blind, handcrafted in Bali, installed on a Gold Coast patio'},
+  {src:'assets/blinds-white-web.jpg', caption:'White', alt:'White timber slat blind (AI-generated preview)', aiGenerated:true}
 ];
 const BLIND_SWATCHES = [
   {colour:'Natural Wood', cls:'natural', note:'Warm, natural grain'},
@@ -1436,7 +1483,7 @@ function renderHome(){
         <div class="gallery-grid">
           ${BLIND_GALLERY.map(g=>`
             <figure class="gallery-item">
-              <img src="${g.src}" alt="${g.caption}" loading="lazy">
+              <img src="${g.src}" alt="${g.alt || g.caption}" loading="lazy">
               ${g.aiGenerated ? `<span class="ai-badge">AI-generated preview</span>` : ''}
               <figcaption>${g.caption}</figcaption>
             </figure>`).join('')}

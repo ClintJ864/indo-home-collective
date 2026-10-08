@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Only the home page for now: the site's other views live after "#" (e.g. /#/about),
+     which Google treats as the same page. Add real URLs here if routing moves to paths. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://indohomecollective.com.au/</loc>
+    <lastmod>2026-10-09</lastmod>
+  </url>
+</urlset>
