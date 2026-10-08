@@ -521,7 +521,8 @@ are built at runtime by `initContactLinks()` (JS, near the top of the
 anti-scraping measure — it stops naive bots that regex raw page source for
 `mailto:`/`tel:` patterns, without hiding anything from real visitors. Current
 values:
-- Email: `indohomecollective@gmail.com`
+- Email: `hello@indohomecollective.com.au` (since 2026-10-08; forwards to
+  indohomecollective@gmail.com via ImprovMX — see Deployment)
 - Phone: `+61 410 495 924` (E.164 `+61410495924` for the `tel:` link)
 - Instagram: `https://www.instagram.com/indohomecollective`
 - Facebook: `https://www.facebook.com/profile.php?id=61589068032578`
@@ -534,7 +535,19 @@ helpers rather than hardcoding the address again.
 - GitHub: https://github.com/ClintJ864/indo-home-collective (public), this
   folder is its repo root (has its own `.git`, separate from the parent
   project folder which is not a git repo).
-- Netlify: site `indo-home-collective`, live at
+- **Domain (2026-10-08):** https://indohomecollective.com.au is the primary
+  Netlify domain (`www.` 301s to it; Let's Encrypt cert auto-managed by
+  Netlify). Registered at GoDaddy (paid to Apr 2029); DNS stays at GoDaddy:
+  A `@` → `75.2.60.5`, CNAME `www` → `indo-home-collective.netlify.app`.
+  Email: no mailbox — ImprovMX free forwarding (account
+  indohomecollective@gmail.com), catch-all `*@indohomecollective.com.au` →
+  indohomecollective@gmail.com; GoDaddy has MX `mx1/mx2.improvmx.com`
+  (10/20) and TXT SPF `v=spf1 include:spf.improvmx.com ~all`. Leave the
+  `_dmarc` and `_domainconnect` records alone. GoDaddy asks for an
+  identity code on every DNS change. Stripe's business website is set to the
+  new domain. `create-checkout-session` builds return URLs from Netlify's
+  `process.env.URL`, so it follows the primary domain after a redeploy.
+- Netlify: site `indo-home-collective`, also reachable at
   https://indo-home-collective.netlify.app. Created and deployed via
   Netlify CLI (`netlify sites:create` + `netlify deploy --prod --dir=.`),
   **not** yet connected to GitHub for auto-deploy-on-push — pushes to
@@ -558,7 +571,7 @@ helpers rather than hardcoding the address again.
 - [ ] Swap placeholder icons for real product photography as it becomes
       available
 - [ ] Confirm/adjust Decor pricing and dimensions (currently placeholders)
-- [ ] Add real domain (currently the default `.netlify.app` subdomain)
+- [x] Add real domain — indohomecollective.com.au live 2026-10-08 (see Deployment)
 
 ## 2026-10-07: v2 "blinds-focus" redesign
 v2 is live (deployed to prod 2026-10-07) and is `master` in this repo — this
