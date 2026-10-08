@@ -1186,6 +1186,12 @@ const BLIND_SHIPPING_PER_UNIT = 50;
 // #/checkout send customers to the quote request instead of Stripe.
 const PAYMENTS_ENABLED = true;
 
+// Blinds are made to order and other items ship on demand, so change-of-mind
+// returns aren't offered. Don't reword to a flat "no refunds": under the
+// Australian Consumer Law customers keep their rights for faulty or
+// not-as-described goods, and blanket "no refunds" statements are prohibited.
+const RETURNS_NOTE = 'Made to order · no change-of-mind returns. This doesn’t affect your rights under the Australian Consumer Law.';
+
 // Home-page gallery. Add real install photos here as they come in — keep each
 // file ~1100px wide / under ~150KB (mobile data). aiGenerated:true shows an
 // "AI-generated preview" label; never remove it from an image that isn't a
@@ -1972,7 +1978,7 @@ function renderCart(){
           <a href="#/quote" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Save / email a quote</a>` : `
           <a href="#/quote" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Request a quote</a>`}
           <a href="#/shop" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Continue shopping</a>
-          <p class="summary-note">${PAYMENTS_ENABLED ? 'Secure checkout · ' : ''}Free returns within 14 days</p>
+          <p class="summary-note">${PAYMENTS_ENABLED ? 'Secure checkout · ' : ''}${RETURNS_NOTE}</p>
         </div>
       </div>
     </div>
@@ -2252,7 +2258,7 @@ function renderCheckout(){
           <div class="summary-row total"><span>Total</span><span>${money(cartTotal())}</span></div>
           <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; margin-top:18px;">Place order</button>
           <a href="#/cart" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Back to cart</a>
-          <p class="summary-note">Secure checkout · Free returns within 14 days</p>
+          <p class="summary-note">Secure checkout · ${RETURNS_NOTE}</p>
         </div>
       </div>
     </div>
