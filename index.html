@@ -463,6 +463,31 @@
     color:var(--moss); display:flex; align-items:center; justify-content:center; font-family:Georgia, 'Times New Roman', serif; font-size:1.2rem;
   }
   .step-text p{margin:0; font-size:1.02rem; line-height:1.6;}
+
+  /* ---------- Ordering page: "Get in touch" business cards ---------- */
+  .contact-cards{max-width:860px; margin:70px auto 0; padding-top:56px; border-top:1px solid rgba(61,92,59,0.15);}
+  .contact-cards .section-head{margin-bottom:32px;}
+  .bizcards-main{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:20px;}
+  .bizcards-team{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; max-width:640px; margin:22px auto 0;}
+  .bizcard{
+    background:var(--white); border:1px solid rgba(199,177,148,0.45); border-radius:6px;
+    padding:28px 26px 24px; display:flex; flex-direction:column; gap:4px; min-width:0;
+  }
+  .bizcard .logo{width:120px; margin:0 0 16px;}
+  .bizcard h3{font-size:1.35rem; color:var(--moss); margin:0; text-transform:none; letter-spacing:0;}
+  .bizcard .title{font-size:0.74rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--tan);}
+  .bizcard .rule{width:44px; height:2px; background:var(--tan); border:0; margin:14px 0;}
+  .bizcard .line{color:var(--charcoal); font-size:0.95rem; overflow-wrap:break-word;}
+  .bizcard .line:hover{color:var(--moss); text-decoration:underline;}
+  .bizcard .btn{margin-top:16px; align-self:flex-start;}
+  .bizcard.team{padding:18px 20px; background:rgba(255,255,255,0.6);}
+  .bizcard.team h3{font-size:1.1rem;}
+  .bizcard.team .rule{margin:10px 0;}
+  .bizcard.team .line{font-size:0.88rem;}
+  .bizcard.team .btn{margin-top:12px; padding:8px 16px; font-size:0.8rem;}
+  @media (max-width: 640px){
+    .bizcards-main, .bizcards-team{grid-template-columns:1fr;}
+  }
   .step-text .note{font-size:0.82rem; color:var(--tan); margin-top:4px; font-style:italic; font-family:Georgia, 'Times New Roman', serif;}
 
   .value-strip{
@@ -1260,6 +1285,7 @@ function render(){
   } else if(parts[0]==='ordering'){
     setActiveNav('ordering');
     app.innerHTML = renderOrdering();
+    bindContactCards();
   } else if(parts[0]==='lakey-peak'){
     setActiveNav(''); // not a primary nav item — deliberately not in the main/bottom nav
     app.innerHTML = renderLakeyPeak();
@@ -2446,9 +2472,95 @@ function renderOrdering(){
         <div style="text-align:center; margin-top:44px;">
           <a href="#/product/timber-slat-blinds" class="btn btn-dark">Design your blind</a>
         </div>
+        ${renderContactCards()}
       </div>
     </section>
   `;
+}
+
+/* ---------- "Get in touch" business cards (Ordering page) ----------
+   Emails and the phone number are filled in by bindContactCards() from
+   CONTACT at runtime (same anti-scraping approach as the footer), and the
+   "Save contact" vCard is generated in the browser rather than stored. */
+const BIZ_CARDS = [
+  { id:'hello', name:'General enquiries', title:'', emailUser:'hello', main:true },
+  { id:'admin', name:'Accounts & orders', title:'', emailUser:'admin', main:true },
+  { id:'nikki', name:'Nikki', title:'Owner', emailUser:'nikki' },
+  { id:'clint', name:'Clint', title:'', emailUser:'clint' }
+];
+const SITE_URL = 'https://indohomecollective.com.au';
+
+function bizCardEmail(card){ return card.emailUser + '@' + CONTACT.emailParts[1]; }
+
+function renderBizCard(card){
+  return `
+    <div class="bizcard${card.main ? '' : ' team'}" data-card="${card.id}">
+      ${card.main ? '<img class="logo" src="assets/logo-transparent.png" alt="indo home collective.">' : ''}
+      <h3 class="brand-font">${card.name}</h3>
+      ${card.title ? `<span class="title">${card.title}</span>` : ''}
+      <hr class="rule">
+      <a class="line" data-role="email"></a>
+      <a class="line" data-role="phone"></a>
+      <button type="button" class="btn ${card.main ? 'btn-dark' : 'btn-outline'}" data-role="save">Save contact</button>
+    </div>`;
+}
+
+function renderContactCards(){
+  return `
+    <div class="contact-cards">
+      <div class="section-head">
+        <span class="eyebrow">questions before you order?</span>
+        <h2>get in touch</h2>
+      </div>
+      <div class="bizcards-main">${BIZ_CARDS.filter(c=>c.main).map(renderBizCard).join('')}</div>
+      <div class="bizcards-team">${BIZ_CARDS.filter(c=>!c.main).map(renderBizCard).join('')}</div>
+    </div>`;
+}
+
+function vcardEscape(s){ return String(s).replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/([,;])/g,'\\$1'); }
+
+function bizCardVcard(card){
+  const lines = ['BEGIN:VCARD', 'VERSION:3.0'];
+  if(card.main){
+    // A department card saves as the business itself, e.g. "Indo Home Collective – Accounts & orders".
+    lines.push('N:;;;;', 'FN:' + vcardEscape('Indo Home Collective – ' + card.name));
+  } else {
+    lines.push('N:;' + vcardEscape(card.name) + ';;;', 'FN:' + vcardEscape(card.name));
+  }
+  lines.push('ORG:Indo Home Collective');
+  if(card.title) lines.push('TITLE:' + vcardEscape(card.title));
+  lines.push(
+    'TEL;TYPE=CELL,VOICE:+' + CONTACT.phoneDigits,
+    'EMAIL;TYPE=INTERNET,WORK:' + bizCardEmail(card),
+    'URL:' + SITE_URL,
+    'END:VCARD'
+  );
+  return lines.join('\r\n') + '\r\n';
+}
+
+function bindContactCards(){
+  BIZ_CARDS.forEach(card=>{
+    const el = document.querySelector(`.bizcard[data-card="${card.id}"]`);
+    if(!el) return;
+    const email = bizCardEmail(card);
+    const emailLink = el.querySelector('[data-role="email"]');
+    emailLink.href = 'mailto:' + email;
+    // Allow a line break only after the "@" on narrow cards.
+    emailLink.append(card.emailUser + '@', document.createElement('wbr'), CONTACT.emailParts[1]);
+    const phoneLink = el.querySelector('[data-role="phone"]');
+    phoneLink.href = 'tel:+' + CONTACT.phoneDigits;
+    phoneLink.textContent = contactPhoneDisplay();
+    el.querySelector('[data-role="save"]').addEventListener('click', ()=>{
+      const url = URL.createObjectURL(new Blob([bizCardVcard(card)], {type:'text/vcard'}));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'indo-home-collective-' + card.id + '.vcf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    });
+  });
 }
 
 /* =========================================================

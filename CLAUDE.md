@@ -531,6 +531,17 @@ If you add more contact touchpoints elsewhere on the site, route them through
 the same `contactEmail()` / `contactPhoneDisplay()` / `contactPhoneTel()`
 helpers rather than hardcoding the address again.
 
+**"Get in touch" business cards (2026-10-08)** sit at the bottom of the
+Ordering page (`renderContactCards()` inside `renderOrdering()`, wired up by
+`bindContactCards()` from the router). People/departments are the
+`BIZ_CARDS` array: `main:true` cards (General enquiries → hello@, Accounts &
+orders → admin@) are the large ones; Nikki (Owner) and Clint are the smaller
+row. Emails are built at runtime as `emailUser@` + `CONTACT.emailParts[1]`,
+the phone comes from `CONTACT.phoneDigits`, and "Save contact" generates a
+vCard in the browser (`bizCardVcard()`), so there are no .vcf files to keep
+in sync. Add or rename a card by editing `BIZ_CARDS` only — and add the
+matching ImprovMX alias, or mail to that address will go to the catch-all.
+
 ## Deployment
 - GitHub: https://github.com/ClintJ864/indo-home-collective (public), this
   folder is its repo root (has its own `.git`, separate from the parent
