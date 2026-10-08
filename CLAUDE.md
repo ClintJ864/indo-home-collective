@@ -412,8 +412,13 @@ into the `render()` route table's `setActiveNav(...)` calls.
 
 ## Stripe integration (live as of 2026-08-30)
 Business context: `indohomecollective@gmail.com`. Stripe account
-`acct_1U1Kdk7RWQCVcHzg` ("indo home collective"), connected via the Stripe
-MCP server (`claude mcp login stripe` — previously blocked, now done).
+`acct_1UA0dvFvxG3FrkKw` ("Indo home collective", live; sole trader, Nikki as
+account representative) and its sandbox `acct_1UA0e9CAq8tTFo2q` ("Indo home
+collective sandbox", where test-mode payments land). Audited 2026-10-08: this
+login has only that one account. An older note here named
+`acct_1U1Kdk7RWQCVcHzg` (from the Stripe MCP connection) — this login can't
+open it; treat it as stale. The account was also put through Stripe's Connect
+setup at some point — not needed for this shop, ignore Connect prompts.
 
 **Integration shape** (per `stripe_implementation_planner`): Stripe Checkout,
 hosted/redirect — the simplest fit for a physical-goods, one-time-payment
@@ -459,17 +464,22 @@ actually cleared once `bindConfirmationEvents()` has verified the returned
 session as paid — if the customer cancels on Stripe's page, `cancel_url`
 sends them back to `#/checkout` with their cart still intact.
 
-**Card payments are switched OFF on the live site (2026-10-07)** via
-`const PAYMENTS_ENABLED = false` in `index.html` (next to the blind pricing
-constants), because Stripe identity verification for live mode is still
-pending. While false: the cart shows "Request a quote" instead of "Proceed to
-checkout", `#/checkout` renders the quote page, and the quote form says card
-payment is coming soon. The checkout code itself is untouched. To turn
-payments on: CJ saves the `sk_live_` key in Netlify (an earlier attempt didn't
-save — check the variable's "updated" date changed), then set the flag to
-`true`, redeploy, and confirm a checkout session comes back `cs_live_`.
+**Current status (2026-10-08): LIVE card payments are on.** Stripe account
+activated (Payments + Payouts active, AUD bank account linked).
+`STRIPE_SECRET_KEY` has different values per Netlify deploy context:
+**Production = `sk_live_`**; deploy previews, branch deploys, dev/dev-server
+and agent runners = the `sk_test_` key. Verified: production checkout
+sessions come back `cs_live_`, draft deploys (`netlify deploy` without
+`--prod`) come back `cs_test_` — so test on a draft URL with 4242, never on
+production.
 
-**Current status (2026-10-07)**: working end-to-end in **test mode** —
+**Kill switch:** `const PAYMENTS_ENABLED` in `index.html` (next to the blind
+pricing constants). Set to `false` to pause card payments — the cart then
+shows "Request a quote" instead of "Proceed to checkout", `#/checkout`
+renders the quote page, and the quote form says card payment is coming soon.
+It was `false` from 2026-10-07 until live activation on 2026-10-08.
+
+Earlier status (2026-10-07): working end-to-end in **test mode** —
 `STRIPE_SECRET_KEY` is set in Netlify (an `sk_test_` key; sessions come
 back `cs_test_`), and a full 4242 test purchase on the live site reached
 "Order confirmed" with the cart cleared. Steps 1–4 below are done; only
@@ -542,8 +552,8 @@ helpers rather than hardcoding the address again.
       per-size/type/colour pricing for the Blinds product
 - [x] Cart persistence across refresh (`localStorage`, see above)
 - [x] Deploy to GitHub + Netlify (see above)
-- [x] Wire up Stripe Checkout (see Stripe integration section) — working
-      in test mode; swap in the live key to take real payments
+- [x] Wire up Stripe Checkout (see Stripe integration section) — live
+      card payments on since 2026-10-08
 - [x] Form email alerts (3 recipients, all forms) — phone push still to do
 - [ ] Swap placeholder icons for real product photography as it becomes
       available

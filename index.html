@@ -1100,10 +1100,9 @@ const BLIND_DISCOUNT_PCT = { Timber:0.25 };
 const BLIND_DISCOUNT_THRESHOLD = 400;
 const BLIND_SHIPPING_PER_UNIT = 50;
 
-// Off until Stripe live payments are activated (identity verification
-// pending). While false, the cart's checkout button and #/checkout send
-// customers to the quote request instead of a test-mode Stripe page.
-const PAYMENTS_ENABLED = false;
+// Kill switch for card checkout. While false, the cart's checkout button and
+// #/checkout send customers to the quote request instead of Stripe.
+const PAYMENTS_ENABLED = true;
 
 // Home-page gallery. Add real install photos here as they come in — keep each
 // file ~1100px wide / under ~150KB (mobile data). aiGenerated:true shows an
