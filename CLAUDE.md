@@ -531,9 +531,9 @@ If you add more contact touchpoints elsewhere on the site, route them through
 the same `contactEmail()` / `contactPhoneDisplay()` / `contactPhoneTel()`
 helpers rather than hardcoding the address again.
 
-**"Get in touch" business cards (2026-10-08)** sit at the bottom of the
-Ordering page (`renderContactCards()` inside `renderOrdering()`, wired up by
-`bindContactCards()` from the router). People/departments are the
+**Business cards (2026-10-08)** live on their own **Contact us** page
+(`#/contact`, `renderContactPage()`, wired up by
+`bindContactCards()` from the router), linked from the footer's "Get in touch" column as "Contact cards". People/departments are the
 `BIZ_CARDS` array: `main:true` cards (General enquiries → hello@, Accounts &
 orders → admin@) are the large ones; Nikki (Owner) and Clint are the smaller
 row. Emails are built at runtime as `emailUser@` + `CONTACT.emailParts[1]`,

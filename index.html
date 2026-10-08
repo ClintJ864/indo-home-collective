@@ -464,9 +464,9 @@
   }
   .step-text p{margin:0; font-size:1.02rem; line-height:1.6;}
 
-  /* ---------- Ordering page: "Get in touch" business cards ---------- */
-  .contact-cards{max-width:860px; margin:70px auto 0; padding-top:56px; border-top:1px solid rgba(61,92,59,0.15);}
-  .contact-cards .section-head{margin-bottom:32px;}
+  /* ---------- Contact us page (#/contact): business cards ---------- */
+  .contact-section{margin-top:0;}
+  .contact-cards{max-width:860px; margin:0 auto;}
   .bizcards-main{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:20px;}
   .bizcards-team{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; max-width:640px; margin:22px auto 0;}
   .bizcard{
@@ -753,6 +753,7 @@
       <h3>Get in touch</h3>
       <p id="footerEmail"></p>
       <p id="footerPhone"></p>
+      <p><a href="#/contact">Contact cards</a></p>
       <div class="social-row">
         <a id="footerInstagram" href="#" target="_blank" rel="noopener noreferrer" aria-label="Indo Home Collective on Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
@@ -1285,6 +1286,9 @@ function render(){
   } else if(parts[0]==='ordering'){
     setActiveNav('ordering');
     app.innerHTML = renderOrdering();
+  } else if(parts[0]==='contact'){
+    setActiveNav(''); // reached from the footer's "Contact cards" link
+    app.innerHTML = renderContactPage();
     bindContactCards();
   } else if(parts[0]==='lakey-peak'){
     setActiveNav(''); // not a primary nav item — deliberately not in the main/bottom nav
@@ -2472,13 +2476,12 @@ function renderOrdering(){
         <div style="text-align:center; margin-top:44px;">
           <a href="#/product/timber-slat-blinds" class="btn btn-dark">Design your blind</a>
         </div>
-        ${renderContactCards()}
       </div>
     </section>
   `;
 }
 
-/* ---------- "Get in touch" business cards (Ordering page) ----------
+/* ---------- Contact us page (#/contact): business cards ----------
    Emails and the phone number are filled in by bindContactCards() from
    CONTACT at runtime (same anti-scraping approach as the footer), and the
    "Save contact" vCard is generated in the browser rather than stored. */
@@ -2505,16 +2508,21 @@ function renderBizCard(card){
     </div>`;
 }
 
-function renderContactCards(){
+function renderContactPage(){
   return `
-    <div class="contact-cards">
-      <div class="section-head">
-        <span class="eyebrow">questions before you order?</span>
-        <h2>get in touch</h2>
+    <section class="ordering-section contact-section">
+      <div class="wrap">
+        <div class="section-head">
+          <img src="assets/icon.jpg" alt="">
+          <span class="eyebrow">we'd love to hear from you</span>
+          <h2>contact us</h2>
+        </div>
+        <div class="contact-cards">
+          <div class="bizcards-main">${BIZ_CARDS.filter(c=>c.main).map(renderBizCard).join('')}</div>
+          <div class="bizcards-team">${BIZ_CARDS.filter(c=>!c.main).map(renderBizCard).join('')}</div>
+        </div>
       </div>
-      <div class="bizcards-main">${BIZ_CARDS.filter(c=>c.main).map(renderBizCard).join('')}</div>
-      <div class="bizcards-team">${BIZ_CARDS.filter(c=>!c.main).map(renderBizCard).join('')}</div>
-    </div>`;
+    </section>`;
 }
 
 function vcardEscape(s){ return String(s).replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/([,;])/g,'\\$1'); }
