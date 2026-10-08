@@ -519,6 +519,24 @@
   }
   .step-text p{margin:0; font-size:1.02rem; line-height:1.6;}
 
+  /* Ordering page: two ways to order */
+  .order-lede{margin:14px auto 0; max-width:520px; font-size:1.02rem; line-height:1.6;}
+  .order-options{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:22px; max-width:860px; margin:0 auto;}
+  .order-option{background:var(--white); border:1px solid rgba(199,177,148,0.45); border-radius:6px; padding:28px 26px; display:flex; flex-direction:column; gap:14px; min-width:0;}
+  .order-option.primary{border-color:var(--moss);}
+  .order-tag{align-self:flex-start; font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--tan); font-weight:600;}
+  .order-option h3{font-size:1.5rem; color:var(--moss); margin:0; text-transform:none; letter-spacing:0;}
+  .order-steps{list-style:none; margin:0; padding:0; display:grid; gap:12px; flex:1;}
+  .order-steps li{display:flex; gap:12px; align-items:flex-start; font-size:0.96rem; line-height:1.5;}
+  .order-steps .num{flex:none; width:26px; height:26px; border-radius:50%; border:1.5px solid var(--moss); color:var(--moss); display:flex; align-items:center; justify-content:center; font-family:Georgia, 'Times New Roman', serif; font-size:0.85rem;}
+  .order-option .btn{align-self:flex-start; margin-top:6px;}
+  .order-timeframe{text-align:center; font-family:Georgia, 'Times New Roman', serif; font-style:italic; color:var(--tan); font-size:0.92rem; margin:26px 0 0;}
+  .order-help{max-width:640px; margin:46px auto 0; text-align:center;}
+  .order-help h3{font-size:1.3rem; color:var(--moss); margin:0 0 8px; text-transform:none; letter-spacing:0;}
+  .order-help p{margin:0; font-size:0.98rem;}
+  .order-help a{color:var(--moss); text-decoration:underline;}
+  @media (max-width: 760px){ .order-options{grid-template-columns:1fr;} }
+
   /* Ordering page: returns & faulty items policy */
   .policy{max-width:640px; margin:70px auto 0; padding-top:44px; border-top:1px solid rgba(61,92,59,0.15);}
   .policy h3{font-size:1.4rem; color:var(--moss); margin:0 0 18px; text-transform:none; letter-spacing:0;}
@@ -2528,30 +2546,34 @@ function renderOrdering(){
           <img src="assets/logo-mark.png" alt="">
           <span class="eyebrow">for custom blinds</span>
           <h2>ordering is easy ✦</h2>
+          <p class="order-lede">Just use our blind calculator to choose your colour and size, see your price instantly, and pay securely at checkout.</p>
         </div>
-        <div class="steps">
-          <div class="step">
-            <div class="step-circle">1</div>
-            <div class="step-text"><p>DM us your measurements and preferred colour.</p></div>
+        <div class="order-options">
+          <div class="order-option primary">
+            <span class="order-tag">quickest</span>
+            <h3 class="brand-font">order online</h3>
+            <ol class="order-steps">
+              <li><span class="num">1</span><span>Pick your colour, width and drop in our blind calculator.</span></li>
+              <li><span class="num">2</span><span>Add to cart and pay securely at checkout.</span></li>
+              <li><span class="num">3</span><span>We handcraft your blinds and keep you posted by email.</span></li>
+            </ol>
+            <a href="#/product/timber-slat-blinds" class="btn btn-dark">Design your blind</a>
           </div>
-          <div class="step">
-            <div class="step-circle">2</div>
-            <div class="step-text"><p>We'll send you a personalised quote.</p></div>
-          </div>
-          <div class="step">
-            <div class="step-circle">3</div>
-            <div class="step-text"><p>Once confirmed, we'll send through your invoice to secure your order.</p></div>
-          </div>
-          <div class="step">
-            <div class="step-circle">4</div>
-            <div class="step-text">
-              <p>Sit back while your custom handcrafted blinds are carefully made.</p>
-              <span class="note">Approximate timeframe: 8–12 weeks</span>
-            </div>
+          <div class="order-option">
+            <span class="order-tag">prefer email?</span>
+            <h3 class="brand-font">kick it old school</h3>
+            <ol class="order-steps">
+              <li><span class="num">1</span><span>Build your blind in the calculator and add it to your cart.</span></li>
+              <li><span class="num">2</span><span>Choose “Save / email a quote” and send it to us.</span></li>
+              <li><span class="num">3</span><span>We’ll confirm the details and invoice you — all over email.</span></li>
+            </ol>
+            <a href="#/product/timber-slat-blinds" class="btn btn-outline">Start a quote</a>
           </div>
         </div>
-        <div style="text-align:center; margin-top:44px;">
-          <a href="#/product/timber-slat-blinds" class="btn btn-dark">Design your blind</a>
+        <p class="order-timeframe">Approximate timeframe: 8–12 weeks from order to delivery.</p>
+        <div class="order-help">
+          <h3 class="brand-font">still not sure?</h3>
+          <p>Email us any questions at <a href="mailto:${contactEmail()}">${contactEmail()}</a> — we’re happy to help.</p>
         </div>
         ${renderReturnsPolicy()}
       </div>
