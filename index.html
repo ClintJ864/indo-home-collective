@@ -450,6 +450,10 @@
   .about-hero{padding:70px 32px 10px; text-align:center;}
   .about-hero img.icon{height:70px; margin:0 auto 20px;}
   .about-hero h1{font-size:2.2rem; margin-bottom:0;}
+  /* Full logo mark, faded behind the "about us" heading */
+  .about-title{position:relative; display:inline-block; padding:44px 0;}
+  .about-title .mark-bg{position:absolute; left:50%; top:50%; height:150px; width:auto; transform:translate(-50%,-50%); opacity:0.28; pointer-events:none;}
+  .about-title h1{position:relative;}
   .about-body{max-width:680px; margin:0 auto; padding:30px 32px 90px;}
   .about-body p{font-family:Georgia, 'Times New Roman', serif; font-size:1.18rem; line-height:1.85; color:#3f3f3f; margin-bottom:24px; text-align:center;}
 
@@ -1307,7 +1311,10 @@ function render(){
    ========================================================= */
 // v2: Blinds have their own home page (renderHome). This grid is now the
 // secondary "Homewares" page — Blinds excluded, defaults to Floating Pool Trays.
-const HOMEWARE_CATEGORIES = CATEGORIES.filter(c=>c!=='Blinds');
+// Hidden from the Homewares category chips for now (client request 2026-10-08).
+// The products stay in PRODUCTS, so showing them again is just removing them here.
+const HIDDEN_CATEGORIES = ['Lighting', 'Mirrors', 'Furniture'];
+const HOMEWARE_CATEGORIES = CATEGORIES.filter(c=>c!=='Blinds' && !HIDDEN_CATEGORIES.includes(c));
 let activeCategory = 'Floating Pool Trays';
 
 function renderShop(){
@@ -2425,8 +2432,10 @@ async function bindConfirmationEvents(orderId){
 function renderAbout(){
   return `
     <section class="about-hero">
-      <img class="icon" src="assets/icon.jpg" alt="">
-      <h1>about us</h1>
+      <div class="about-title">
+        <img class="mark-bg" src="assets/logo-mark.png" alt="">
+        <h1>about us</h1>
+      </div>
     </section>
     <section class="about-body">
       <p>After living in beautiful Bali for over 15 years, we fell in love with the relaxed lifestyle, natural textures, and timeless craftsmanship that make every Bali home feel warm and inviting.</p>
