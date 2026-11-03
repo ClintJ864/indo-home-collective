@@ -9,6 +9,9 @@
 <!-- Search & sharing. Wording deliberately pairs the name with "timber slat
      blinds" + "Gold Coast" so Google doesn't confuse us with the NZ store
      Indie Home Collective. Service area: Gold Coast, delivering QLD & NSW. -->
+<!-- SEO:START — this block is rewritten per page by scripts/prerender.js (static
+     copies in /prerender) and by applyRouteMeta() at runtime. Edit the wording in
+     routeMeta(), not here, except for the home page which routeMeta() mirrors. -->
 <title>Timber Slat Blinds Gold Coast | Indo Home Collective – Handcrafted in Bali</title>
 <meta name="description" content="Custom timber slat blinds, handcrafted in Bali and made to measure. Gold Coast based, delivering across Queensland and NSW. Natural Wood, White &amp; Black.">
 <link rel="canonical" href="https://indohomecollective.com.au/">
@@ -23,6 +26,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Indo Home Collective logo beside a natural timber slat blind">
 <meta name="twitter:card" content="summary_large_image">
+<!-- SEO:END -->
 <!-- Email/phone are deliberately left out of this block, matching the site's
      anti-scraping approach (see "Contact info handling" in CLAUDE.md). -->
 <script type="application/ld+json">
@@ -54,7 +58,7 @@
   ]
 }
 </script>
-<link rel="icon" href="assets/logo-mark.png" type="image/png">
+<link rel="icon" href="/assets/logo-mark.png" type="image/png">
 <style>
   :root{
     color-scheme:only light;
@@ -180,7 +184,7 @@
   /* ---------- Hero ---------- */
   .hero{
     position:relative;
-    background:url('assets/hero-bg.jpg') center/cover no-repeat;
+    background:url('/assets/hero-bg.jpg') center/cover no-repeat;
     padding:90px 32px 100px;
     text-align:center;
     overflow:hidden;
@@ -740,35 +744,35 @@
 
 <header class="site-header">
   <div class="header-inner">
-    <a href="#/shop" class="logo-link">
-      <span class="logo-spin"><span class="spinner"><img src="assets/logo-transparent.png" alt="indo home collective — balinese inspired living"><img class="back" src="assets/logo-transparent.png" alt="" aria-hidden="true"></span></span>
+    <a href="/" class="logo-link">
+      <span class="logo-spin"><span class="spinner"><img src="/assets/logo-transparent.png" alt="indo home collective — balinese inspired living"><img class="back" src="/assets/logo-transparent.png" alt="" aria-hidden="true"></span></span>
     </a>
     <nav class="main-nav" id="mainNav">
-      <a href="#/shop" data-route="shop">Blinds</a>
-      <a href="#/homewares" data-route="homewares">Homewares</a>
-      <a href="#/ordering" data-route="ordering">Ordering</a>
-      <a href="#/about" data-route="about">About</a>
+      <a href="/" data-route="shop">Blinds</a>
+      <a href="/homewares" data-route="homewares">Homewares</a>
+      <a href="/ordering" data-route="ordering">Ordering</a>
+      <a href="/about" data-route="about">About</a>
     </nav>
-    <button class="cart-btn" onclick="location.hash='#/cart'">
+    <button class="cart-btn" onclick="navigate('/cart')">
       Cart <span class="cart-count" id="cartCount">0</span>
     </button>
   </div>
 </header>
 
 <nav class="bottom-nav" id="bottomNav">
-  <a href="#/shop" data-route="shop">
+  <a href="/" data-route="shop">
     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="14" width="60" height="72" rx="4"/><line x1="28" y1="32" x2="72" y2="32"/><line x1="28" y1="50" x2="72" y2="50"/><line x1="28" y1="68" x2="72" y2="68"/></svg>
     <span>Blinds</span>
   </a>
-  <a href="#/homewares" data-route="homewares">
+  <a href="/homewares" data-route="homewares">
     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="50" cy="42" rx="34" ry="10"/><path d="M16 42 Q20 70 50 72 Q80 70 84 42"/></svg>
     <span>Decor</span>
   </a>
-  <a href="#/about" data-route="about">
+  <a href="/about" data-route="about">
     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="34"/><line x1="50" y1="46" x2="50" y2="70"/><circle cx="50" cy="32" r="3" fill="currentColor" stroke="none"/></svg>
     <span>About</span>
   </a>
-  <a href="#/cart" data-route="cart">
+  <a href="/cart" data-route="cart">
     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18 H26 L34 62 H74 L84 30 H30"/><circle cx="40" cy="80" r="6"/><circle cx="68" cy="80" r="6"/></svg>
     <span>Cart</span>
     <span class="cart-count" id="cartCountMobile">0</span>
@@ -826,17 +830,17 @@
     </div>
     <div>
       <h3>Shop</h3>
-      <p><a href="#/shop">Timber slat blinds</a></p>
-      <p><a href="#/homewares">Homewares</a></p>
-      <p><a href="#/ordering">How ordering works</a></p>
-      <p><a href="#/about">Our story</a></p>
-      <p><a href="#/lakey-peak">Lakey Peak Surf Camp</a></p>
+      <p><a href="/">Timber slat blinds</a></p>
+      <p><a href="/homewares">Homewares</a></p>
+      <p><a href="/ordering">How ordering works</a></p>
+      <p><a href="/about">Our story</a></p>
+      <p><a href="/lakey-peak">Lakey Peak Surf Camp</a></p>
     </div>
     <div>
       <h3>Get in touch</h3>
       <p id="footerEmail"></p>
       <p id="footerPhone"></p>
-      <p><a href="#/contact">Contact cards</a></p>
+      <p><a href="/contact">Contact cards</a></p>
       <div class="social-row">
         <a id="footerInstagram" href="#" target="_blank" rel="noopener noreferrer" aria-label="Indo Home Collective on Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
@@ -866,7 +870,7 @@ const PRODUCTS = [
     priceLabel:'From',
     unit:'per blind — priced by size',
     icon:'blinds',
-    image:'assets/blinds-natural-web.jpg',
+    image:'/assets/blinds-natural-web.jpg',
     customBlind:true,
     desc:"Our signature piece. Real timber slats, handcrafted by a family of makers with over thirty years of experience. Choose your colour, width and drop below — pricing, bulk discounts and shipping calculate instantly.",
     meta:[['Material','Solid timber'],['Slat width','2.5cm'],['Sizes','50–300cm wide, 50–300cm drop'],['Lead time','8–12 weeks']]
@@ -899,7 +903,7 @@ const PRODUCTS = [
     // Not currently for sale — client chose to launch with Blinds only and
     // collect interest on everything else until stock/pricing is ready.
     // price/unit/meta are kept (not deleted) so re-enabling later is just
-    // removing comingSoon:true. Add `image:'assets/...'` here once a real
+    // removing comingSoon:true. Add `image:'/assets/...'` here once a real
     // photo exists — comingSoon still takes priority over price display.
     id:'wooden-bowl-small',
     name:'Wooden Bowl Small (150mm diameter)',
@@ -957,8 +961,8 @@ const PRODUCTS = [
     comingSoon:true,
     icon:'pooltray',
     images:[
-      {src:'assets/floating-pool-tray-land.jpg', label:'Product photo'},
-      {src:'assets/floating-pool-tray-pool.jpg', label:'In the pool', aiGenerated:true}
+      {src:'/assets/floating-pool-tray-land.jpg', label:'Product photo'},
+      {src:'/assets/floating-pool-tray-pool.jpg', label:'In the pool', aiGenerated:true}
     ],
     // Range being expanded beyond the original 500mm circle — shape/colour
     // list below is a placeholder (client-supplied names, no photos/pricing
@@ -1006,7 +1010,7 @@ function icon(key){
 const ARCH_MARK = `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M20 80 Q20 30 40 20 Q30 15 22 22 Q10 30 14 42 Q22 34 28 38"/><path d="M55 82 V38 Q55 18 70 18 Q85 18 85 38 V82 Z"/></svg>`;
 
 // Single place that decides how a product's image renders: a real photo
-// (p.image, e.g. 'assets/wooden-bowl-small.jpg') once one exists, otherwise
+// (p.image, e.g. '/assets/wooden-bowl-small.jpg') once one exists, otherwise
 // the line-art icon placeholder. Adding real photography later is just
 // setting `image` on the product in PRODUCTS — no template changes needed.
 // A product can also carry `images: [{src,label,aiGenerated?}, ...]` for a
@@ -1224,8 +1228,8 @@ const RETURNS_NOTE = 'Made to order · no change-of-mind returns. This doesn’t
 // "AI-generated preview" label; never remove it from an image that isn't a
 // genuine photo of our product.
 const BLIND_GALLERY = [
-  {src:'assets/blinds-natural-web.jpg', caption:'Natural Wood', alt:'Natural wood timber slat blind, handcrafted in Bali, installed on a Gold Coast patio'},
-  {src:'assets/blinds-white-web.jpg', caption:'White', alt:'White timber slat blind (AI-generated preview)', aiGenerated:true}
+  {src:'/assets/blinds-natural-web.jpg', caption:'Natural Wood', alt:'Natural wood timber slat blind, handcrafted in Bali, installed on a Gold Coast patio'},
+  {src:'/assets/blinds-white-web.jpg', caption:'White', alt:'White timber slat blind (AI-generated preview)', aiGenerated:true}
 ];
 const BLIND_SWATCHES = [
   {colour:'Natural Wood', cls:'natural', note:'Warm, natural grain'},
@@ -1317,10 +1321,35 @@ function updateCartCount(){
 /* =========================================================
    ROUTER
    ========================================================= */
-window.addEventListener('hashchange', render);
+// Real paths (/about, /product/timber-slat-blinds ...) so Google can index each
+// page. Netlify serves index.html (or a /prerender copy) for every path, and
+// this router takes over. Old "#/about"-style links, including the Stripe
+// return URL, are rewritten to paths on load so shared links keep working.
+function legacyHashToPath(){
+  const m = location.hash.match(/^#\/(.*)$/);
+  if(!m) return;
+  const rest = m[1] === 'shop' ? '' : m[1];
+  history.replaceState(null, '', '/' + rest + location.search);
+}
+
+function navigate(path){
+  if(path !== location.pathname + location.search) history.pushState(null, '', path);
+  render();
+}
+
+window.addEventListener('popstate', render);
+document.addEventListener('click', e=>{
+  if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const a = e.target.closest && e.target.closest('a[href^="/"]');
+  if(!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
+  const href = a.getAttribute('href');
+  if(href.startsWith('//') || href.startsWith('/.netlify') || href.startsWith('/assets/')) return;
+  e.preventDefault();
+  navigate(href);
+});
 window.addEventListener('DOMContentLoaded', ()=>{
   loadCart();
-  if(!location.hash) location.hash = '#/shop';
+  legacyHashToPath();
   render();
   updateCartCount();
   initContactLinks();
@@ -1332,14 +1361,19 @@ function setActiveNav(routeName){
   });
 }
 
+function pathParts(pathname){
+  const clean = pathname.replace(/\/index\.html$/, '/').replace(/^\/+|\/+$/g, '');
+  return clean ? clean.split('/') : [];
+}
+
 function render(){
   stopSquirrel();
-  const hash = location.hash || '#/shop';
-  const parts = hash.replace('#/','').split('/');
+  const parts = pathParts(location.pathname);
   const app = document.getElementById('app');
   window.scrollTo({top:0, behavior:'instant' in document.documentElement.style ? 'instant' : 'auto'});
+  applyRouteMeta(routeMeta(parts));
 
-  if(parts[0]==='shop' && !parts[1]){
+  if(!parts[0]){
     setActiveNav('shop');
     app.innerHTML = renderHome();
     bindHomeEvents();
@@ -1385,11 +1419,154 @@ function render(){
     app.innerHTML = renderLakeyPeak();
     bindLakeyPeakEvents();
   } else {
-    setActiveNav('shop');
-    app.innerHTML = renderHome();
-    bindHomeEvents();
+    setActiveNav('');
+    app.innerHTML = renderNotFound();
   }
   updateCartCount();
+}
+
+// Netlify answers every unknown path with this page (status 200), so say so
+// on the page and keep it out of Google (routeMeta marks it noindex).
+function renderNotFound(){
+  return `<div class="wrap" style="padding:100px 0; text-align:center;"><h1>Page not found</h1><p style="color:#666;">That page doesn't exist — it may have moved.</p><a href="/" class="btn btn-primary" style="margin-top:20px;">Back to our blinds</a></div>`;
+}
+
+/* =========================================================
+   SEARCH METADATA
+   routeMeta() is the one source of per-page title/description/canonical/
+   structured data. applyRouteMeta() updates <head> as the visitor navigates;
+   scripts/prerender.js calls routeMeta() to write the static /prerender pages.
+   ========================================================= */
+// SITE_URL is declared with the contact-card constants further down; it's only
+// read when a route renders, after the whole script has loaded.
+function blindPriceRange(){
+  const prices = [];
+  BLIND_WIDTHS.forEach(w=>BLIND_DROPS.forEach(d=>prices.push(computeBlindPrice('Timber', w, d).unitPrice)));
+  return {low:Math.min(...prices), high:Math.max(...prices)};
+}
+
+function routeMeta(parts){
+  const m = {
+    title:'Timber Slat Blinds Gold Coast | Indo Home Collective – Handcrafted in Bali',
+    description:'Custom timber slat blinds, handcrafted in Bali and made to measure. Gold Coast based, delivering across Queensland and NSW. Natural Wood, White & Black.',
+    path:'/',
+    image:SITE_URL + '/assets/og-image.jpg',
+    ogType:'website',
+    noindex:false,
+    jsonld:null
+  };
+  const set = o => Object.assign(m, o);
+
+  switch(parts[0]){
+    case undefined:
+      break;
+    case 'product': {
+      const p = findProduct(parts[1]);
+      if(!p){ set({title:'Product not found | Indo Home Collective', description:m.description, path:'/', noindex:true}); break; }
+      if(p.customBlind){
+        const {low, high} = blindPriceRange();
+        const path = '/product/' + p.id;
+        set({
+          title:'Custom Timber Slat Blinds – Made to Measure | Indo Home Collective',
+          description:`Design a made-to-measure timber slat blind in Natural Wood, White or Black. Handcrafted in Bali, from ${money(low)}, delivered across Queensland and NSW.`,
+          path, ogType:'product',
+          jsonld:{
+            '@context':'https://schema.org', '@type':'Product',
+            name:'Custom Timber Slat Blinds',
+            description:'Made-to-measure timber slat blinds, handcrafted in Bali. Choose Natural Wood, White or Black and your exact width and drop.',
+            image:[SITE_URL + p.image],
+            brand:{'@type':'Brand', name:'Indo Home Collective'},
+            material:'Timber',
+            color:BLIND_COLOURS.Timber.join(', '),
+            url:SITE_URL + path,
+            offers:{
+              '@type':'AggregateOffer', priceCurrency:'AUD',
+              lowPrice:low.toFixed(2), highPrice:high.toFixed(2),
+              availability:'https://schema.org/MadeToOrder',
+              seller:{'@type':'Organization', name:'Indo Home Collective'},
+              url:SITE_URL + path
+            }
+          }
+        });
+      } else if(p.comingSoon){
+        set({title:`${p.name} – coming soon | Indo Home Collective`, description:`${p.name} is coming soon to Indo Home Collective. Register your interest to hear when it arrives.`, path:'/product/' + p.id, noindex:true});
+      } else {
+        set({title:`${p.name} | Indo Home Collective`, description:p.desc, path:'/product/' + p.id, ogType:'product'});
+      }
+      break;
+    }
+    case 'homewares':
+      set({
+        title:'Balinese Homewares – Floating Pool Trays & More | Indo Home Collective',
+        description:'Balinese-inspired homewares from Indo Home Collective, including floating pool trays, wooden bowls and leather goods. Register your interest for new arrivals.',
+        path:'/homewares'
+      });
+      break;
+    case 'ordering':
+      set({
+        title:'How Ordering Works – Made-to-Measure Timber Blinds | Indo Home Collective',
+        description:'Order handcrafted timber slat blinds online or by emailed quote. Approximate timeframe is 8–12 weeks, delivered across Queensland and NSW. Returns policy included.',
+        path:'/ordering'
+      });
+      break;
+    case 'about':
+      set({
+        title:'About Us – Balinese-Inspired Timber Blinds | Indo Home Collective',
+        description:'After 15+ years living in Bali, we bring island living to Australian homes with handcrafted timber slat blinds made by a family of craftsmen with 30+ years of experience.',
+        path:'/about'
+      });
+      break;
+    case 'contact':
+      set({
+        title:'Contact Us | Indo Home Collective – Gold Coast Timber Blinds',
+        description:'Get in touch with Indo Home Collective about timber slat blinds and homewares. Gold Coast based, delivering across Queensland and NSW.',
+        path:'/contact'
+      });
+      break;
+    case 'lakey-peak':
+      set({
+        title:'Lakey Peak Surf Camp, Sumbawa | Indo Home Collective',
+        description:'A small surf camp is under construction at Lakey Peak, Sumbawa, Indonesia. Register your interest to hear when it opens for bookings.',
+        path:'/lakey-peak'
+      });
+      break;
+    case 'cart': case 'quote': case 'checkout': case 'order-confirmed':
+      set({title:'Your order | Indo Home Collective', path:'/' + parts[0], noindex:true});
+      break;
+    default:
+      set({title:'Page not found | Indo Home Collective', path:'/', noindex:true});
+  }
+  m.url = SITE_URL + (m.path === '/' ? '/' : m.path);
+  return m;
+}
+
+function applyRouteMeta(m){
+  const head = document.head;
+  const ensure = (selector, make) => head.querySelector(selector) || head.appendChild(make());
+  const setAttr = (selector, attr, value, make) => ensure(selector, make).setAttribute(attr, value);
+  const metaTag = (attr, key) => () => { const el = document.createElement('meta'); el.setAttribute(attr, key); return el; };
+
+  document.title = m.title;
+  setAttr('meta[name="description"]', 'content', m.description, metaTag('name', 'description'));
+  setAttr('link[rel="canonical"]', 'href', m.url, () => { const el = document.createElement('link'); el.rel = 'canonical'; return el; });
+  setAttr('meta[property="og:type"]', 'content', m.ogType, metaTag('property', 'og:type'));
+  setAttr('meta[property="og:url"]', 'content', m.url, metaTag('property', 'og:url'));
+  setAttr('meta[property="og:title"]', 'content', m.title, metaTag('property', 'og:title'));
+  setAttr('meta[property="og:description"]', 'content', m.description, metaTag('property', 'og:description'));
+  setAttr('meta[property="og:image"]', 'content', m.image, metaTag('property', 'og:image'));
+
+  const robots = head.querySelector('meta[name="robots"]');
+  if(m.noindex) setAttr('meta[name="robots"]', 'content', 'noindex,follow', metaTag('name', 'robots'));
+  else if(robots) robots.remove();
+
+  const ld = document.getElementById('ld-page');
+  if(m.jsonld){
+    const el = ld || Object.assign(document.createElement('script'), {id:'ld-page', type:'application/ld+json'});
+    el.textContent = JSON.stringify(m.jsonld);
+    if(!ld) head.appendChild(el);
+  } else if(ld){
+    ld.remove();
+  }
 }
 
 /* =========================================================
@@ -1443,14 +1620,14 @@ function renderShop(){
 
 function bindShopEvents(){
   document.querySelectorAll('.product-card').forEach(card=>{
-    card.addEventListener('click', ()=>{ location.hash = '#/product/' + card.dataset.id; });
+    card.addEventListener('click', ()=>{ navigate('/product/' + card.dataset.id); });
   });
   document.querySelectorAll('.filter-chip').forEach(chip=>{
     chip.addEventListener('click', ()=>{
       activeCategory = chip.dataset.cat;
       document.getElementById('app').innerHTML = renderShop();
       bindShopEvents();
-      history.replaceState(null, '', '#/homewares/' + encodeURIComponent(activeCategory));
+      history.replaceState(null, '', '/homewares/' + encodeURIComponent(activeCategory));
       document.getElementById('shop-grid').scrollIntoView({behavior:'smooth'});
     });
   });
@@ -1474,8 +1651,8 @@ function renderHome(){
           <h1>timber slat blinds,<br>made for your home.</h1>
           <p class="sub">Real timber slats, handmade by a family of craftsmen with over thirty years of experience. Choose your colour and size, see your price instantly, and we'll build them for you.</p>
           <div class="hero-actions">
-            <a href="#/product/timber-slat-blinds" class="btn btn-primary">Design your blind</a>
-            <a href="#/ordering" class="btn btn-outline">How ordering works</a>
+            <a href="/product/timber-slat-blinds" class="btn btn-primary">Design your blind</a>
+            <a href="/ordering" class="btn btn-outline">How ordering works</a>
           </div>
           <div class="hero-facts">
             <span><strong>From ${money(blind.price)}</strong> per blind</span>
@@ -1497,7 +1674,7 @@ function renderHome(){
         </div>
         <div class="swatch-grid">
           ${BLIND_SWATCHES.map(sw=>`
-            <a class="swatch-card" href="#/product/timber-slat-blinds/${encodeURIComponent(sw.colour)}">
+            <a class="swatch-card" href="/product/timber-slat-blinds/${encodeURIComponent(sw.colour)}">
               <div class="swatch ${sw.cls}" role="img" aria-label="${sw.colour} slat colour sample"></div>
               <div class="swatch-info">
                 <h3>${sw.colour}</h3>
@@ -1551,7 +1728,7 @@ function renderHome(){
       <section class="also-strip" style="padding-bottom:0;">
         <div class="also-head">
           <h2>also from us</h2>
-          <a href="#/homewares">View homewares →</a>
+          <a href="/homewares">View homewares →</a>
         </div>
       </section>
 
@@ -1559,7 +1736,7 @@ function renderHome(){
         <span class="eyebrow">the indo lifestyle, beyond the home</span>
         <h3 class="brand-font">We don't just bring Indonesia into your home.</h3>
         <p>We're also building a small surf camp at Lakey Peak, Sumbawa — register your interest and we'll let you know when it's ready.</p>
-        <a href="#/lakey-peak" class="btn btn-outline">Discover Lakey Peak →</a>
+        <a href="/lakey-peak" class="btn btn-outline">Discover Lakey Peak →</a>
       </div>
     </div>
   `;
@@ -1589,7 +1766,7 @@ async function startSquirrel(){
   if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if(!sqSvgText){
     try{
-      const res = await fetch('assets/squirrel-mascot.svg');
+      const res = await fetch('/assets/squirrel-mascot.svg');
       if(!res.ok) return;
       sqSvgText = (await res.text()).replace('<svg ', '<svg class="sq-svg" aria-hidden="true" ');
     }catch(e){ return; }
@@ -1640,14 +1817,14 @@ function squirrelPeek(){
 function renderProductDetail(id, preColour){
   const p = findProduct(id);
   if(!p){
-    return `<div class="wrap" style="padding:100px 0; text-align:center;"><h2>Product not found</h2><a href="#/shop" class="btn btn-outline" style="margin-top:20px;">Back to shop</a></div>`;
+    return `<div class="wrap" style="padding:100px 0; text-align:center;"><h2>Product not found</h2><a href="/" class="btn btn-outline" style="margin-top:20px;">Back to shop</a></div>`;
   }
   const related = PRODUCTS.filter(r=>r.category===p.category && r.id!==p.id && !r.comingSoon).slice(0,4);
 
   if(p.comingSoon){
     return `
       <div class="wrap">
-        <div class="breadcrumb"><a href="#/homewares">Homewares</a> / ${p.category}</div>
+        <div class="breadcrumb"><a href="/homewares">Homewares</a> / ${p.category}</div>
         <div class="detail-grid">
           <div class="detail-photo ${primaryImageSrc(p) ? '' : 'is-coming-soon'}">
             ${renderDetailPhotoBlock(p)}
@@ -1663,7 +1840,7 @@ function renderProductDetail(id, preColour){
               ${p.meta.map(m=>`<div class="meta-row"><span class="label">${m[0]}</span><span class="value">${m[1]}</span></div>`).join('')}
             </div>` : ''}
             ${renderInterestForm(p)}
-            <a href="#/homewares" class="btn btn-outline" style="margin-top:18px;">Back to homewares</a>
+            <a href="/homewares" class="btn btn-outline" style="margin-top:18px;">Back to homewares</a>
           </div>
         </div>
       </div>
@@ -1678,7 +1855,7 @@ function renderProductDetail(id, preColour){
   const inCart = findCartLine(id, defaultFinish);
   return `
     <div class="wrap">
-      <div class="breadcrumb"><a href="#/homewares">Homewares</a> / ${p.category} / ${p.name}</div>
+      <div class="breadcrumb"><a href="/homewares">Homewares</a> / ${p.category} / ${p.name}</div>
       <div class="detail-grid">
         <div class="detail-photo">
           <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
@@ -1715,7 +1892,7 @@ function renderProductDetail(id, preColour){
           </div>
           <div class="detail-actions">
             <button class="btn btn-primary" id="addToCartBtn">Add to cart</button>
-            <a href="#/cart" class="btn btn-outline">View cart</a>
+            <a href="/cart" class="btn btn-outline">View cart</a>
           </div>
           <div class="added-toast" id="addedToast">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
@@ -1799,7 +1976,7 @@ function bindDetailEvents(id){
   });
 
   document.querySelectorAll('.related-card').forEach(card=>{
-    card.addEventListener('click', ()=>{ location.hash = '#/product/' + card.dataset.id; });
+    card.addEventListener('click', ()=>{ navigate('/product/' + card.dataset.id); });
   });
 }
 
@@ -1815,7 +1992,7 @@ function renderBlindDetail(p, preColour){
 
   return `
     <div class="wrap">
-      <div class="breadcrumb"><a href="#/shop">Blinds</a> / ${p.name}</div>
+      <div class="breadcrumb"><a href="/">Blinds</a> / ${p.name}</div>
       <div class="detail-grid">
         <div class="detail-photo">
           <div class="handmade-badge">${ARCH_MARK.replace('currentColor','#fff')}Handmade</div>
@@ -1860,7 +2037,7 @@ function renderBlindDetail(p, preColour){
 
           <div class="detail-actions">
             <button class="btn btn-primary" id="addToCartBtn">Add to cart</button>
-            <a href="#/cart" class="btn btn-outline">View cart</a>
+            <a href="/cart" class="btn btn-outline">View cart</a>
           </div>
           <div class="added-toast" id="addedToast">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
@@ -1949,7 +2126,7 @@ function renderCart(){
           <svg viewBox="0 0 100 100" fill="none" stroke="var(--tan)" stroke-width="2.2"><path d="M20 30 H80 L72 78 H28 Z"/><path d="M20 30 Q50 18 80 30"/></svg>
           <span class="eyebrow">your basket is empty</span>
           <h2 style="margin:0 0 20px;">Nothing here yet</h2>
-          <a href="#/shop" class="btn btn-primary">Browse the collection</a>
+          <a href="/" class="btn btn-primary">Browse the collection</a>
         </div>
       </div>`;
   }
@@ -2002,11 +2179,11 @@ function renderCart(){
           <div class="summary-row"><span>Shipping</span><span>Included</span></div>
           <div class="summary-row total"><span>Estimated total</span><span>${money(cartTotal())}</span></div>
           ${PAYMENTS_ENABLED ? `
-          <a href="#/checkout" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Proceed to checkout</a>
-          <a href="#/quote" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Save / email a quote</a>` : `
-          <a href="#/quote" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Request a quote</a>`}
-          <a href="#/shop" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Continue shopping</a>
-          <p class="summary-note">${PAYMENTS_ENABLED ? 'Secure checkout · ' : ''}${RETURNS_NOTE} <a href="#/ordering/returns">Returns policy</a></p>
+          <a href="/checkout" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Proceed to checkout</a>
+          <a href="/quote" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Save / email a quote</a>` : `
+          <a href="/quote" class="btn btn-primary" style="width:100%; text-align:center; margin-top:18px; box-sizing:border-box; display:block;">Request a quote</a>`}
+          <a href="/" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Continue shopping</a>
+          <p class="summary-note">${PAYMENTS_ENABLED ? 'Secure checkout · ' : ''}${RETURNS_NOTE} <a href="/ordering/returns">Returns policy</a></p>
         </div>
       </div>
     </div>
@@ -2053,7 +2230,7 @@ function renderQuotePage(){
     return `<div class="wrap" style="padding:100px 0; text-align:center;">
       <h2>Your cart is empty</h2>
       <p style="color:#777; margin:12px 0 24px;">Add something from the collection before saving a quote.</p>
-      <a href="#/shop" class="btn btn-primary">Browse the collection</a>
+      <a href="/" class="btn btn-primary">Browse the collection</a>
     </div>`;
   }
   const quoteRef = 'Q-' + Date.now().toString().slice(-8);
@@ -2117,7 +2294,7 @@ function renderQuotePage(){
         </div>
       </div>
 
-      <a href="#/cart" class="btn btn-outline no-print" style="margin-top:20px; display:inline-block;">Back to cart</a>
+      <a href="/cart" class="btn btn-outline no-print" style="margin-top:20px; display:inline-block;">Back to cart</a>
     </div>
   `;
 }
@@ -2216,7 +2393,7 @@ function renderCheckout(){
     return `<div class="wrap" style="padding:100px 0; text-align:center;">
       <h2>Your cart is empty</h2>
       <p style="color:#777; margin:12px 0 24px;">Add something from the collection before checking out.</p>
-      <a href="#/shop" class="btn btn-primary">Browse the collection</a>
+      <a href="/" class="btn btn-primary">Browse the collection</a>
     </div>`;
   }
   return `
@@ -2264,7 +2441,7 @@ function renderCheckout(){
 
         <div class="summary-box">
           <h2>Order summary</h2>
-          <a href="#/cart" class="edit-cart-link">Edit cart</a>
+          <a href="/cart" class="edit-cart-link">Edit cart</a>
           <div class="order-summary-items">
             ${cart.map(c=>{
               const p = findProduct(c.id);
@@ -2285,8 +2462,8 @@ function renderCheckout(){
           <div class="summary-row"><span>Shipping</span><span>Included</span></div>
           <div class="summary-row total"><span>Total</span><span>${money(cartTotal())}</span></div>
           <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; margin-top:18px;">Place order</button>
-          <a href="#/cart" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Back to cart</a>
-          <p class="summary-note">Secure checkout · ${RETURNS_NOTE} <a href="#/ordering/returns">Returns policy</a></p>
+          <a href="/cart" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Back to cart</a>
+          <p class="summary-note">Secure checkout · ${RETURNS_NOTE} <a href="/ordering/returns">Returns policy</a></p>
         </div>
       </div>
     </div>
@@ -2416,7 +2593,7 @@ function renderConfirmationFailed(){
         <h1>we couldn't confirm your payment</h1>
         <p>Your order wasn't completed. If you were charged, please contact us and we'll sort it out — otherwise your cart is still waiting for you.</p>
         <div class="confirm-actions">
-          <a href="#/cart" class="btn btn-primary">Back to cart</a>
+          <a href="/cart" class="btn btn-primary">Back to cart</a>
         </div>
       </div>
     </div>
@@ -2429,7 +2606,7 @@ function renderConfirmationContent(order, orderId){
   return `
     <div class="wrap">
       <div class="order-confirm">
-        <img src="assets/logo-mark.png" alt="">
+        <img src="/assets/logo-mark.png" alt="">
         <span class="eyebrow">terima kasih${firstName ? ', '+firstName : ''}</span>
         <h1>your order is confirmed</h1>
         <div class="order-id">Order ${orderId || ''}</div>
@@ -2468,7 +2645,7 @@ function renderConfirmationContent(order, orderId){
         </div>` : ''}
 
         <div class="confirm-actions">
-          <a href="#/shop" class="btn btn-primary">Continue shopping</a>
+          <a href="/" class="btn btn-primary">Continue shopping</a>
         </div>
       </div>
     </div>
@@ -2519,7 +2696,7 @@ function renderAbout(){
   return `
     <section class="about-hero">
       <div class="about-title">
-        <img class="mark-bg" src="assets/logo-mark.png" alt="">
+        <img class="mark-bg" src="/assets/logo-mark.png" alt="">
         <h1>about us</h1>
       </div>
     </section>
@@ -2529,7 +2706,7 @@ function renderAbout(){
       <p>We believe natural materials create a calm and welcoming space, which is why we choose real timber for its beauty, durability, and natural insulation qualities. Every blind is custom made by hand by a talented family of craftsmen who have been creating these beautiful products for over 30 years.</p>
       <p>Each piece is made to measure with care and attention to detail, ensuring your home receives a unique and authentic touch inspired by island living.</p>
       <div style="text-align:center; margin-top:10px;">
-        <a href="#/shop" class="btn btn-primary">Explore the collection</a>
+        <a href="/" class="btn btn-primary">Explore the collection</a>
       </div>
     </section>
   `;
@@ -2543,7 +2720,7 @@ function renderOrdering(){
     <section class="ordering-section">
       <div class="wrap">
         <div class="section-head">
-          <img src="assets/logo-mark.png" alt="">
+          <img src="/assets/logo-mark.png" alt="">
           <span class="eyebrow">for custom blinds</span>
           <h2>ordering is easy ✦</h2>
           <p class="order-lede">Just use our blind calculator to choose your colour and size, see your price instantly, and pay securely at checkout.</p>
@@ -2557,7 +2734,7 @@ function renderOrdering(){
               <li><span class="num">2</span><span>Add to cart and pay securely at checkout.</span></li>
               <li><span class="num">3</span><span>We handcraft your blinds and keep you posted by email.</span></li>
             </ol>
-            <a href="#/product/timber-slat-blinds" class="btn btn-dark">Design your blind</a>
+            <a href="/product/timber-slat-blinds" class="btn btn-dark">Design your blind</a>
           </div>
           <div class="order-option">
             <span class="order-tag">prefer email?</span>
@@ -2567,7 +2744,7 @@ function renderOrdering(){
               <li><span class="num">2</span><span>Choose “Save / email a quote” and send it to us.</span></li>
               <li><span class="num">3</span><span>We’ll confirm the details and invoice you — all over email.</span></li>
             </ol>
-            <a href="#/product/timber-slat-blinds" class="btn btn-outline">Start a quote</a>
+            <a href="/product/timber-slat-blinds" class="btn btn-outline">Start a quote</a>
           </div>
         </div>
         <p class="order-timeframe">Approximate timeframe: 8–12 weeks from order to delivery.</p>
@@ -2614,7 +2791,7 @@ function bizCardEmail(card){ return card.emailUser + '@' + CONTACT.emailParts[1]
 function renderBizCard(card){
   return `
     <div class="bizcard${card.main ? '' : ' team'}" data-card="${card.id}">
-      ${card.main ? '<img class="logo" src="assets/logo-transparent.png" alt="indo home collective.">' : ''}
+      ${card.main ? '<img class="logo" src="/assets/logo-transparent.png" alt="indo home collective.">' : ''}
       <h3 class="brand-font">${card.name}</h3>
       ${card.title ? `<span class="title">${card.title}</span>` : ''}
       <hr class="rule">
@@ -2629,7 +2806,7 @@ function renderContactPage(){
     <section class="ordering-section contact-section">
       <div class="wrap">
         <div class="section-head">
-          <img src="assets/logo-mark.png" alt="">
+          <img src="/assets/logo-mark.png" alt="">
           <span class="eyebrow">we'd love to hear from you</span>
           <h2>contact us</h2>
         </div>
@@ -2706,7 +2883,7 @@ const LAKEY_PEAK = { id:'lakey-peak', name:'Lakey Peak Surf Camp', category:'Sum
 function renderLakeyPeak(){
   return `
     <section class="about-hero">
-      <img class="icon" src="assets/logo-mark.png" alt="">
+      <img class="icon" src="/assets/logo-mark.png" alt="">
       <span class="eyebrow">the indo lifestyle, beyond the home</span>
       <h1>lakey peak surf camp</h1>
     </section>
@@ -2722,7 +2899,7 @@ function renderLakeyPeak(){
         ${renderInterestForm(LAKEY_PEAK, "Leave your email (and contact details if you'd like) and we'll let you know as soon as Lakey Peak is open for bookings.")}
       </div>
       <div style="text-align:center; margin-top:10px;">
-        <a href="#/shop" class="btn btn-outline">Back to the collection</a>
+        <a href="/" class="btn btn-outline">Back to the collection</a>
       </div>
     </section>
   `;

@@ -15,9 +15,11 @@ off here for backend/payment integration and deployment.
 
 ## Stack
 Plain HTML/CSS/JS. No framework, no build step, no dependencies. Routing is a
-minimal hash-based router (`#/shop`, `#/product/:id`, `#/cart`, `#/checkout`,
-`#/order-confirmed/:id`, `#/about`, `#/ordering`) implemented in the inline
-`<script>` at the bottom of `index.html`.
+minimal path-based router (`/`, `/product/:id`, `/cart`, `/checkout`,
+`/order-confirmed/:id`, `/about`, `/ordering`, ...) implemented in the inline
+`<script>` at the bottom of `index.html` (since 2026-11-03 — see "Search (SEO)
+basics"). **Older notes in this file that say `#/route` mean the path `/route`**;
+old `#/...` URLs are rewritten to paths on load (`legacyHashToPath()`).
 
 ## Brand system
 - Colors: Moss Green `#3D5C3B`, Sandy Beige `#EAE0D3`, Charcoal `#333333`,
@@ -645,10 +647,41 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
   store. Always pair our name with "timber slat blinds" + "Gold Coast" and the
   Bali/Indonesia story; avoid their vocabulary ("concept store", "eclectic",
   "curated interiors").
-- `robots.txt` + `sitemap.xml` (home page only). Netlify serves these static
-  files ahead of the `/*` → index.html rewrite.
-- Known limitation: all views are hash routes (`/#/about` etc.), so Google sees
-  one page. Moving to path routes (`/about`, `/ordering`, `/contact`) is the next
-  SEO step; add those URLs to `sitemap.xml` when it happens.
+- `robots.txt` + `sitemap.xml`. Netlify serves these static files ahead of the
+  `/*` → index.html rewrite. `sitemap.xml` is **generated** — don't hand-edit.
+
+### Real URLs + prerendered pages (2026-11-03)
+- **Path routing.** Views live at real URLs (`/about`, `/ordering`, `/homewares`,
+  `/contact`, `/lakey-peak`, `/product/timber-slat-blinds[/Colour]`), so Google
+  can index each one. Links are plain `href="/x"`; a document click handler
+  calls `navigate()` (pushState + `render()`); `popstate` handles back/forward.
+  Asset paths are root-absolute (`/assets/...`) because pages now sit at depth.
+  Stripe's return URL still uses `#/order-confirmed/…`; `legacyHashToPath()`
+  converts it (keeping `?session_id=`), so `create-checkout-session.js` is unchanged.
+- **Per-page metadata:** `routeMeta(parts)` in `index.html` is the single source
+  of title/description/canonical/noindex/JSON-LD; `applyRouteMeta()` writes it to
+  `<head>` on every route change. The blind page carries `Product` +
+  `AggregateOffer` schema (AUD, price range computed from `computeBlindPrice`;
+  no ratings/reviews — don't add any unless they're real). Cart, quote,
+  checkout, order-confirmed, coming-soon products and unknown paths are
+  `noindex`; unknown paths render a "Page not found" view (the status is still 200).
+- **Static copies for crawlers:** `node scripts/prerender.js` runs the page's own
+  render functions and writes `prerender/*.html` (head + body content filled in)
+  and regenerates `sitemap.xml`. `netlify.toml` serves them at the real URLs with
+  `force = true` rewrites; every other path gets the `index.html` shell. The JS
+  re-renders identical content on load. Contact emails are deliberately *not*
+  baked into static HTML (the script throws if one would be).
+  **Re-run the script (and commit `prerender/` + `sitemap.xml`) whenever page
+  copy, prices or `routeMeta()` change, then redeploy.** New indexable page =
+  add it to `PAGES` in the script + a rewrite in `netlify.toml`.
+- **Local testing:** `.claude/launch.json` now runs `scripts/dev-server.py`,
+  which applies `netlify.toml`'s redirects so deep links work locally. (The old
+  `python -m http.server` can't serve `/about`.)
+- `netlify.toml` also 404s project files that sit in the publish folder
+  (`CLAUDE.md`, `package*.json`, `netlify/*`, `scripts/*`, `.gitignore`) — before
+  this they were publicly downloadable. `/index.html` 301s to `/`.
+- Still to do outside the code: Google Search Console (verify domain by DNS TXT
+  at GoDaddy, submit `sitemap.xml`, request indexing), Google Business Profile
+  (service-area business), more written content/real photos, directory listings.
 - Hi-res print logos (`assets/logo-full-hires*.png`, `logo-mark-hires.png`)
   were made for the Canva stationery set.
