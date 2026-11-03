@@ -680,8 +680,19 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
 - `netlify.toml` also 404s project files that sit in the publish folder
   (`CLAUDE.md`, `package*.json`, `netlify/*`, `scripts/*`, `.gitignore`) — before
   this they were publicly downloadable. `/index.html` 301s to `/`.
-- Still to do outside the code: Google Search Console (verify domain by DNS TXT
-  at GoDaddy, submit `sitemap.xml`, request indexing), Google Business Profile
-  (service-area business), more written content/real photos, directory listings.
+- **Done outside the code (2026-11-03):** Search Console domain verified, sitemap
+  submitted, indexing requested for `/` and `/product/timber-slat-blinds`; Bing
+  Webmaster Tools imported from Search Console with the sitemap submitted (both
+  under the Google account tropica.obscura@gmail.com).
+- **Google Business Profile "Indo Home Collective" is created but UNVERIFIED**
+  (Blinds shop; service area Gold Coast, Queensland, NSW; address hidden). Google
+  only offers video verification: film one continuous take in daylight on a phone
+  — street sign/neighbours, the business card with the name, a blind sample or
+  laptop showing the site/dashboard (no customer data). Resume at
+  business.google.com → Verify. Don't click "Add business" (makes a duplicate).
+- **Still to do:** finish the GBP verification, then add photos, a description and
+  the blinds product; directory listings (Yellow Pages, True Local, Hotfrog,
+  Houzz AU); more written content (how to measure, indoor/outdoor, care) and real
+  photos. Check Search Console (Pages, Sitemaps) and Bing in 2–3 weeks.
 - Hi-res print logos (`assets/logo-full-hires*.png`, `logo-mark-hires.png`)
   were made for the Canva stationery set.
