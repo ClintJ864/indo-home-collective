@@ -684,12 +684,15 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
   submitted, indexing requested for `/` and `/product/timber-slat-blinds`; Bing
   Webmaster Tools imported from Search Console with the sitemap submitted (both
   under the Google account tropica.obscura@gmail.com).
-- **Google Business Profile "Indo Home Collective" is created but UNVERIFIED**
-  (Blinds shop; service area Gold Coast, Queensland, NSW; address hidden). Google
-  only offers video verification: film one continuous take in daylight on a phone
-  — street sign/neighbours, the business card with the name, a blind sample or
-  laptop showing the site/dashboard (no customer data). Resume at
-  business.google.com → Verify. Don't click "Add business" (makes a duplicate).
+- **Google Business Profile "Indo Home Collective"** (Blinds shop; service area
+  Gold Coast, Queensland, NSW; address hidden) — verification video submitted
+  2026-11-06, status "Processing" (Google reviews in a few business days). Google
+  only offers video verification. If rejected, get Google's exact reason and
+  re-film. Don't click "Add business" (makes a duplicate). Optional steps were
+  skipped on purpose (no storefront photos, no Ads credit, no Workspace).
+- `/timber-slat-blinds` (2026-11-06): guide page with colours, sizes and a price
+  table generated from `computeBlindPrice()` — keep new copy to facts already
+  true on the site (no outdoor/installation/care claims until confirmed).
 - **Still to do:** finish the GBP verification, then add photos, a description and
   the blinds product; directory listings (Yellow Pages, True Local, Hotfrog,
   Houzz AU); more written content (how to measure, indoor/outdoor, care) and real
