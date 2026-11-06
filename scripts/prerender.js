@@ -26,6 +26,7 @@ const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const PAGES = [
   { path: '/',                            file: 'home.html',                    render: c => c.renderHome() },
   { path: '/product/timber-slat-blinds',  file: 'product-timber-slat-blinds.html', render: c => c.renderProductDetail('timber-slat-blinds', null) },
+  { path: '/timber-slat-blinds',          file: 'timber-slat-blinds.html',      render: c => c.renderBlindsGuide() },
   { path: '/homewares',                   file: 'homewares.html',               render: c => c.renderShop() },
   { path: '/ordering',                    file: 'ordering.html',                render: c => c.renderOrdering() },
   { path: '/about',                       file: 'about.html',                   render: c => c.renderAbout() },
@@ -50,7 +51,7 @@ vm.createContext(sandbox);
 const api = vm.runInContext(`${scriptSrc}
 // Contact details are built at runtime on purpose (anti-scraping); never bake them into static HTML.
 contactEmail = () => '';
-({ renderHome, renderProductDetail, renderShop, renderOrdering, renderAbout, renderContactPage, renderLakeyPeak, routeMeta, pathParts });`, sandbox);
+({ renderHome, renderProductDetail, renderBlindsGuide, renderShop, renderOrdering, renderAbout, renderContactPage, renderLakeyPeak, routeMeta, pathParts });`, sandbox);
 
 // ---- helpers
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

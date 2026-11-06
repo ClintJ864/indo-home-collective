@@ -60,6 +60,11 @@
   status = 200
   force = true
 [[redirects]]
+  from = "/timber-slat-blinds"
+  to = "/prerender/timber-slat-blinds.html"
+  status = 200
+  force = true
+[[redirects]]
   from = "/homewares"
   to = "/prerender/homewares.html"
   status = 200

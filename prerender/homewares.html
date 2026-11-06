@@ -548,6 +548,30 @@
   .policy .acl{margin-top:22px; font-size:0.82rem; color:#6e665b; font-style:italic;}
   .summary-note a{color:var(--moss); text-decoration:underline;}
 
+  /* Blinds guide page (/timber-slat-blinds): sizes, colours, price table, Q&A */
+  .guide{max-width:760px; margin:0 auto; padding:24px 32px 90px;}
+  .guide-lede{font-family:Georgia, 'Times New Roman', serif; font-size:1.2rem; line-height:1.75; color:#3f3f3f; text-align:center; margin:0 0 36px;}
+  .guide h2{font-size:1.5rem; color:var(--moss); margin:44px 0 14px; text-transform:none; letter-spacing:0;}
+  .guide p, .guide li, .guide dd{font-size:1rem; line-height:1.7; color:#3f3f3f;}
+  .guide p{margin:0 0 14px;}
+  .guide a{color:var(--moss); text-decoration:underline;}
+  .guide .btn{text-decoration:none;}
+  .guide .btn-primary{color:var(--moss-dark);}
+  .guide-colours{list-style:none; margin:0; padding:0; display:grid; gap:10px;}
+  .guide-colours li{padding:12px 16px; background:var(--white); border:1px solid rgba(199,177,148,0.45); border-radius:6px;}
+  .guide-colours strong{color:var(--moss);}
+  .price-scroll{overflow-x:auto; margin:18px 0 10px; border:1px solid rgba(199,177,148,0.45); border-radius:6px; background:var(--white); -webkit-overflow-scrolling:touch;}
+  .price-table{border-collapse:collapse; width:100%; min-width:520px; font-size:0.9rem; text-align:right;}
+  .price-table th, .price-table td{padding:9px 12px; border-bottom:1px solid rgba(199,177,148,0.3); white-space:nowrap;}
+  .price-table thead th{background:var(--beige); color:var(--moss); font-weight:600; position:sticky; top:0;}
+  .price-table tbody th{text-align:left; color:var(--moss); font-weight:600; background:var(--cream); position:sticky; left:0;}
+  .price-table thead th:first-child{position:sticky; left:0; z-index:1;}
+  .price-table tbody tr:last-child th, .price-table tbody tr:last-child td{border-bottom:none;}
+  .price-note{font-size:0.85rem; color:#6e665b;}
+  .guide dt{font-weight:600; color:var(--moss); margin:22px 0 4px;}
+  .guide dd{margin:0;}
+  .guide-cta{text-align:center; margin-top:44px;}
+
   /* ---------- Contact us page (#/contact): business cards ---------- */
   .contact-section{margin-top:0;}
   .contact-cards{max-width:860px; margin:0 auto;}
@@ -859,6 +883,7 @@
     <div>
       <h3>Shop</h3>
       <p><a href="/">Timber slat blinds</a></p>
+      <p><a href="/timber-slat-blinds">Sizes &amp; prices</a></p>
       <p><a href="/homewares">Homewares</a></p>
       <p><a href="/ordering">How ordering works</a></p>
       <p><a href="/about">Our story</a></p>
@@ -1438,6 +1463,9 @@ function render(){
     setActiveNav('ordering');
     app.innerHTML = renderOrdering();
     if(parts[1]==='returns') document.getElementById('returns').scrollIntoView();
+  } else if(parts[0]==='timber-slat-blinds' && !parts[1]){
+    setActiveNav('shop');
+    app.innerHTML = renderBlindsGuide();
   } else if(parts[0]==='contact'){
     setActiveNav(''); // reached from the footer's "Contact cards" link
     app.innerHTML = renderContactPage();
@@ -1521,6 +1549,16 @@ function routeMeta(parts){
       } else {
         set({title:`${p.name} | Indo Home Collective`, description:p.desc, path:'/product/' + p.id, ogType:'product'});
       }
+      break;
+    }
+    case 'timber-slat-blinds': {
+      if(parts[1]){ set({title:'Page not found | Indo Home Collective', path:'/', noindex:true}); break; }
+      const {low} = blindPriceRange();
+      set({
+        title:'Timber Slat Blinds – Sizes, Colours & Prices | Indo Home Collective',
+        description:`Timber slat blinds in Natural Wood, White or Black, handcrafted in Bali. See sizes from 50–300cm, prices from ${money(low)} and delivery across Queensland and NSW.`,
+        path:'/timber-slat-blinds'
+      });
       break;
     }
     case 'homewares':
@@ -2800,6 +2838,74 @@ function renderReturnsPolicy(){
       <p><strong>Cancellations.</strong> Contact us as soon as possible. Once production of your made-to-order blind has started, the order can't be cancelled.</p>
       <p class="acl">Our goods come with guarantees that cannot be excluded under the Australian Consumer Law. You are entitled to a replacement or refund for a major failure and compensation for any other reasonably foreseeable loss or damage. You are also entitled to have the goods repaired or replaced if the goods fail to be of acceptable quality and the failure does not amount to a major failure.</p>
     </div>`;
+}
+
+/* =========================================================
+   VIEW: BLINDS GUIDE (/timber-slat-blinds)
+   Sizes, colours, a price table and a short Q&A. Every figure comes from the
+   same constants the calculator uses (BLIND_WIDTHS/DROPS, computeBlindPrice,
+   BLIND_COLOURS, BLIND_SWATCHES, the product's meta), so prices here can't drift
+   from the real ones. Only state facts that are already true elsewhere on the
+   site — no care/installation/outdoor claims until the owner confirms them.
+   ========================================================= */
+function renderBlindsGuide(){
+  const blind = findProduct('timber-slat-blinds');
+  const discountPct = Math.round(BLIND_DISCOUNT_PCT.Timber * 100);
+  const priceRows = BLIND_DROPS.map(d =>
+    `<tr><th scope="row">${d}cm</th>${BLIND_WIDTHS.map(w=>`<td>${money(computeBlindPrice('Timber', w, d).unitPrice)}</td>`).join('')}</tr>`
+  ).join('');
+  const colourItems = BLIND_SWATCHES.map(sw =>
+    `<li><strong><a href="/product/timber-slat-blinds/${encodeURIComponent(sw.colour)}">${sw.colour}</a></strong> — ${sw.note}</li>`
+  ).join('');
+  const low = blindPriceRange().low;
+  return `
+    <section class="about-hero">
+      <img class="icon" src="/assets/logo-mark.png" alt="">
+      <span class="eyebrow">sizes, colours &amp; prices</span>
+      <h1>timber slat blinds, made to measure</h1>
+    </section>
+    <article class="guide">
+      <p class="guide-lede">Real timber slat blinds, handcrafted in Bali by a family of makers with over thirty years of experience. Gold Coast based, delivering across Queensland and New South Wales.</p>
+
+      <h2>colours</h2>
+      <ul class="guide-colours">${colourItems}</ul>
+
+      <h2>sizes</h2>
+      <p>Each blind is made to order from solid timber, with slats ${blind.meta.find(m=>m[0]==='Slat width')[1]} wide. Choose a width and a drop (the height of the blind, top to bottom) — widths run from ${BLIND_WIDTHS[0]}cm to ${BLIND_WIDTHS[BLIND_WIDTHS.length-1]}cm and drops from ${BLIND_DROPS[0]}cm to ${BLIND_DROPS[BLIND_DROPS.length-1]}cm. Not sure which size to pick? <a href="/contact">Ask us before you order</a>.</p>
+
+      <h2>prices</h2>
+      <p>Blinds start from ${money(low)}. Every size is priced below in Australian dollars, with delivery included and a ${discountPct}% discount already applied to larger blinds. Width runs across the top, drop runs down the side.</p>
+      <div class="price-scroll" role="region" aria-label="Timber slat blind prices by width and drop" tabindex="0">
+        <table class="price-table">
+          <thead><tr><th scope="col">Drop ↓ Width →</th>${BLIND_WIDTHS.map(w=>`<th scope="col">${w}cm</th>`).join('')}</tr></thead>
+          <tbody>${priceRows}</tbody>
+        </table>
+      </div>
+      <p class="price-note">The same price is shown live in the <a href="/product/timber-slat-blinds">blind calculator</a>, where you can pick your colour and exact size.</p>
+
+      <h2>how long it takes</h2>
+      <p>Every blind is handmade to order, so allow roughly 8–12 weeks from order to delivery. We'll confirm the details with you before production begins.</p>
+
+      <h2>handmade, so a little variation</h2>
+      <p>Our craftsmen in Bali measure with care, but by people, not machines, so a blind may arrive up to 1cm over or under in width and drop. Grain, tone and small knots also vary from blind to blind — that's the character of real timber. See our <a href="/ordering/returns">returns and faulty items policy</a> for the full detail.</p>
+
+      <h2>common questions</h2>
+      <dl>
+        <dt>Where do you deliver?</dt>
+        <dd>We're Gold Coast based and deliver across Queensland and New South Wales. Delivery is included in the price.</dd>
+        <dt>How do I order?</dt>
+        <dd>Pick your colour, width and drop in the <a href="/product/timber-slat-blinds">blind calculator</a>, add it to your cart and pay securely at checkout. Prefer email? Choose “Save / email a quote” and we'll confirm the details and invoice you. <a href="/ordering">How ordering works</a>.</dd>
+        <dt>Can I return a blind if I change my mind?</dt>
+        <dd>Because each blind is made to your measurements, we can't offer change-of-mind returns. This doesn't affect your rights under the Australian Consumer Law for faulty goods.</dd>
+        <dt>What are the blinds made from?</dt>
+        <dd>Solid timber, chosen for its beauty, durability and natural insulation qualities.</dd>
+      </dl>
+
+      <div class="guide-cta">
+        <a href="/product/timber-slat-blinds" class="btn btn-primary">Design your blind</a>
+      </div>
+    </article>
+  `;
 }
 
 /* ---------- Contact us page (#/contact): business cards ----------
