@@ -691,8 +691,14 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
   re-film. Don't click "Add business" (makes a duplicate). Optional steps were
   skipped on purpose (no storefront photos, no Ads credit, no Workspace).
 - `/timber-slat-blinds` (2026-11-06): guide page with colours, sizes and a price
-  table generated from `computeBlindPrice()` — keep new copy to facts already
-  true on the site (no outdoor/installation/care claims until confirmed).
+  table generated from `computeBlindPrice()`. Keep new copy to facts already true
+  on the site or confirmed by the owner. **Owner-confirmed 2026-11-06:** suitable
+  for outdoor use; blinds are self-installed (a Gold Coast installation service
+  is available on request); in-between sizes are available on request and priced
+  at the next size up (customers send a request via /contact). **Still
+  unconfirmed — don't claim:** care/cleaning, indoor use, mounting types, install
+  pricing. The product page shows a matching "Between sizes?" hint under the
+  size selectors.
 - **Still to do:** finish the GBP verification, then add photos, a description and
   the blinds product; directory listings (Yellow Pages, True Local, Hotfrog,
   Houzz AU); more written content (how to measure, indoor/outdoor, care) and real

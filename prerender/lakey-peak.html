@@ -571,6 +571,8 @@
   .guide dt{font-weight:600; color:var(--moss); margin:22px 0 4px;}
   .guide dd{margin:0;}
   .guide-cta{text-align:center; margin-top:44px;}
+  .size-hint{font-size:0.85rem; line-height:1.5; color:#6e665b; margin:-4px 0 18px;}
+  .size-hint a{color:var(--moss); text-decoration:underline;}
 
   /* ---------- Contact us page (#/contact): business cards ---------- */
   .contact-section{margin-top:0;}
@@ -2103,6 +2105,7 @@ function renderBlindDetail(p, preColour){
               <select id="blindDrop">${BLIND_DROPS.map(d=>`<option value="${d}" ${d===defaultDrop?'selected':''}>${d}</option>`).join('')}</select>
             </div>
           </div>
+          <p class="size-hint">Between sizes? <a href="/contact">Send us a request</a> — we can make in-between sizes, priced at the next size up. <a href="/timber-slat-blinds">Sizes &amp; prices</a></p>
           <div class="qty-row">
             <label style="margin:0;">Quantity</label>
             <div class="qty-control">
@@ -2864,7 +2867,9 @@ function renderReturnsPolicy(){
    same constants the calculator uses (BLIND_WIDTHS/DROPS, computeBlindPrice,
    BLIND_COLOURS, BLIND_SWATCHES, the product's meta), so prices here can't drift
    from the real ones. Only state facts that are already true elsewhere on the
-   site — no care/installation/outdoor claims until the owner confirms them.
+   site or confirmed by the owner (outdoor use, self-install with an optional Gold
+   Coast installation service, in-between sizes priced at the next size up).
+   Still unconfirmed — don't claim: care/cleaning, indoor use, mounting types.
    ========================================================= */
 function renderBlindsGuide(){
   const blind = findProduct('timber-slat-blinds');
@@ -2889,7 +2894,10 @@ function renderBlindsGuide(){
       <ul class="guide-colours">${colourItems}</ul>
 
       <h2>sizes</h2>
-      <p>Each blind is made to order from solid timber, with slats ${blind.meta.find(m=>m[0]==='Slat width')[1]} wide. Choose a width and a drop (the height of the blind, top to bottom) — widths run from ${BLIND_WIDTHS[0]}cm to ${BLIND_WIDTHS[BLIND_WIDTHS.length-1]}cm and drops from ${BLIND_DROPS[0]}cm to ${BLIND_DROPS[BLIND_DROPS.length-1]}cm. Not sure which size to pick? <a href="/contact">Ask us before you order</a>.</p>
+      <p>Each blind is made to order from solid timber, with slats ${blind.meta.find(m=>m[0]==='Slat width')[1]} wide. Choose a width and a drop (the height of the blind, top to bottom) — widths run from ${BLIND_WIDTHS[0]}cm to ${BLIND_WIDTHS[BLIND_WIDTHS.length-1]}cm and drops from ${BLIND_DROPS[0]}cm to ${BLIND_DROPS[BLIND_DROPS.length-1]}cm.</p>
+
+      <h2>between sizes &amp; how to measure</h2>
+      <p>Measure the width and the drop of the space you want to cover, in centimetres, and double-check both numbers — we make each blind to the sizes you give us. If your measurements fall between two listed sizes, we can make an in-between size. <a href="/contact">Send us a request</a> so we can check, and the price is the next size up.</p>
 
       <h2>prices</h2>
       <p>Blinds start from ${money(low)}. Every size is priced below in Australian dollars, with delivery included and a ${discountPct}% discount already applied to larger blinds. Width runs across the top, drop runs down the side.</p>
@@ -2900,6 +2908,12 @@ function renderBlindsGuide(){
         </table>
       </div>
       <p class="price-note">The same price is shown live in the <a href="/product/timber-slat-blinds">blind calculator</a>, where you can pick your colour and exact size.</p>
+
+      <h2>outdoor use</h2>
+      <p>Our timber slat blinds are suitable for outdoor use, such as patios.</p>
+
+      <h2>installation</h2>
+      <p>Our blinds are self-installed. If you're on the Gold Coast, we can also offer an installation service — <a href="/contact">get in touch</a> to ask about it.</p>
 
       <h2>how long it takes</h2>
       <p>Every blind is handmade to order, so allow roughly 8–12 weeks from order to delivery. We'll confirm the details with you before production begins.</p>
@@ -2913,6 +2927,12 @@ function renderBlindsGuide(){
         <dd>We're Gold Coast based and deliver across Queensland and New South Wales. Delivery is included in the price.</dd>
         <dt>How do I order?</dt>
         <dd>Pick your colour, width and drop in the <a href="/product/timber-slat-blinds">blind calculator</a>, add it to your cart and pay securely at checkout. Prefer email? Choose “Save / email a quote” and we'll confirm the details and invoice you. <a href="/ordering">How ordering works</a>.</dd>
+        <dt>Can I use them outdoors?</dt>
+        <dd>Yes — our timber slat blinds are suitable for outdoor use, such as patios.</dd>
+        <dt>Do you install the blinds?</dt>
+        <dd>Our blinds are self-installed. If you're on the Gold Coast, we can also offer an installation service — <a href="/contact">get in touch</a> to ask about it.</dd>
+        <dt>What if my space is between two sizes?</dt>
+        <dd>We can make in-between sizes. <a href="/contact">Send us a request</a> so we can check, and the price is the next size up.</dd>
         <dt>Can I return a blind if I change my mind?</dt>
         <dd>Because each blind is made to your measurements, we can't offer change-of-mind returns. This doesn't affect your rights under the Australian Consumer Law for faulty goods.</dd>
         <dt>What are the blinds made from?</dt>
