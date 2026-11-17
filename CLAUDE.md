@@ -685,11 +685,14 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
   Webmaster Tools imported from Search Console with the sitemap submitted (both
   under the Google account tropica.obscura@gmail.com).
 - **Google Business Profile "Indo Home Collective"** (Blinds shop; service area
-  Gold Coast, Queensland, NSW; address hidden) — verification video submitted
-  2026-11-06, status "Processing" (Google reviews in a few business days). Google
-  only offers video verification. If rejected, get Google's exact reason and
-  re-film. Don't click "Add business" (makes a duplicate). Optional steps were
-  skipped on purpose (no storefront photos, no Ads credit, no Workspace).
+  Gold Coast, Queensland, NSW; address hidden) — **VERIFIED** (checked
+  2026-11-17; video submitted 2026-11-06). Profile still needs hours (or "by
+  appointment", only if true), the logo and real photos, the blinds product,
+  Facebook/Instagram links and the review link — owner chose to do this later.
+  Don't click "Add business" (makes a duplicate). Optional steps were skipped on
+  purpose (no storefront photos, no Ads credit, no Workspace). 2026-11-17 Google:
+  home, `/timber-slat-blinds` and `/product/timber-slat-blinds` indexed; `/about`,
+  `/ordering`, `/homewares`, `/contact`, `/lakey-peak` discovered, not yet crawled.
 - `/timber-slat-blinds` (2026-11-06): guide page with colours, sizes and a price
   table generated from `computeBlindPrice()`. Keep new copy to facts already true
   on the site or confirmed by the owner. **Owner-confirmed 2026-11-06:** suitable
@@ -699,9 +702,11 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
   unconfirmed — don't claim:** care/cleaning, indoor use, mounting types, install
   pricing. The product page shows a matching "Between sizes?" hint under the
   size selectors.
-- **Still to do:** finish the GBP verification, then add photos, a description and
-  the blinds product; directory listings (Yellow Pages, True Local, Hotfrog,
-  Houzz AU); more written content (how to measure, indoor/outdoor, care) and real
-  photos. Check Search Console (Pages, Sitemaps) and Bing in 2–3 weeks.
+- **Still to do:** complete the GBP profile (see above); directory listings
+  (Yellow Pages + True Local are one Thryv form; Hotfrog; skip Houzz Pro) — paused
+  until the business has an ABN, paste-ready sheet is `../directory-listing-details.md`;
+  more content only from owner-confirmed facts (care/cleaning, indoor use,
+  mounting types are still unconfirmed) and real photos. Re-check Search Console
+  and Bing indexing for the 5 pages not yet crawled.
 - Hi-res print logos (`assets/logo-full-hires*.png`, `logo-mark-hires.png`)
   were made for the Canva stationery set.
