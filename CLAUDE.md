@@ -614,9 +614,23 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
   4 items clear of the Netlify badge — still in header + footer).
 - Blind product now has `image:'assets/blinds-natural-web.jpg'`.
 - New compressed assets `blinds-natural-web.jpg` (~120KB, real photo) and
-  `blinds-white-web.jpg` (~84KB, **AI-generated** — shown with the
-  "AI-generated preview" badge; replace with a real photo when available).
-  No Black photo yet.
+  `blinds-white-web.jpg` (~84KB, was **AI-generated**, shown with the
+  "AI-generated preview" badge). **Replaced 2026-11-21** with the owner's real
+  photo `blinds-white-real-web.jpg` (white blind on a patio beside a pool fence, location unconfirmed, cropped
+  4:3 from `google-profile-photos/real-photos/05-…`); the AI file was deleted
+  and the badge no longer shows on the blind gallery. The gallery now holds 5
+  real photos (`blinds-natural-web`, `blinds-white-real-web`,
+  `blinds-natural-garden-web`, `blinds-natural-detail-web`,
+  `blinds-white-rolled-web`; all 4:3 crops) plus the "more photos coming soon"
+  note. **Layout (2026-11-21):** desktop = magazine mosaic (first photo is a
+  2×2 feature + 4 tiles, so keep `BLIND_GALLERY` at a feature + a multiple of 2);
+  ≤860px = swipe track with the next photo peeking, "01 / 05" counter, progress
+  line and arrows; tapping any photo opens a full-screen viewer (swipe/arrows/Esc,
+  swipe-down to close, focus trapped). Code: `.gal*`/`.lb*` CSS, `bindGalleryEvents()`
+  + `openLightbox()` near `bindHomeEvents()`. `render()` closes the viewer. Remember
+  `/` is served from `prerender/home.html` — re-run `node scripts/prerender.js`
+  after any change or you'll be testing the old page. More real photos live in
+  `../google-profile-photos/real-photos/`. No Black photo yet.
 
 ### 2026-10-07 (later): spinning logo, squirrel mascot
 - Header logo is now `assets/logo-transparent.png` (white background

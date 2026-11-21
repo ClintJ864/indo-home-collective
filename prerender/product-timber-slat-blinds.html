@@ -635,19 +635,53 @@
   .swatch-card{background:var(--white); border:1px solid rgba(199,177,148,0.35); border-radius:6px; overflow:hidden; display:flex; flex-direction:column; transition:transform .25s ease, box-shadow .25s ease;}
   .swatch-card:hover{transform:translateY(-4px); box-shadow:0 14px 26px rgba(61,92,59,0.12);}
   .swatch{aspect-ratio:16/10;}
-  /* Slat colours sampled from the real product photos (blinds-natural-web.jpg / blinds-white-web.jpg) */
+  /* Slat colours sampled from the real product photos (blinds-natural-web.jpg / blinds-white-real-web.jpg) */
   .swatch.natural{background:repeating-linear-gradient(180deg,#a8744f 0,#8d5d40 9px,#6e4530 17px,#3d2418 17px 20px);}
   .swatch.white{background:repeating-linear-gradient(180deg,#ffffff 0,#fafaf8 9px,#f0efec 17px,#cfcdc8 17px 20px); box-shadow:inset 0 0 0 1px rgba(0,0,0,0.05);}
   .swatch.black{background:repeating-linear-gradient(180deg,#2e2b28 0 18px,#141210 18px 20px);}
   .swatch-info{padding:16px 18px 18px;}
   .swatch-info h3{margin:0 0 4px; font-size:1.02rem; text-transform:none;}
   .swatch-info span{font-size:0.78rem; color:var(--moss); letter-spacing:0.04em;}
-  .gallery-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
-  .gallery-item{position:relative; margin:0; border-radius:6px; overflow:hidden; background:var(--beige); aspect-ratio:4/3;}
-  .gallery-item img{width:100%; height:100%; object-fit:cover;}
-  .gallery-item figcaption{position:absolute; left:0; right:0; bottom:0; padding:22px 14px 10px; font-size:0.78rem; color:#fff; background:linear-gradient(transparent, rgba(0,0,0,0.55));}
-  .gallery-item.placeholder{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; text-align:center; color:var(--tan); font-family:Georgia, 'Times New Roman', serif; font-style:italic; font-size:0.95rem; padding:20px;}
-  .gallery-item.placeholder svg{width:56px; height:56px; opacity:0.6;}
+  /* Gallery: magazine mosaic on desktop (first photo is the big feature), swipe
+     track with a peeking next photo on phones. Tap any photo for the full-screen
+     viewer (see bindGalleryEvents). */
+  .gal{position:relative;}
+  .gal-track{position:relative; display:grid; grid-template-columns:repeat(4, 1fr); gap:16px;}
+  .gal-item{position:relative; margin:0; border-radius:6px; overflow:hidden; background:var(--beige); aspect-ratio:4/3;}
+  .gal-item:first-child{grid-column:span 2; grid-row:span 2; aspect-ratio:auto;}
+  .gal-open{position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; margin:0; background:none; display:block; cursor:zoom-in; font:inherit; color:inherit; text-align:left;}
+  .gal-open img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:transform .7s cubic-bezier(.2,.7,.2,1);}
+  .gal-open:focus-visible{outline:3px solid var(--aqua); outline-offset:-3px;}
+  @media (hover:hover){ .gal-open:hover img{transform:scale(1.045);} }
+  .gal-cap{position:absolute; left:0; right:0; bottom:0; padding:34px 16px 12px; font-size:0.8rem; letter-spacing:0.02em; color:#fff; background:linear-gradient(transparent, rgba(0,0,0,0.6)); pointer-events:none;}
+  .gal-item:first-child .gal-cap{padding:56px 22px 18px; font-family:Georgia, 'Times New Roman', serif; font-style:italic; font-size:1.05rem;}
+  .gal-zoom{position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.88); display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0.9; transition:opacity .25s ease, transform .25s ease;}
+  .gal-zoom svg{width:14px; height:14px;}
+  @media (hover:hover){ .gal-zoom{opacity:0; transform:scale(0.85);} .gal-open:hover .gal-zoom, .gal-open:focus-visible .gal-zoom{opacity:1; transform:none;} }
+  .gal-bar{display:none;}
+  .gal-note{text-align:center; margin:22px 0 0; font-family:Georgia, 'Times New Roman', serif; font-style:italic; font-size:0.92rem; color:var(--tan);}
+  .gal-count{font-size:0.78rem; letter-spacing:0.14em; color:var(--moss); font-variant-numeric:tabular-nums; min-width:3.6em;}
+  .gal-prog{flex:1; height:2px; background:rgba(199,177,148,0.4); border-radius:2px; overflow:hidden;}
+  .gal-fill{display:block; height:100%; width:20%; background:var(--moss); border-radius:2px; transition:width .3s ease;}
+  .gal-arrows{display:flex; gap:8px;}
+  .gal-arrows button, .lb-btn{width:40px; height:40px; border-radius:50%; border:1px solid var(--tan); background:transparent; color:var(--moss); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;}
+  .gal-arrows button:disabled{opacity:0.35; cursor:default;}
+  .gal-arrows svg, .lb-btn svg{width:16px; height:16px;}
+  /* full-screen viewer */
+  .lb{position:fixed; inset:0; z-index:2000; background:rgba(22,30,22,0.97); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:64px 16px 84px; opacity:0; transition:opacity .25s ease;}
+  .lb.on{opacity:1;}
+  .lb-fig{margin:0; display:flex; flex-direction:column; align-items:center; gap:16px; max-width:100%;}
+  .lb-img{display:block; max-width:min(1100px, 100%); max-height:72vh; width:auto; height:auto; object-fit:contain; border-radius:4px; box-shadow:0 12px 50px rgba(0,0,0,0.45);}
+  .lb-cap{margin:0; color:var(--beige); font-family:Georgia, 'Times New Roman', serif; font-style:italic; font-size:1.02rem; text-align:center; max-width:34em;}
+  .lb-count{position:absolute; top:26px; left:22px; color:var(--beige); font-size:0.8rem; letter-spacing:0.16em; font-variant-numeric:tabular-nums;}
+  .lb-btn{position:absolute; color:#fff; border-color:rgba(234,224,211,0.45); background:rgba(0,0,0,0.25);}
+  .lb-btn:hover{background:rgba(255,255,255,0.14);}
+  .lb-btn:focus-visible{outline:3px solid var(--aqua); outline-offset:2px;}
+  .lb-close{top:14px; right:14px;}
+  .lb-prev, .lb-next{top:50%; margin-top:-20px;}
+  .lb-prev{left:14px;} .lb-next{right:14px;}
+  @media (hover:none){ .lb-prev, .lb-next{display:none;} }
+  @media (prefers-reduced-motion: reduce){ .gal-open img, .gal-zoom, .gal-fill, .lb{transition:none;} .gal-open:hover img{transform:none;} }
   .also-strip{padding:56px 0 10px; border-top:1px solid rgba(199,177,148,0.4);}
   .also-head{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:20px;}
   .also-head h2{font-size:1.3rem; margin:0;}
@@ -671,7 +705,11 @@
     .swatch-info h3{font-size:0.88rem;}
     .swatch-info span{font-size:0.68rem;}
     .also-grid{grid-template-columns:1fr 1fr;}
-    .gallery-grid{grid-template-columns:1fr;}
+    .gal-track{display:flex; gap:12px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; margin:0 -32px; padding:0 32px; scroll-padding:0 32px; scrollbar-width:none;}
+    .gal-track::-webkit-scrollbar{display:none;}
+    .gal-item, .gal-item:first-child{flex:0 0 82%; grid-column:auto; grid-row:auto; aspect-ratio:4/3; scroll-snap-align:start; scroll-snap-stop:always;}
+    .gal-item:first-child .gal-cap{padding:34px 16px 12px; font-family:inherit; font-style:normal; font-size:0.8rem;}
+    .gal-bar{display:flex; align-items:center; gap:16px; margin-top:16px;}
     .home-section{padding:44px 0;}
   }
   @media (max-width: 480px){
@@ -1314,9 +1352,14 @@ const RETURNS_NOTE = 'Made to order · no change-of-mind returns. This doesn’t
 // "AI-generated preview" label; never remove it from an image that isn't a
 // genuine photo of our product.
 const BLIND_GALLERY = [
-  {src:'/assets/blinds-natural-web.jpg', caption:'Natural Wood', alt:'Natural wood timber slat blind, handcrafted in Bali, installed on a Gold Coast patio'},
-  {src:'/assets/blinds-white-web.jpg', caption:'White', alt:'White timber slat blind (AI-generated preview)', aiGenerated:true}
+  {src:'/assets/blinds-natural-garden-web.jpg', caption:'Natural Wood, lowered over the garden', alt:'Pair of natural wood timber slat blinds lowered on a patio overlooking a tropical garden'},
+  {src:'/assets/blinds-white-real-web.jpg', caption:'White', alt:'White timber slat blind installed on an outdoor patio beside a glass pool fence'},
+  {src:'/assets/blinds-natural-web.jpg', caption:'Natural Wood', alt:'Natural wood timber slat blind, handcrafted in Bali, installed on a patio'},
+  {src:'/assets/blinds-white-rolled-web.jpg', caption:'White, rolled up and tied off', alt:'White timber slat blind rolled up and secured with its cord on a wall cleat'},
+  {src:'/assets/blinds-natural-detail-web.jpg', caption:'Solid timber slats', alt:'Close-up of natural wood timber slats strung with cord, with the garden showing through the gaps'}
 ];
+// The gallery is laid out for exactly 5 photos (1 big feature + 4 tiles on desktop).
+// If you add more, add them in a set that keeps the desktop mosaic tidy (a feature plus a multiple of 2).
 const BLIND_SWATCHES = [
   {colour:'Natural Wood', cls:'natural', note:'Warm, natural grain'},
   {colour:'White', cls:'white', note:'Light & coastal'},
@@ -1454,6 +1497,7 @@ function pathParts(pathname){
 
 function render(){
   stopSquirrel();
+  closeLightbox();
   const parts = pathParts(location.pathname);
   const app = document.getElementById('app');
   window.scrollTo({top:0, behavior:'instant' in document.documentElement.style ? 'instant' : 'auto'});
@@ -1790,18 +1834,28 @@ function renderHome(){
           <span class="eyebrow">in real homes</span>
           <h2>gallery</h2>
         </div>
-        <div class="gallery-grid">
-          ${BLIND_GALLERY.map(g=>`
-            <figure class="gallery-item">
-              <img src="${g.src}" alt="${g.alt || g.caption}" loading="lazy">
-              ${g.aiGenerated ? `<span class="ai-badge">AI-generated preview</span>` : ''}
-              <figcaption>${g.caption}</figcaption>
+        <div class="gal" role="region" aria-roledescription="carousel" aria-label="Photo gallery">
+          <div class="gal-track" id="galTrack" tabindex="0">
+            ${BLIND_GALLERY.map((g,i)=>`
+            <figure class="gal-item">
+              <button type="button" class="gal-open" data-i="${i}" aria-label="View larger: ${g.caption}">
+                <img src="${g.src}" alt="${g.alt || g.caption}" loading="lazy" decoding="async">
+                ${g.aiGenerated ? `<span class="ai-badge">AI-generated preview</span>` : ''}
+                <span class="gal-zoom" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="#3D5C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2H14v4.5M6.5 14H2V9.5M14 2L9 7M2 14l5-5"/></svg></span>
+                <figcaption class="gal-cap">${g.caption}</figcaption>
+              </button>
             </figure>`).join('')}
-          <div class="gallery-item placeholder">
-            ${icon('blinds')}
-            <span>More install photos coming soon</span>
+          </div>
+          <div class="gal-bar">
+            <span class="gal-count" id="galCount" aria-live="polite">01 / ${String(BLIND_GALLERY.length).padStart(2,'0')}</span>
+            <span class="gal-prog" aria-hidden="true"><span class="gal-fill" id="galFill"></span></span>
+            <span class="gal-arrows">
+              <button type="button" id="galPrev" aria-label="Previous photo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg></button>
+              <button type="button" id="galNext" aria-label="Next photo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></button>
+            </span>
           </div>
         </div>
+        <p class="gal-note">More install photos coming soon</p>
       </div>
     </section>
 
@@ -1841,7 +1895,142 @@ function renderHome(){
   `;
 }
 
-function bindHomeEvents(){ startSquirrel(); }
+function bindHomeEvents(){ bindGalleryEvents(); startSquirrel(); }
+
+/* =========================================================
+   GALLERY — swipe track (phones) / mosaic (desktop) + full-screen viewer.
+   The track's own scroll position drives the "01 / 05" counter and progress
+   line; arrows scroll it. The viewer is built on demand, traps focus, closes
+   on Esc / backdrop / swipe-down, and is torn down by render() so a back
+   button press never leaves it stranded over another page.
+   ========================================================= */
+const GAL_REDUCED = ()=> window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pad2 = n => String(n).padStart(2,'0');
+
+function bindGalleryEvents(){
+  const track = document.getElementById('galTrack');
+  if(!track) return;
+  const items = Array.from(track.querySelectorAll('.gal-item'));
+  const count = document.getElementById('galCount'), fill = document.getElementById('galFill');
+  const prev = document.getElementById('galPrev'), next = document.getElementById('galNext');
+  const total = items.length;
+  let cur = 0, ticking = false;
+
+  const padL = ()=> parseFloat(getComputedStyle(track).paddingLeft) || 0;
+  function nearest(){
+    const edge = track.getBoundingClientRect().left + padL();
+    let best = 0, bestD = Infinity;
+    items.forEach((el,i)=>{
+      const d = Math.abs(el.getBoundingClientRect().left - edge);
+      if(d < bestD){ bestD = d; best = i; }
+    });
+    // at the very end the last photo can't reach the start edge — count it as current
+    if(track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) best = total - 1;
+    return best;
+  }
+  function update(){
+    ticking = false;
+    cur = nearest();
+    count.textContent = pad2(cur+1) + ' / ' + pad2(total);
+    fill.style.width = ((cur+1)/total*100) + '%';
+    prev.disabled = cur <= 0;
+    next.disabled = cur >= total-1;
+  }
+  function goTo(i){
+    i = Math.max(0, Math.min(total-1, i));
+    track.scrollTo({left: items[i].offsetLeft - padL(), behavior: GAL_REDUCED() ? 'auto' : 'smooth'});
+  }
+  track.addEventListener('scroll', ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+  window.addEventListener('resize', update, {passive:true});
+  prev.addEventListener('click', ()=> goTo(cur-1));
+  next.addEventListener('click', ()=> goTo(cur+1));
+  track.addEventListener('keydown', e=>{
+    if(e.target !== track) return;
+    if(e.key === 'ArrowRight'){ e.preventDefault(); goTo(cur+1); }
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); goTo(cur-1); }
+  });
+  track.addEventListener('click', e=>{
+    const btn = e.target.closest('.gal-open');
+    if(btn) openLightbox(Number(btn.dataset.i));
+  });
+  update();
+}
+
+let lbEl = null, lbIdx = 0, lbReturn = null;
+
+function openLightbox(i){
+  closeLightbox();
+  lbReturn = document.activeElement;
+  const svg = (d, w)=> `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="${w||1.8}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+  lbEl = document.createElement('div');
+  lbEl.className = 'lb';
+  lbEl.setAttribute('role', 'dialog');
+  lbEl.setAttribute('aria-modal', 'true');
+  lbEl.setAttribute('aria-label', 'Photo viewer');
+  lbEl.innerHTML = `
+    <span class="lb-count" id="lbCount" aria-live="polite"></span>
+    <button type="button" class="lb-btn lb-close" aria-label="Close">${svg('M3 3l10 10M13 3L3 13')}</button>
+    <button type="button" class="lb-btn lb-prev" aria-label="Previous photo">${svg('M10 3L5 8l5 5')}</button>
+    <button type="button" class="lb-btn lb-next" aria-label="Next photo">${svg('M6 3l5 5-5 5')}</button>
+    <figure class="lb-fig"><img class="lb-img" id="lbImg" alt=""><figcaption class="lb-cap" id="lbCap"></figcaption></figure>`;
+  document.body.appendChild(lbEl);
+  document.body.style.overflow = 'hidden';
+  showLightbox(i);
+  requestAnimationFrame(()=> lbEl && lbEl.classList.add('on'));
+  lbEl.querySelector('.lb-close').focus();
+
+  lbEl.addEventListener('click', e=>{
+    if(e.target.closest('.lb-close')) return closeLightbox();
+    if(e.target.closest('.lb-prev')) return showLightbox(lbIdx-1);
+    if(e.target.closest('.lb-next')) return showLightbox(lbIdx+1);
+    if(!e.target.closest('.lb-img, .lb-cap')) closeLightbox(); // backdrop
+  });
+  let sx = 0, sy = 0;
+  lbEl.addEventListener('touchstart', e=>{ sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+  lbEl.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)*1.5) showLightbox(lbIdx + (dx < 0 ? 1 : -1));
+    else if(dy > 90 && dy > Math.abs(dx)*1.5) closeLightbox();
+  }, {passive:true});
+  document.addEventListener('keydown', lbKeydown);
+}
+
+function showLightbox(i){
+  if(!lbEl) return;
+  const n = BLIND_GALLERY.length;
+  lbIdx = (i + n) % n;
+  const g = BLIND_GALLERY[lbIdx];
+  const img = lbEl.querySelector('#lbImg');
+  img.src = g.src;
+  img.alt = g.alt || g.caption;
+  lbEl.querySelector('#lbCap').textContent = g.caption;
+  lbEl.querySelector('#lbCount').textContent = pad2(lbIdx+1) + ' / ' + pad2(n);
+  [lbIdx-1, lbIdx+1].forEach(j=>{ new Image().src = BLIND_GALLERY[(j+n)%n].src; }); // warm the neighbours
+}
+
+function lbKeydown(e){
+  if(!lbEl) return;
+  if(e.key === 'Escape'){ e.preventDefault(); closeLightbox(); }
+  else if(e.key === 'ArrowRight'){ e.preventDefault(); showLightbox(lbIdx+1); }
+  else if(e.key === 'ArrowLeft'){ e.preventDefault(); showLightbox(lbIdx-1); }
+  else if(e.key === 'Tab'){
+    const f = Array.from(lbEl.querySelectorAll('button')).filter(b=> b.offsetParent !== null);
+    if(!f.length) return;
+    const first = f[0], last = f[f.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    else if(!lbEl.contains(document.activeElement)){ e.preventDefault(); first.focus(); }
+  }
+}
+
+function closeLightbox(){
+  if(!lbEl) return;
+  document.removeEventListener('keydown', lbKeydown);
+  lbEl.remove(); lbEl = null;
+  document.body.style.overflow = '';
+  if(lbReturn && document.contains(lbReturn)) lbReturn.focus();
+  lbReturn = null;
+}
 
 /* =========================================================
    SQUIRREL MASCOT — hides behind things on the home page and pops up over
@@ -1852,7 +2041,7 @@ function bindHomeEvents(){ startSquirrel(); }
    who ask for reduced motion. pointer-events:none so it never blocks a tap.
    ========================================================= */
 const SQ_SPEEDS = [0.6, 1, 1.6]; // fast, normal, slow
-const SQ_TARGETS = '.hero-photo, .hero-actions .btn-primary, .swatch-card, .gallery-item:not(.placeholder)';
+const SQ_TARGETS = '.hero-photo, .hero-actions .btn-primary, .swatch-card, .gal-item';
 let sqSvgText = null, sqTimer = null, sqHost = null;
 
 function stopSquirrel(){
@@ -1883,7 +2072,7 @@ function squirrelPeek(){
   const clearTop = (hdr ? hdr.getBoundingClientRect().bottom : 0) + (window.innerWidth <= 860 ? 66 : 80);
   const targets = Array.from(document.querySelectorAll(SQ_TARGETS)).filter(el=>{
     const r = el.getBoundingClientRect();
-    return r.width > 60 && r.top > clearTop && r.top < vh - 80;
+    return r.width > 60 && r.top > clearTop && r.top < vh - 80 && r.left >= 0 && r.right <= window.innerWidth; // fully across, so a swipe-track photo off to the side never gets picked
   });
   if(!targets.length){ sqTimer = setTimeout(squirrelPeek, 2000); return; }
   const el = targets[Math.floor(Math.random()*targets.length)];
