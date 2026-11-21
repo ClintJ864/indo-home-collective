@@ -320,6 +320,25 @@
     padding:4px 9px; border-radius:20px;
   }
 
+  /* ---------- 3D blind builder (added by startBlindViewer once 3D has loaded) ---------- */
+  .b3d{position:absolute; inset:0; z-index:2; border-radius:4px; overflow:hidden; background:#e9e0d2; opacity:0; transition:opacity .5s ease;}
+  .b3d.on{opacity:1;}
+  .b3d.off{pointer-events:none;}
+  .b3d canvas{position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:pan-y; cursor:grab;}
+  .b3d canvas:active{cursor:grabbing;}
+  .b3d-note{position:absolute; left:12px; top:12px; max-width:calc(100% - 150px); padding:5px 11px; border-radius:14px; background:rgba(251,249,245,0.82); color:#5a5a5a; font-size:0.64rem; line-height:1.3; letter-spacing:0.04em; pointer-events:none;}
+  .b3d-ui{position:absolute; left:12px; right:12px; bottom:12px; display:flex; align-items:center; gap:12px; padding:9px 16px; background:rgba(251,249,245,0.92); backdrop-filter:blur(6px); border-radius:30px; border:1px solid rgba(199,177,148,0.5);}
+  .b3d-ui label{font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--moss); white-space:nowrap;}
+  .b3d-ui input[type=range]{flex:1; min-width:0; accent-color:var(--moss); height:28px; margin:0; cursor:pointer;}
+  .b3d-hint{position:absolute; left:50%; bottom:68px; transform:translateX(-50%); padding:5px 12px; border-radius:20px; background:rgba(22,30,22,0.55); color:#fff; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; pointer-events:none; transition:opacity .6s ease; white-space:nowrap;}
+  .b3d-hint.gone{opacity:0;}
+  .b3d-mode{position:absolute; top:12px; right:12px; z-index:4; display:flex; gap:3px; padding:3px; background:rgba(255,255,255,0.92); border:1px solid var(--tan); border-radius:22px;}
+  .b3d-mode button{border:0; background:transparent; border-radius:18px; padding:5px 13px; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--charcoal); cursor:pointer;}
+  .b3d-mode button.active{background:var(--moss); color:#fff;}
+  .b3d-mode button:focus-visible, .b3d-ui input:focus-visible{outline:3px solid var(--aqua); outline-offset:2px;}
+  .detail-photo.has-3d .photo-toggle{display:none;}
+  .detail-photo.has-3d .handmade-badge{display:none;}
+
   /* ---------- Product detail ---------- */
   .breadcrumb{font-size:0.78rem; color:var(--tan); margin:32px 0 10px; letter-spacing:0.04em;}
   .breadcrumb a:hover{color:var(--moss);}
@@ -619,15 +638,35 @@
 
 
   /* ---------- v2: blinds-first home ---------- */
-  .home-hero{display:grid; grid-template-columns:1.05fr 1fr; gap:48px; align-items:center; padding:56px 0 64px;}
-  .home-hero .eyebrow{display:block; margin-bottom:12px;}
-  .home-hero h1{font-size:clamp(2rem, 4.4vw, 3rem); line-height:1.2; margin:0 0 18px;}
-  .home-hero p.sub{font-family:Georgia, 'Times New Roman', serif; font-size:1.12rem; line-height:1.7; color:#4a4a4a; margin:0 0 26px;}
+  /* Hero: your garden, with a 3D timber blind that rolls up as you scroll.
+     Without JS / WebGL / with reduced motion it is simply the still photo + text
+     (the .is-3d class, which adds the scroll run, is only set once 3D is running). */
+  .rhero{position:relative; --stage-h:max(540px, calc(100svh - var(--hdr, 73px)));}
+  .rhero.is-3d{height:calc(var(--stage-h) * 1.85);}
+  .rh-stage{position:sticky; top:var(--hdr, 73px); height:var(--stage-h); overflow:hidden; background:#24301f; isolation:isolate;}
+  .rh-view{position:absolute; inset:0; z-index:0;}
+  .rh-view img{width:100%; height:100%; object-fit:cover; object-position:56% 62%; display:block;}
+  .rh-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:1; opacity:0; transition:opacity .8s ease; pointer-events:none;}
+  .rhero.is-3d .rh-canvas{opacity:1;}
+  .rh-shade{position:absolute; inset:0; z-index:2; pointer-events:none; background:
+      linear-gradient(90deg, rgba(14,22,13,0.66) 0%, rgba(14,22,13,0.36) 46%, rgba(14,22,13,0) 74%),
+      linear-gradient(0deg, rgba(14,22,13,0.55) 0%, rgba(14,22,13,0) 42%);}
+  .rh-copy{position:absolute; inset:0; z-index:3; display:flex; align-items:flex-end; pointer-events:none;}
+  .rh-copy .wrap{width:100%; padding-bottom:clamp(40px, 9vh, 96px);}
+  .rh-text{max-width:780px; pointer-events:auto; transform:translateY(calc(var(--rp, 0) * -22px));}
+  .rhero .eyebrow{display:block; margin-bottom:12px; color:#eadfcb; text-shadow:0 1px 12px rgba(0,0,0,0.4);}
+  .rhero h1{font-size:clamp(2.3rem, 5.6vw, 4.4rem); line-height:1.06; margin:0 0 20px; color:#fff; letter-spacing:-0.01em; text-shadow:0 2px 26px rgba(0,0,0,0.35);}
+  .rhero p.sub{font-family:Georgia, 'Times New Roman', serif; font-size:clamp(1rem, 1.5vw, 1.2rem); line-height:1.65; color:rgba(255,255,255,0.93); margin:0 0 26px; max-width:34em; text-shadow:0 1px 14px rgba(0,0,0,0.4);}
   .hero-actions{display:flex; gap:12px; flex-wrap:wrap;}
-  .hero-facts{display:flex; gap:22px; flex-wrap:wrap; margin-top:26px; font-size:0.8rem; color:#666; letter-spacing:0.03em;}
-  .hero-facts strong{color:var(--moss); font-weight:600;}
-  .hero-photo{position:relative; border-radius:6px; overflow:hidden; aspect-ratio:4/3; background:var(--beige);}
-  .hero-photo img{width:100%; height:100%; object-fit:cover;}
+  .rhero .btn-outline{border-color:rgba(255,255,255,0.78); color:#fff;}
+  .rhero .btn-outline:hover{background:#fff; color:var(--moss-dark);}
+  .hero-facts{display:flex; gap:10px 24px; flex-wrap:wrap; margin-top:26px; font-size:0.8rem; color:rgba(255,255,255,0.84); letter-spacing:0.03em;}
+  .hero-facts strong{color:#fff; font-weight:600;}
+  .rh-cue{position:absolute; z-index:3; top:16px; left:50%; transform:translateX(-50%); display:none; align-items:center; gap:8px; padding:7px 14px 7px 12px; border-radius:30px; background:rgba(20,28,18,0.5); color:#fff; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; backdrop-filter:blur(6px); pointer-events:none; opacity:calc(1 - var(--rp, 0) * 7); white-space:nowrap;}
+  .rhero.is-3d .rh-cue{display:flex;}
+  .rh-cue i{display:block; width:7px; height:7px; border-right:1.6px solid #fff; border-bottom:1.6px solid #fff; transform:rotate(45deg); animation:rhCue 1.6s ease-in-out infinite;}
+  @keyframes rhCue{0%,100%{transform:translateY(-2px) rotate(45deg); opacity:.5;} 50%{transform:translateY(2px) rotate(45deg); opacity:1;}}
+  @media (prefers-reduced-motion: reduce){ .rh-cue i{animation:none;} .rh-canvas{transition:none;} .rh-text{transform:none;} }
   /* Bali-style carved frame (CSS only, no image download): moss outer band
      with tan "tumpal" triangles and beige dots, then a beige/tan inner fillet */
   .home-section{padding:64px 0; border-top:1px solid rgba(199,177,148,0.4);}
@@ -698,8 +737,10 @@
   .page-head h1{font-size:2rem; margin:6px 0 10px;}
   .page-head p{color:#666; max-width:520px; margin:0 auto;}
   @media (max-width: 860px){
-    .home-hero{grid-template-columns:1fr; gap:28px; padding:28px 0 44px;}
-    .hero-photo{order:-1;}
+    .rhero.is-3d{height:calc(var(--stage-h) * 1.7);}
+    .rh-shade{background:linear-gradient(0deg, rgba(14,22,13,0.82) 0%, rgba(14,22,13,0.5) 46%, rgba(14,22,13,0.08) 82%);}
+    .rh-copy .wrap{padding-bottom:96px;}
+    .hero-facts{margin-top:20px;}
     .swatch-grid{grid-template-columns:1fr 1fr 1fr; gap:12px;}
     .swatch-info{padding:10px 10px 12px;}
     .swatch-info h3{font-size:0.88rem;}
@@ -716,6 +757,27 @@
     .also-grid{grid-template-columns:1fr;}
   }
 
+
+  /* ---------- Polish layer: scroll reveals, card tilt, page fade, header depth ----------
+     .rv is only ever added by JS (polishPage), so without JS everything is simply visible. */
+  .rv{opacity:0; translate:0 28px; transition:opacity .9s cubic-bezier(.2,.7,.2,1), translate .9s cubic-bezier(.2,.7,.2,1); transition-delay:var(--rvd, 0ms);}
+  .rv.in{opacity:1; translate:0 0;}
+  #app.page-in{animation:pageIn .5s ease both;}
+  @keyframes pageIn{from{opacity:0;} to{opacity:1;}}
+  .site-header{transition:box-shadow .3s ease, background .3s ease;}
+  .site-header.scrolled{box-shadow:0 10px 34px rgba(40,52,30,0.09); background:rgba(251,249,245,0.97);}
+  .btn:active{transform:translateY(0) scale(0.985);}
+  .swatch-card{position:relative; transform:perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition:transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease;}
+  .swatch-card:hover{transform:perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-5px);}
+  .swatch-card.tilting{transition:transform .12s linear, box-shadow .25s ease;}
+  .swatch-card::after{content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; transition:opacity .3s ease; background:radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(255,255,255,0.3), rgba(255,255,255,0) 62%);}
+  .swatch-card:hover::after{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    .rv{opacity:1; translate:none; transition:none;}
+    #app.page-in{animation:none;}
+    .swatch-card, .swatch-card:hover{transform:none;}
+    .swatch-card::after{display:none;}
+  }
 
   /* ---------- Squirrel mascot peek (v2) ---------- */
   .sq-host{position:absolute; z-index:40; overflow:hidden; pointer-events:none; width:72px; height:76px;}
@@ -1497,6 +1559,8 @@ function pathParts(pathname){
 
 function render(){
   stopSquirrel();
+  stopHero();
+  stopViewer();
   closeLightbox();
   const parts = pathParts(location.pathname);
   const app = document.getElementById('app');
@@ -1556,6 +1620,7 @@ function render(){
     app.innerHTML = renderNotFound();
   }
   updateCartCount();
+  polishPage();
 }
 
 // Netlify answers every unknown path with this page (status 200), so say so
@@ -1787,9 +1852,12 @@ function bindShopEvents(){
 function renderHome(){
   const blind = findProduct('timber-slat-blinds');
   return `
-    <div class="wrap">
-      <section class="home-hero">
-        <div>
+    <section class="rhero" id="rhero" aria-label="Indo Home Collective">
+      <div class="rh-stage" id="rhStage">
+        <div class="rh-view"><img src="/assets/hero-garden.jpg" width="2000" height="679" alt="Tropical garden seen from a covered patio" fetchpriority="high"></div>
+        <canvas class="rh-canvas" id="rhCanvas" aria-hidden="true"></canvas>
+        <div class="rh-shade"></div>
+        <div class="rh-copy"><div class="wrap"><div class="rh-text">
           <span class="eyebrow">handcrafted in bali, made to measure</span>
           <h1>timber slat blinds,<br>made for your home.</h1>
           <p class="sub">Real timber slats, handmade by a family of craftsmen with over thirty years of experience. Choose your colour and size, see your price instantly, and we'll build them for you.</p>
@@ -1802,12 +1870,10 @@ function renderHome(){
             <span><strong>8–12 weeks</strong> made to order</span>
             <span><strong>Shipping</strong> included</span>
           </div>
-        </div>
-        <div class="hero-photo">
-          <img src="${primaryImageSrc(blind)}" alt="Natural timber slat blind installed on a patio" fetchpriority="high">
-        </div>
-      </section>
-    </div>
+        </div></div></div>
+        <div class="rh-cue" aria-hidden="true"><span>Scroll to raise the blind</span><i></i></div>
+      </div>
+    </section>
 
     <section class="home-section">
       <div class="wrap">
@@ -1895,7 +1961,177 @@ function renderHome(){
   `;
 }
 
-function bindHomeEvents(){ bindGalleryEvents(); startSquirrel(); }
+function bindHomeEvents(){ bindGalleryEvents(); bindTilt(); startHero(); startSquirrel(); }
+
+/* =========================================================
+   POLISH — small touches that make the site feel finished:
+   sections ease in as you reach them, colour cards tilt toward the pointer,
+   pages fade between routes, the header gains depth once you scroll.
+   All of it is skipped for visitors who ask for reduced motion.
+   ========================================================= */
+let polishIO = null, firstRender = true;
+const REVEAL_SEL = '.section-head, .swatch-card, .value-item, .gal, .gal-note, .also-strip, .lifestyle-teaser, .order-option';
+
+function polishPage(){
+  if(polishIO){ polishIO.disconnect(); polishIO = null; }
+  if(GAL_REDUCED()) return;
+  const app = document.getElementById('app');
+  if(!firstRender){                                   // not on the very first paint: keep the hero image's LCP snappy
+    app.classList.remove('page-in'); void app.offsetWidth; app.classList.add('page-in');
+  }
+  firstRender = false;
+  if(!('IntersectionObserver' in window)) return;
+  polishIO = new IntersectionObserver(es => es.forEach(e => {
+    if(e.isIntersecting){ e.target.classList.add('in'); polishIO && polishIO.unobserve(e.target); }
+  }), {rootMargin:'0px 0px -7% 0px', threshold:0.06});
+  app.querySelectorAll(REVEAL_SEL).forEach(el => {
+    if(el.closest('.rhero')) return;
+    const sib = Array.from(el.parentElement.children).filter(c => c.matches(REVEAL_SEL));
+    el.style.setProperty('--rvd', Math.min(sib.indexOf(el), 4) * 90 + 'ms');
+    el.classList.add('rv');
+    polishIO.observe(el);
+  });
+}
+
+function bindTilt(){
+  if(GAL_REDUCED() || !(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches)) return;
+  document.querySelectorAll('.swatch-card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      card.classList.add('tilting');
+      card.style.setProperty('--ry', ((x - 0.5) * 9).toFixed(2) + 'deg');
+      card.style.setProperty('--rx', ((0.5 - y) * 7).toFixed(2) + 'deg');
+      card.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
+      card.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+    });
+    card.addEventListener('pointerleave', () => {
+      card.classList.remove('tilting');
+      ['--rx','--ry','--mx','--my'].forEach(v => card.style.removeProperty(v));
+    });
+  });
+}
+
+(function headerDepth(){
+  const set = () => { const h = document.querySelector('.site-header'); if(h) h.classList.toggle('scrolled', window.scrollY > 10); };
+  window.addEventListener('scroll', set, {passive:true});
+  document.addEventListener('DOMContentLoaded', set);
+})();
+
+/* =========================================================
+   HERO 3D — the blind in the home-page hero rolls up as you scroll.
+   Everything here is progressive enhancement: the page ships a still photo
+   and text; this only upgrades it when the visitor can take it (no reduced
+   motion, no data-saver, WebGL works, not already scrolled past the hero).
+   The 3D engine (~165KB compressed) is fetched after the page has settled.
+   ========================================================= */
+let heroCtl = null, heroOff = null, blindViewer = null;
+
+/* 3D builder on the blind product page: same engine, orbitable, follows the colour
+   chips and size pickers. Upgrades the photo panel in place; the photos stay one tap away. */
+const viewerColour = c => String(c || 'Natural Wood').startsWith('Natural') ? 'Natural' : c;
+function stopViewer(){ if(blindViewer){ blindViewer.dispose(); blindViewer = null; } }
+function syncViewerSize(){
+  const w = document.getElementById('blindWidth'), d = document.getElementById('blindDrop');
+  if(blindViewer && w && d) blindViewer.setSize(Number(w.value), Number(d.value));
+}
+
+async function startBlindViewer(read){
+  stopViewer();
+  const photo = document.querySelector('.detail-photo');
+  if(!photo) return;
+  const conn = navigator.connection || {};
+  if(conn.saveData || (navigator.deviceMemory && navigator.deviceMemory <= 2)) return;
+  if(document.readyState !== 'complete') await new Promise(r => window.addEventListener('load', r, {once:true}));
+  await new Promise(r => ('requestIdleCallback' in window) ? requestIdleCallback(r, {timeout:1500}) : setTimeout(r, 500));
+  if(!photo.isConnected) return;                                       // navigated away
+  let mod;
+  try{ mod = await import('/assets/blind3d.js'); }catch(e){ return; }
+  if(!photo.isConnected || !mod.webglOk()) return;
+
+  const box = document.createElement('div');
+  box.className = 'b3d';
+  box.innerHTML = `<canvas aria-label="Interactive 3D preview of your blind"></canvas>
+    <span class="b3d-note">3D preview · screen colour is a guide</span>
+    <span class="b3d-hint">Drag to look around</span>
+    <div class="b3d-ui"><label for="b3dLift">Lower</label><input id="b3dLift" type="range" min="0" max="100" value="0" aria-label="Raise or lower the blind"><label for="b3dLift">Raise</label></div>`;
+  const mode = document.createElement('div');
+  mode.className = 'b3d-mode';
+  mode.innerHTML = '<button type="button" class="active" data-m="3d">3D</button><button type="button" data-m="photo">Photo</button>';
+  photo.append(box, mode);
+
+  const s = read();
+  try{
+    blindViewer = mod.createViewer(box.querySelector('canvas'), box, {colour: s.colour, W: s.W, D: s.D, backdrop: '/assets/hero-garden.jpg', raise: 0.8});
+  }catch(e){ box.remove(); mode.remove(); blindViewer = null; return; }
+  photo.classList.add('has-3d');
+  requestAnimationFrame(() => {
+    box.classList.add('on');
+    setTimeout(() => { if(blindViewer) blindViewer.setRaise(0); }, 500);   // the blind lowers into place
+  });
+
+  const hint = box.querySelector('.b3d-hint'), lift = box.querySelector('#b3dLift');
+  const quiet = () => hint.classList.add('gone');
+  setTimeout(quiet, 6000);
+  box.querySelector('canvas').addEventListener('pointerdown', quiet, {once:true});
+  lift.addEventListener('input', () => { quiet(); if(blindViewer) blindViewer.setRaise(Number(lift.value) / 100); });
+  mode.addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return;
+    const is3d = b.dataset.m === '3d';
+    mode.querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
+    box.classList.toggle('on', is3d); box.classList.toggle('off', !is3d);
+    photo.classList.toggle('has-3d', is3d);
+  });
+}
+
+function stopHero(){
+  if(heroOff){ heroOff(); heroOff = null; }
+  if(heroCtl){ heroCtl.dispose(); heroCtl = null; }
+}
+
+function syncHeaderVar(){
+  const hdr = document.querySelector('.site-header');
+  if(hdr) document.documentElement.style.setProperty('--hdr', hdr.offsetHeight + 'px');
+}
+
+async function startHero(){
+  stopHero();
+  const hero = document.getElementById('rhero');
+  if(!hero) return;
+  const stage = hero.querySelector('.rh-stage'), canvas = document.getElementById('rhCanvas');
+  syncHeaderVar();
+  const conn = navigator.connection || {};
+  if(GAL_REDUCED() || conn.saveData || (navigator.deviceMemory && navigator.deviceMemory <= 2)) return;
+
+  // let the still hero paint and the page settle before spending data on 3D
+  if(document.readyState !== 'complete') await new Promise(r => window.addEventListener('load', r, {once:true}));
+  await new Promise(r => ('requestIdleCallback' in window) ? requestIdleCallback(r, {timeout:1800}) : setTimeout(r, 700));
+  if(document.getElementById('rhero') !== hero) return;               // navigated away
+  if(window.scrollY > stage.offsetHeight * 0.4) return;               // already below the hero: don't shift the page under them
+
+  let mod;
+  try{ mod = await import('/assets/blind3d.js'); }catch(e){ return; }
+  if(document.getElementById('rhero') !== hero || !mod.webglOk()) return;
+
+  hero.classList.add('is-3d');                                        // reserves the scroll run
+  try{ heroCtl = mod.createHero(canvas, stage, {colour:'Natural'}); }
+  catch(e){ hero.classList.remove('is-3d'); heroCtl = null; return; }
+
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const run = hero.offsetHeight - stage.offsetHeight;
+    const hdr = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 73;
+    const p = run > 0 ? Math.max(0, Math.min(1, (hdr - hero.getBoundingClientRect().top) / run)) : 0;
+    hero.style.setProperty('--rp', p.toFixed(4));
+    if(heroCtl) heroCtl.setProgress(p);
+  };
+  const onScroll = () => { if(!ticking){ ticking = true; requestAnimationFrame(update); } };
+  const onResize = () => { syncHeaderVar(); onScroll(); };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onResize, {passive:true});
+  heroOff = () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onResize); };
+  update();
+}
 
 /* =========================================================
    GALLERY — swipe track (phones) / mosaic (desktop) + full-screen viewer.
@@ -2041,7 +2277,7 @@ function closeLightbox(){
    who ask for reduced motion. pointer-events:none so it never blocks a tap.
    ========================================================= */
 const SQ_SPEEDS = [0.6, 1, 1.6]; // fast, normal, slow
-const SQ_TARGETS = '.hero-photo, .hero-actions .btn-primary, .swatch-card, .gal-item';
+const SQ_TARGETS = '.swatch-card, .gal-item'; // not the hero: its pinned content moves while the page scrolls
 let sqSvgText = null, sqTimer = null, sqHost = null;
 
 function stopSquirrel(){
@@ -2064,7 +2300,7 @@ async function startSquirrel(){
 
 function squirrelPeek(){
   sqTimer = null;
-  if(!document.querySelector('.home-hero')) return; // left the home page
+  if(!document.querySelector('.rhero')) return; // left the home page
   if(document.hidden){ sqTimer = setTimeout(squirrelPeek, 3000); return; }
   // only targets currently on screen (with room above them for the squirrel)
   const vh = window.innerHeight;
@@ -2377,13 +2613,15 @@ function bindBlindDetailEvents(p){
         colourWrap.querySelectorAll('.finish-chip').forEach(c=>c.classList.remove('active'));
         chip.classList.add('active');
         colour = chip.dataset.colour;
+        if(blindViewer) blindViewer.setColour(viewerColour(colour));
       });
     });
   }
   bindColourChips();
 
-  widthSel.addEventListener('change', recalc);
-  dropSel.addEventListener('change', recalc);
+  widthSel.addEventListener('change', ()=>{ recalc(); syncViewerSize(); });
+  dropSel.addEventListener('change', ()=>{ recalc(); syncViewerSize(); });
+  startBlindViewer(()=>({colour: viewerColour(colour), W: Number(widthSel.value), D: Number(dropSel.value)}));
 
   document.getElementById('qtyMinus').addEventListener('click', ()=>{
     qty = Math.max(1, qty-1); qtyVal.textContent = qty;

@@ -724,3 +724,27 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
   and Bing indexing for the 5 pages not yet crawled.
 - Hi-res print logos (`assets/logo-full-hires*.png`, `logo-mark-hires.png`)
   were made for the Canva stationery set.
+
+## 3D redesign (2026-11-21) — branch `redesign-3d`, NOT live until merged + deployed
+Rollback points: git tag `savepoint-before-3d-2026-11-21` (last live version), branch
+`master` (live + the finished gallery). All 3D work is on branch `redesign-3d`; to
+abandon it, just `git checkout master`.
+- **3D engine:** `assets/vendor/three.module.min.js` = three.js r160 (MIT, licence beside
+  it), pinned and self-hosted. `assets/blind3d.js` = our procedural blind (slats, cords,
+  rails, a roll that winds up like the real thing; wood textures drawn in canvas, no model
+  files). Exports `createHero()` and `createViewer()`; loaded with `import()` only after
+  the page has settled — never part of first load (~165KB compressed).
+- **Hero (home):** `.rhero` — full-bleed photo of the owner's garden (`assets/hero-garden.jpg`,
+  cropped from the real patio photo) with the 3D blind over it; scrolling rolls the blind up.
+  The still photo + text is the real server-rendered HTML (SEO-safe) and is what visitors
+  get with no JS / no WebGL / reduced motion / data-saver / low memory / already scrolled
+  past the hero. `.is-3d` (adds the scroll run) is set only once 3D is running.
+  `startHero()`/`stopHero()`, `--hdr` CSS var = header height.
+- **Product page:** `startBlindViewer()` upgrades `.detail-photo` with an orbitable 3D blind
+  (drag to turn, Lower/Raise slider, 3D/Photo toggle) that follows the colour chips and
+  width/drop selects. Labelled "3D preview · screen colour is a guide".
+- **Polish layer:** `polishPage()` (scroll reveals via `.rv`, page fade), `bindTilt()` (colour
+  cards), header shadow on scroll. All skipped for reduced motion.
+- Squirrel no longer targets the hero (its pinned content moves while scrolling).
+- Not yet measured on a real phone (desktop test = steady 60fps). Re-run
+  `node scripts/prerender.js` after any change — `/` is served from `prerender/home.html`.
