@@ -778,3 +778,13 @@ abandon it, just `git checkout master`.
   shared `--shadow-soft` + 6px radius on photos/cards. Checked: no horizontal overflow on 14 routes at 375px.
 - Gotchas: `h3` has no serif by default (only h1/h2/.brand-font) — set `font-family:var(--serif)` on new h3s;
   `.wrap.cart-wrap{padding:44px 0 …}` wiped the side padding on phones — use padding-top/bottom only on `.wrap` elements.
+
+### Blunt-review fixes (2026-11-21, branch `redesign-3d`)
+- Measured, not guessed: contrast failures 8 → 0 (`--tan-text` deepened to `#6f5a3e`, legal text darker, figcaptions use the variable);
+  one `<h1>` per page (Homewares + Contact were `<h2>`); touch targets raised (footer links, breadcrumbs, colour chips, quantity
+  buttons, contact-card links, 3D/Photo toggle, cart button); header logo got width/height.
+- Fixed a pre-existing JS error: opening `/checkout` with an empty cart threw in `bindCheckoutEvents()` (no form on that page).
+- **Known, not fixed — needs the owner's call:** the "Powered by Netlify" badge (197×64, fixed bottom-right) shows on the live
+  domain, which is why the phone bottom nav is squeezed to ~175px and labelled "Decor" to fit. Removing it is a hosting/plan decision.
+- Tooling gotchas: never rewrite `index.html` with Python text mode on Windows (it flips LF → CRLF and `scripts/prerender.js`
+  then fails to extract the script) — use Edit, or write bytes. If prerender fails right after an edit, just re-run it (OneDrive sync).

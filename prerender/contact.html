@@ -74,7 +74,7 @@
     --aqua:#72D3D8;
     --aqua-dark:#4fb8be;
     --tan:#C7B194;
-    --tan-text:#7d6648;   /* tan deepened for text on cream: ~5:1 contrast, same family as --tan */
+    --tan-text:#6f5a3e;   /* tan deepened for text on cream: ~5:1 contrast, same family as --tan */
     --cream:#FBF9F5;
     --white:#FFFFFF;
     --shadow-soft:0 1px 2px rgba(40,52,30,0.05), 0 10px 28px rgba(40,52,30,0.07);
@@ -218,7 +218,7 @@
 
   /* ---------- Section headers ---------- */
   .section-head{text-align:center; max-width:600px; margin:0 auto 48px;}
-  .section-head h2{font-size:1.9rem; margin:0 0 10px;}
+  .section-head h1, .section-head h2{font-size:1.9rem; margin:0 0 10px;}
   .section-head .eyebrow{display:block; margin-bottom:8px;}
 
   section.shop-section{padding:80px 0 20px;}
@@ -389,7 +389,7 @@
   .finish-options{display:flex; gap:10px; flex-wrap:wrap;}
   .finish-chip{
     background:transparent; border:1px solid var(--tan); color:var(--charcoal);
-    border-radius:30px; padding:9px 18px; font-size:0.8rem; letter-spacing:0.02em;
+    border-radius:30px; padding:9px 20px; min-height:44px; font-size:0.9rem; letter-spacing:0.02em;
     transition:all .2s ease;
   }
   .finish-chip:hover{border-color:var(--moss);}
@@ -606,7 +606,7 @@
   .policy p{margin:0 0 14px; font-size:0.95rem; line-height:1.65;}
   .policy strong{color:var(--moss);}
   .policy a{color:var(--moss); text-decoration:underline;}
-  .policy .acl{margin-top:22px; font-size:0.82rem; color:#6e665b; font-style:italic;}
+  .policy .acl{margin-top:22px; font-size:0.86rem; color:#554d42; font-style:italic;}
   .summary-note a{color:var(--moss); text-decoration:underline;}
 
   /* Blinds guide page (/timber-slat-blinds): sizes, colours, price table, Q&A */
@@ -648,7 +648,7 @@
   .bizcard h3{font-size:1.35rem; color:var(--moss); margin:0; text-transform:none; letter-spacing:0;}
   .bizcard .title{font-size:0.74rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--tan-text);}
   .bizcard .rule{width:44px; height:2px; background:var(--tan); border:0; margin:14px 0;}
-  .bizcard .line{color:var(--charcoal); font-size:0.95rem; overflow-wrap:break-word;}
+  .bizcard .line{display:block; padding:9px 0; color:var(--charcoal); font-size:0.95rem; overflow-wrap:break-word;}
   .bizcard .line:hover{color:var(--moss); text-decoration:underline;}
   .bizcard .btn{margin-top:16px; align-self:flex-start;}
   .bizcard.team{padding:18px 20px; background:rgba(255,255,255,0.6);}
@@ -767,7 +767,7 @@
   .also-strip{padding:56px 0 10px; border-top:1px solid rgba(199,177,148,0.4);}
   .also-head{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:20px;}
   .also-head h2{font-size:1.3rem; margin:0;}
-  .also-head a{font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--moss); border-bottom:1px solid var(--aqua);}
+  .also-head a{display:inline-block; padding:12px 0 6px; font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--moss); border-bottom:1px solid var(--aqua);}
   .also-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:16px;}
   .also-card{display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid rgba(199,177,148,0.35); border-radius:6px; padding:10px; transition:border-color .2s ease;}
   .also-card:hover{border-color:var(--moss);}
@@ -811,10 +811,10 @@
   .ab-text p{font-family:var(--serif); font-size:1.3rem; line-height:1.78; color:#3a3a3a; margin:0 0 22px; max-width:34em;}
   .ab-photo{margin:0; position:sticky; top:calc(var(--hdr, 73px) + 24px);}
   .ab-photo img{width:100%; height:auto; border-radius:4px; aspect-ratio:3/4; object-fit:cover;}
-  .ab-photo figcaption{margin-top:10px; font-family:var(--serif); font-style:italic; font-size:0.98rem; color:#8a7b66;}
+  .ab-photo figcaption{margin-top:10px; font-family:var(--serif); font-style:italic; font-size:0.98rem; color:var(--tan-text);}
   .ab-close{display:grid; grid-template-columns:minmax(0, 320px) minmax(0, 1fr); gap:56px; max-width:1000px; margin:0 auto; padding:30px 32px 100px; align-items:center;}
   .ab-close img{width:100%; height:auto; border-radius:4px; aspect-ratio:480/393; object-fit:cover;}
-  .ab-close figcaption{margin-top:10px; font-family:var(--serif); font-style:italic; font-size:0.98rem; color:#8a7b66;}
+  .ab-close figcaption{margin-top:10px; font-family:var(--serif); font-style:italic; font-size:0.98rem; color:var(--tan-text);}
   .ab-close p{font-family:var(--serif); font-size:1.55rem; line-height:1.5; color:var(--moss-dark); margin:0 0 26px;}
   .ab-close .actions{display:flex; gap:12px; flex-wrap:wrap;}
 
@@ -832,7 +832,7 @@
   .od-timeline p{margin:0; font-size:1.02rem; line-height:1.65; color:#444; max-width:34em;}
   .od-timeline figure{margin:18px 0 0; max-width:340px;}
   .od-timeline figure img{width:100%; height:auto; border-radius:4px; aspect-ratio:480/393; object-fit:cover;}
-  .od-timeline figcaption{margin-top:8px; font-family:var(--serif); font-style:italic; font-size:0.95rem; color:#8a7b66;}
+  .od-timeline figcaption{margin-top:8px; font-family:var(--serif); font-style:italic; font-size:0.95rem; color:var(--tan-text);}
   .od-routes-head{text-align:center; margin:0 0 30px;}
   .od-routes-head h2{font-size:1.9rem; margin:0;}
   .order-option p.route-line{margin:0; font-size:0.98rem; line-height:1.6; color:#4a4a4a; flex:1;}
@@ -895,6 +895,17 @@
     .guide-tiles .t{padding:8px 8px 10px;}
     .guide-tiles strong{font-size:0.86rem;}
     .guide-tiles .n{display:none;}
+  }
+
+  /* ---------- Touch targets: comfortable to hit on a phone ---------- */
+  .cart-btn{min-height:44px;}
+  .breadcrumb a{display:inline-block; padding:12px 4px; margin:-12px -4px;}
+  footer p a{display:inline-block; padding:8px 0;}
+  .b3d-mode button{min-height:36px; padding:7px 15px;}
+  .qty-control button{width:44px; height:44px;}
+  @media (pointer:coarse){
+    footer p a{padding:11px 0;}
+    .b3d-mode button{min-height:40px;}
   }
 
   /* ---------- Finish: one corner radius and one soft shadow for every photo and card ---------- */
@@ -1027,7 +1038,7 @@
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="logo-link">
-      <span class="logo-spin"><span class="spinner"><img src="/assets/logo-transparent.png" alt="indo home collective — balinese inspired living"><img class="back" src="/assets/logo-transparent.png" alt="" aria-hidden="true"></span></span>
+      <span class="logo-spin"><span class="spinner"><img src="/assets/logo-transparent.png" width="99" height="44" alt="indo home collective — balinese inspired living"><img class="back" src="/assets/logo-transparent.png" width="99" height="44" alt="" aria-hidden="true"></span></span>
     </a>
     <nav class="main-nav" id="mainNav">
       <a href="/" data-route="shop">Blinds</a>
@@ -1067,7 +1078,7 @@
         <div class="section-head">
           <img src="/assets/logo-mark.png" alt="">
           <span class="eyebrow">we'd love to hear from you</span>
-          <h2>contact us</h2>
+          <h1>contact us</h1>
         </div>
         <div class="contact-cards">
           <div class="bizcards-main">
@@ -2006,7 +2017,7 @@ function renderShop(){
       <div class="wrap">
         <div class="section-head" style="margin-bottom:28px;">
           <span class="eyebrow">also from us</span>
-          <h2>homewares</h2>
+          <h1>homewares</h1>
           <p style="color:#555; margin:8px 0 0;">Bali homewares we're bringing in alongside our blinds. Most are still on their way — register your interest on any piece and we'll let you know when it lands.</p>
         </div>
         <div class="coll-tabs" id="filterRow" role="tablist" aria-label="Collections">
@@ -3265,6 +3276,7 @@ function renderCheckout(){
 
 function bindCheckoutEvents(){
   const form = document.getElementById('checkoutForm');
+  if(!form) return;   // empty cart: the page shows "Your cart is empty" and has no form to wire up
 
   function validateField(input){
     const field = input.closest('.field');
@@ -3718,7 +3730,7 @@ function renderContactPage(){
         <div class="section-head">
           <img src="/assets/logo-mark.png" alt="">
           <span class="eyebrow">we'd love to hear from you</span>
-          <h2>contact us</h2>
+          <h1>contact us</h1>
         </div>
         <div class="contact-cards">
           <div class="bizcards-main">${BIZ_CARDS.filter(c=>c.main).map(renderBizCard).join('')}</div>
