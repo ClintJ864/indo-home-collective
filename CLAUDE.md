@@ -725,8 +725,8 @@ What changed (all in `index.html`; Netlify functions/pricing untouched):
 - Hi-res print logos (`assets/logo-full-hires*.png`, `logo-mark-hires.png`)
   were made for the Canva stationery set.
 
-## 3D redesign (2026-11-21) — branch `redesign-3d`, NOT live until merged + deployed
-Rollback points: git tag `savepoint-before-3d-2026-11-21` (last live version), branch
+## 3D redesign (2026-11-21) — LIVE since 2026-11-21 (merged to master, deployed to production)
+Rollback point: git tag `savepoint-before-3d-2026-11-21` (the version live before this redesign; pushed to GitHub). Branch
 `master` (live + the finished gallery). All 3D work is on branch `redesign-3d`; to
 abandon it, just `git checkout master`.
 - **3D engine:** `assets/vendor/three.module.min.js` = three.js r160 (MIT, licence beside
