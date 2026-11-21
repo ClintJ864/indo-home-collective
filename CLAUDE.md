@@ -803,3 +803,5 @@ abandon it, just `git checkout master`.
   scanning the last 100 Checkout Sessions. Owner how-to: `../order-status-howto.md`.
 - **Tested:** `node scripts/test-order-status.js` (17 logic checks against a faked Stripe). NOT yet tested end-to-end against real
   Stripe: needs a draft deploy + one test-mode purchase (card 4242…) + setting `status` in the test Dashboard.
+- **Owner decision 2026-11-21:** NO late-delivery refund promise. `LATE_PROMISE` stays `null`. The owner tested the whole flow on a draft
+  (test purchase → `/order-status` → edited `status` in Stripe test mode) and it worked.
