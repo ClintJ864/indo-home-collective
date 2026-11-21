@@ -897,6 +897,44 @@
     .guide-tiles .n{display:none;}
   }
 
+  /* ---------- Delivery dates, order promise, "Where's my order?" ---------- */
+  .pd-eta{margin:0 0 22px; font-family:var(--serif); font-size:1.2rem; line-height:1.4; color:var(--moss-dark);}
+  .pd-eta strong{font-weight:600;}
+  .eta-box{margin:16px 0 0; padding:14px 16px; background:rgba(255,255,255,0.6); border-left:3px solid var(--aqua); border-radius:0 6px 6px 0; font-size:0.95rem; line-height:1.55; color:#3f3f3f;}
+  .eta-box a{color:var(--moss); text-decoration:underline;}
+  .confirm-eta{max-width:520px; margin:6px auto 26px; text-align:left; font-size:1rem;}
+  .promise{margin:26px 0 8px; padding:26px 26px 22px; background:var(--beige); border-radius:8px;}
+  .promise h3{font-family:var(--serif); font-weight:400; font-size:1.8rem; line-height:1.1; margin:0 0 16px; color:var(--moss); text-transform:none; letter-spacing:0;}
+  .promise ul{list-style:none; margin:0; padding:0; display:grid; gap:13px;}
+  .promise li{display:flex; gap:12px; align-items:flex-start; font-size:0.97rem; line-height:1.55; color:#3f3f3f;}
+  .promise li svg{flex:none; width:20px; height:20px; margin-top:2px; stroke:var(--moss); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .promise li strong{color:var(--moss-dark);}
+  .promise a{color:var(--moss); text-decoration:underline;}
+  .promise-note{margin:18px 0 0; padding-top:16px; border-top:1px solid rgba(111,90,62,0.28); font-size:0.88rem; line-height:1.6; color:#4a4a4a;}
+  .od-promise-wrap{max-width:760px; margin:0 auto; padding:0 32px 30px;}
+  .od-promise-wrap .promise{margin-top:6px;}
+  .os{max-width:620px; margin:0 auto; padding:30px 32px 110px;}
+  .os-form{display:grid; gap:16px;}
+  .os-form .btn{justify-self:start; margin-top:4px;}
+  .os-help{margin:6px 0 0; font-size:0.9rem; line-height:1.55; color:#555;}
+  .os-help a, .os-msg a, .os-result a{color:var(--moss); text-decoration:underline;}
+  .os-result{margin-top:38px;}
+  .os-result:empty{display:none;}
+  .os-result h2{font-size:1.9rem; margin:0 0 20px; text-transform:none; letter-spacing:0;}
+  .os-msg{margin:0; padding:16px 18px; background:var(--beige); border-radius:6px; line-height:1.6;}
+  .os-steps{list-style:none; display:grid; grid-template-columns:repeat(4, 1fr); gap:0; margin:0 0 22px; padding:0; position:relative;}
+  .os-steps li{position:relative; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; font-size:0.86rem; line-height:1.3; color:#666;}
+  .os-steps li::before{content:""; position:absolute; top:11px; left:-50%; width:100%; height:2px; background:rgba(111,90,62,0.28); z-index:0;}
+  .os-steps li:first-child::before{display:none;}
+  .os-steps .dot{position:relative; z-index:1; width:24px; height:24px; border-radius:50%; background:var(--cream); border:2px solid rgba(111,90,62,0.4);}
+  .os-steps .done::before, .os-steps .on::before{background:var(--moss);}
+  .os-steps .done .dot{background:var(--aqua); border-color:var(--aqua);}
+  .os-steps .on .dot{background:var(--moss); border-color:var(--moss); box-shadow:0 0 0 5px rgba(114,211,216,0.35);}
+  .os-steps .on, .os-steps .done{color:var(--moss-dark); font-weight:600;}
+  .os-now{margin:0 0 12px; font-family:var(--serif); font-size:1.35rem; line-height:1.5; color:var(--moss-dark);}
+  .os-note{margin:0 0 12px; padding:14px 16px; background:var(--beige); border-radius:6px; line-height:1.55;}
+  .os-eta{margin:0 0 14px; font-size:1.02rem; color:#333;}
+
   /* ---------- Touch targets: comfortable to hit on a phone ---------- */
   .cart-btn{min-height:44px;}
   .breadcrumb a{display:inline-block; padding:12px 4px; margin:-12px -4px;}
@@ -1160,6 +1198,7 @@
       <p><a href="/timber-slat-blinds">Sizes &amp; prices</a></p>
       <p><a href="/homewares">Homewares</a></p>
       <p><a href="/ordering">How ordering works</a></p>
+      <p><a href="/order-status">Where’s my order?</a></p>
       <p><a href="/about">Our story</a></p>
       <p><a href="/lakey-peak">Lakey Peak Surf Camp</a></p>
     </div>
@@ -1550,6 +1589,122 @@ const PAYMENTS_ENABLED = true;
 // not-as-described goods, and blanket "no refunds" statements are prohibited.
 const RETURNS_NOTE = 'Made to order · no change-of-mind returns. This doesn’t affect your rights under the Australian Consumer Law.';
 
+/* =========================================================
+   DELIVERY WINDOW + ORDER PROMISE
+   "8–12 weeks" is shown as real dates (from today at checkout, from the order
+   date on the status page). Pages render the words "in about 8–12 weeks" in a
+   [data-eta] element; fillEta() swaps in the dates at runtime, so the static
+   prerendered HTML never goes stale. Keep LEAD_WEEKS equal to
+   netlify/functions/lib/delivery.js.
+   ========================================================= */
+const LEAD_WEEKS = [8, 12];
+function deliveryWindow(from){
+  const start = from ? new Date(from) : new Date();
+  const add = n => { const d = new Date(start.getTime()); d.setDate(d.getDate() + n*7); return d; };
+  return {from: add(LEAD_WEEKS[0]), to: add(LEAD_WEEKS[1])};
+}
+function deliveryWindowText(from){
+  const w = deliveryWindow(from), now = new Date();
+  const opts = {day:'numeric', month:'long', timeZone:'Australia/Brisbane'};
+  const first = w.from.toLocaleDateString('en-AU', opts);
+  const last = w.to.toLocaleDateString('en-AU', w.to.getFullYear() !== now.getFullYear() ? {...opts, year:'numeric'} : opts);
+  return `between ${first} and ${last}`;
+}
+function fillEta(){
+  const text = deliveryWindowText();
+  document.querySelectorAll('[data-eta]').forEach(el => { el.textContent = text; });
+}
+
+// Optional extra line for the order promise, e.g. 'If your blind hasn’t shipped by week 14, you can cancel for a full refund.'
+// Leave null until the owner has decided what they are happy to promise — it is shown as written.
+const LATE_PROMISE = null;
+
+function renderOrderPromise(){
+  const tick = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  return `
+    <section class="promise" id="promise" aria-labelledby="promiseTitle">
+      <h3 id="promiseTitle">our order promise</h3>
+      <ul>
+        <li>${tick}<span><strong>A real delivery window before you pay.</strong> We show your expected dates at checkout and again in your confirmation.</span></li>
+        <li>${tick}<span><strong>Check on your order any time.</strong> <a href="/order-status">Where’s my order?</a> shows whether it’s confirmed, in production, on its way or delivered.</span></li>
+        <li>${tick}<span><strong>If anything slips, you’ll hear from us first.</strong> We’ll email you straight away with a new date.</span></li>
+        <li>${tick}<span><strong>Changed your mind early?</strong> Contact us before production starts and we can cancel your order.</span></li>
+        ${LATE_PROMISE ? `<li>${tick}<span><strong>${LATE_PROMISE}</strong></span></li>` : ''}
+      </ul>
+      <p class="promise-note">You pay by card through Stripe, so your card details never touch our site, and your bank’s own dispute process is there as a backstop. Your rights under the Australian Consumer Law always apply. <a href="/ordering/returns">Returns and cancellations</a></p>
+    </section>`;
+}
+
+/* =========================================================
+   VIEW: WHERE'S MY ORDER?  (/order-status)
+   Looks the order up through netlify/functions/order-status.js. The order
+   number and email must both match. The owner moves an order along by editing
+   its `status` in the Stripe Dashboard (see order-status-howto.md).
+   ========================================================= */
+const ORDER_STAGES = [
+  {key:'confirmed',     label:'Order confirmed', says:'We’ve got your order. We’ll confirm the details with you before production begins.'},
+  {key:'in_production', label:'In production',   says:'Your blinds are being handmade to order by our craftsmen in Bali.'},
+  {key:'shipped',       label:'On its way',      says:'Your order has left the workshop and is on its way to you.'},
+  {key:'delivered',     label:'Delivered',       says:'Your order has been delivered. We hope you love it.'}
+];
+
+function renderOrderStatus(){
+  const prefill = (new URLSearchParams(location.search).get('order') || '').replace(/[^A-Za-z0-9-]/g, '').slice(0, 12);
+  return `
+    <section class="od-hero">
+      <h1>where’s my order?</h1>
+      <p class="od-lede">Enter your order number and the email you ordered with, and we’ll show you where things are up to.</p>
+    </section>
+    <section class="os">
+      <form id="osForm" class="os-form" novalidate>
+        <div class="field"><label for="osOrder">Order number</label><input id="osOrder" name="order" value="${prefill}" placeholder="IHC-123456" autocomplete="off" autocapitalize="characters" required></div>
+        <div class="field"><label for="osEmail">Email</label><input id="osEmail" name="email" type="email" placeholder="jane@example.com" autocomplete="email" required></div>
+        <button type="submit" class="btn btn-primary" id="osBtn">Check my order</button>
+        <p class="os-help">Your order number is on your confirmation page and on your Stripe receipt, and starts with IHC.</p>
+      </form>
+      <div id="osResult" class="os-result" aria-live="polite"></div>
+    </section>`;
+}
+
+function bindOrderStatusEvents(){
+  const form = document.getElementById('osForm');
+  if(!form) return;
+  const out = document.getElementById('osResult'), btn = document.getElementById('osBtn');
+  const dayOpts = {day:'numeric', month:'long', year:'numeric', timeZone:'Australia/Brisbane'};
+  const say = html => { out.innerHTML = html; };
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const order = form.order.value.trim(), email = form.email.value.trim();
+    if(!order || !email){ say(`<p class="os-msg">Please enter both your order number and your email.</p>`); return; }
+    btn.disabled = true; btn.textContent = 'Checking…'; say('');
+    try{
+      const res = await fetch('/.netlify/functions/order-status', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({order, email})});
+      const d = await res.json().catch(()=>({}));
+      if(!res.ok) throw new Error(d.error || 'lookup failed');
+      if(!d.found){
+        say(`<p class="os-msg">We couldn’t find an order with those details. Please check the order number and the email you used, or <a href="/contact">contact us</a> and we’ll help.</p>`);
+        return;
+      }
+      const stage = d.stage || 0, cur = ORDER_STAGES[stage];
+      const win = `between ${new Date(d.windowFrom).toLocaleDateString('en-AU', dayOpts).replace(/ \d{4}$/, '')} and ${new Date(d.windowTo).toLocaleDateString('en-AU', dayOpts)}`;
+      say(`
+        <h2>Order ${d.order}</h2>
+        <ol class="os-steps" aria-label="Order progress">
+          ${ORDER_STAGES.map((s,i)=>`<li class="${i<stage?'done':(i===stage?'on':'')}"${i===stage?' aria-current="step"':''}><span class="dot"></span><span class="lbl">${s.label}</span></li>`).join('')}
+        </ol>
+        <p class="os-now"><strong>${cur.label}.</strong> ${cur.says}</p>
+        ${d.note ? `<p class="os-note"><strong>A note from us:</strong> ${d.note.replace(/[<>&]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</p>` : ''}
+        ${stage < 3 ? `<p class="os-eta">Expected delivery ${win}.</p>` : ''}
+        <p class="os-help">Questions? <a href="/contact">Contact us</a> — we’re happy to help.</p>`);
+    }catch(err){
+      say(`<p class="os-msg">We couldn’t look that up just now. Please try again in a minute, or <a href="/contact">contact us</a>.</p>`);
+    }finally{
+      btn.disabled = false; btn.textContent = 'Check my order';
+    }
+  });
+}
+
 // Home-page gallery. Add real install photos here as they come in — keep each
 // file ~1100px wide / under ~150KB (mobile data). aiGenerated:true shows an
 // "AI-generated preview" label; never remove it from an image that isn't a
@@ -1739,6 +1894,10 @@ function render(){
     setActiveNav('shop');
     app.innerHTML = renderConfirmation(parts[1]);
     bindConfirmationEvents(parts[1]);
+  } else if(parts[0]==='order-status'){
+    setActiveNav('');
+    app.innerHTML = renderOrderStatus();
+    bindOrderStatusEvents();
   } else if(parts[0]==='about'){
     setActiveNav('about');
     app.innerHTML = renderAbout();
@@ -1762,6 +1921,7 @@ function render(){
     app.innerHTML = renderNotFound();
   }
   updateCartCount();
+  fillEta();
   polishPage();
 }
 
@@ -1880,8 +2040,8 @@ function routeMeta(parts){
         path:'/lakey-peak'
       });
       break;
-    case 'cart': case 'quote': case 'checkout': case 'order-confirmed':
-      set({title:'Your order | Indo Home Collective', path:'/' + parts[0], noindex:true});
+    case 'cart': case 'quote': case 'checkout': case 'order-confirmed': case 'order-status':
+      set({title:parts[0]==='order-status' ? 'Where’s my order? | Indo Home Collective' : 'Your order | Indo Home Collective', path:'/' + parts[0], noindex:true});
       break;
     default:
       set({title:'Page not found | Indo Home Collective', path:'/', noindex:true});
@@ -2739,7 +2899,8 @@ function renderBlindDetail(p, preColour){
             <div class="meta-row" id="bpDiscountRow" style="${calc.eligible?'':'display:none;'}"><span class="label">Bulk discount</span><span class="value" id="bpDiscount">&minus;${Math.round(calc.pct*100)}%</span></div>
             <div class="meta-row"><span class="label">Shipping</span><span class="value">${money(BLIND_SHIPPING_PER_UNIT)} / blind</span></div>
           </div>
-          <div class="price" id="bpTotal" style="margin:18px 0 24px;">${money(calc.unitPrice)} <span style="font-size:0.85rem;color:#6b6b6b;font-weight:400;">per blind</span></div>
+          <div class="price" id="bpTotal" style="margin:18px 0 6px;">${money(calc.unitPrice)} <span style="font-size:0.85rem;color:#6b6b6b;font-weight:400;">per blind</span></div>
+          <p class="pd-eta">Order today and expect delivery <strong data-eta>in about 8–12 weeks</strong>.</p>
 
           <div class="detail-actions">
             <button class="btn btn-primary" id="addToCartBtn">Add to cart</button>
@@ -2755,6 +2916,7 @@ function renderBlindDetail(p, preColour){
             <div><svg viewBox="0 0 24 24"><path d="M2 7h12v9H2zM14 10h4l3 3v3h-7zM6 19a1.7 1.7 0 1 0 0-.01M17 19a1.7 1.7 0 1 0 0-.01"/></svg><span><strong>Delivered across QLD &amp; NSW</strong>Delivery is included in the price</span></div>
             <div><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span><strong>8–12 weeks</strong>Every blind is made to order</span></div>
           </div>
+          ${renderOrderPromise()}
           <div class="meta-table">
             ${p.meta.map(m=>`<div class="meta-row"><span class="label">${m[0]}</span><span class="value">${m[1]}</span></div>`).join('')}
           </div>
@@ -2960,7 +3122,8 @@ function renderCart(){
           <ul class="summary-trust">
             ${PAYMENTS_ENABLED ? `<li><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Secure checkout with Stripe</li>` : ''}
             <li><svg viewBox="0 0 24 24"><path d="M2 7h12v9H2zM14 10h4l3 3v3h-7zM6 19a1.7 1.7 0 1 0 0-.01M17 19a1.7 1.7 0 1 0 0-.01"/></svg>Delivery included across QLD &amp; NSW</li>
-            <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Made to order, roughly 8–12 weeks</li>
+            <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Made to order: expect delivery <span data-eta>in about 8–12 weeks</span> if you order today</li>
+            <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><circle cx="12" cy="16" r="0.6"/></svg><span><a href="/order-status" style="text-decoration:underline;">Check on your order</a> any time once it’s placed</span></li>
           </ul>
           <p class="summary-note">${RETURNS_NOTE} <a href="/ordering/returns">Returns policy</a></p>
         </div>
@@ -3241,6 +3404,7 @@ function renderCheckout(){
           <div class="summary-row" style="margin-top:16px;"><span>Subtotal</span><span>${money(cartTotal())}</span></div>
           <div class="summary-row"><span>Shipping</span><span>Included</span></div>
           <div class="summary-row total"><span>Total</span><span>${money(cartTotal())}</span></div>
+          <p class="eta-box"><strong>Expected delivery</strong> <span data-eta>in about 8–12 weeks</span>, if you order today. Every blind is made to order, and you can <a href="/order-status">check on your order</a> at any time.</p>
           <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; margin-top:18px;">Place order</button>
           <a href="/cart" class="btn btn-outline" style="width:100%; text-align:center; margin-top:12px; box-sizing:border-box; display:block;">Back to cart</a>
           <p class="summary-note">Secure checkout · ${RETURNS_NOTE} <a href="/ordering/returns">Returns policy</a></p>
@@ -3391,6 +3555,7 @@ function renderConfirmationContent(order, orderId){
         <span class="eyebrow">terima kasih${firstName ? ', '+firstName : ''}</span>
         <h1>your order is confirmed</h1>
         <div class="order-id">Order ${orderId || ''}</div>
+        <p class="eta-box confirm-eta"><strong>Expected delivery</strong> <span data-eta>in about 8–12 weeks</span>.<br>We’ll email you straight away if the date changes. <a href="/order-status${orderId ? '?order=' + encodeURIComponent(orderId) : ''}">Check on your order any time</a> with this order number and your email.</p>
         <p>Thank you for bringing a little piece of Bali into your home. A confirmation email is on its way${order && order.email ? ' to <strong>'+order.email+'</strong>' : ''}, and we'll let you know as soon as your order ships.</p>
 
         ${order ? `
@@ -3537,7 +3702,7 @@ function renderOrdering(){
         </li>
         <li>
           <h3>Delivered to you</h3>
-          <p>We deliver across Queensland and New South Wales. Allow roughly 8–12 weeks from order to delivery.</p>
+          <p>We deliver across Queensland and New South Wales. Allow roughly 8–12 weeks from order to delivery — order today and that’s <strong data-eta>in about 8–12 weeks</strong>. You can check where your order is up to any time with <a href="/order-status" style="text-decoration:underline;">Where’s my order?</a></p>
         </li>
         <li>
           <h3>Up on your window</h3>
@@ -3545,6 +3710,7 @@ function renderOrdering(){
         </li>
       </ol>
     </section>
+    <div class="od-promise-wrap">${renderOrderPromise()}</div>
     <section class="ordering-section">
       <div class="wrap">
         <div class="od-routes-head"><h2>two ways to order</h2></div>

@@ -788,3 +788,18 @@ abandon it, just `git checkout master`.
   domain, which is why the phone bottom nav is squeezed to ~175px and labelled "Decor" to fit. Removing it is a hosting/plan decision.
 - Tooling gotchas: never rewrite `index.html` with Python text mode on Windows (it flips LF → CRLF and `scripts/prerender.js`
   then fails to extract the script) — use Edit, or write bytes. If prerender fails right after an edit, just re-run it (OneDrive sync).
+
+### Order confidence: delivery dates, promise, "Where's my order?" (2026-11-21, branch `redesign-3d`)
+- **Delivery window as real dates:** `deliveryWindow()` / `fillEta()` in `index.html` (and `netlify/functions/lib/delivery.js`, keep
+  `LEAD_WEEKS = [8, 12]` the same in both). Pages render `<span data-eta>in about 8–12 weeks</span>`; `render()` calls `fillEta()` to
+  swap in dates, so static prerendered HTML never goes stale. Shown on product page, cart, checkout, confirmation, ordering page;
+  also written into the Stripe payment description (appears on the Stripe receipt).
+- **Order promise:** `renderOrderPromise()` (product page + Ordering page). `LATE_PROMISE` (null) adds an extra line — only set it
+  once the owner has decided what they will honour. The "we'll email you straight away with a new date" line is a commitment.
+- **Where's my order?** `/order-status` (noindex, not prerendered): form → `netlify/functions/order-status.js`. Order lives in Stripe:
+  `create-checkout-session.js` copies `orderId`, `status:'confirmed'`, `email` onto the PaymentIntent (`payment_intent_data.metadata`).
+  Owner edits `status` (confirmed / in_production / shipped / delivered) + optional `status_note` in Stripe Dashboard → Payments →
+  Metadata. Needs order number AND email to match; mismatch = same "not found" reply. Older orders (no payment metadata) are found by
+  scanning the last 100 Checkout Sessions. Owner how-to: `../order-status-howto.md`.
+- **Tested:** `node scripts/test-order-status.js` (17 logic checks against a faked Stripe). NOT yet tested end-to-end against real
+  Stripe: needs a draft deploy + one test-mode purchase (card 4242…) + setting `status` in the test Dashboard.

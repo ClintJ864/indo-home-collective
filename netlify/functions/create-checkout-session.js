@@ -1,5 +1,6 @@
 const Stripe = require('stripe');
 const { priceCartItem } = require('./lib/pricing');
+const { deliveryWindow, formatWindow } = require('./lib/delivery');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -55,6 +56,7 @@ exports.handler = async (event) => {
 
   const siteUrl = process.env.URL || `https://${event.headers.host}`;
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+  const eta = deliveryWindow(new Date());
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -65,6 +67,17 @@ exports.handler = async (event) => {
       cancel_url: `${siteUrl}/#/checkout`,
       shipping_address_collection: { allowed_countries: ['AU'] },
       metadata: { orderId },
+      // Copied onto the payment itself so the "Where's my order?" page can find it,
+      // and the description appears on Stripe's receipt email. `status` is what you
+      // change in the Stripe Dashboard as the order progresses (see order-status.js).
+      payment_intent_data: {
+        description: `Indo Home Collective order ${orderId}. Expected delivery ${formatWindow(eta)}. Check on it any time: ${siteUrl}/order-status`,
+        metadata: {
+          orderId,
+          status: 'confirmed',
+          email: (customerEmail || '').trim().toLowerCase(),
+        },
+      },
     });
 
     return {
