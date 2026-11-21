@@ -748,3 +748,18 @@ abandon it, just `git checkout master`.
 - Squirrel no longer targets the hero (its pinned content moves while scrolling).
 - Not yet measured on a real phone (desktop test = steady 60fps). Re-run
   `node scripts/prerender.js` after any change — `/` is served from `prerender/home.html`.
+
+### Site-wide upgrade, round 1 (2026-11-21, branch `redesign-3d`)
+- **Brand typeface:** Crimson Text (SIL OFL) self-hosted in `assets/fonts/` (regular, italic, semibold; latin subset ~25KB each,
+  400 preloaded). All serif text uses `var(--serif)`; `size-adjust:108%` keeps it the same visual size as the old Georgia.
+- **Real photos everywhere they exist:** colour cards (`assets/swatch-*.jpg`, incl. the first real *Black* photo from Facebook),
+  gallery (white pool shot `blinds-white-pool-web.jpg`), About (`about-hero/portrait/workshop.jpg`). Originals of the Facebook
+  photos are in `../facebook-photos/` (outside the repo; most are 480–830px, three are hi-res). People/collage photos skipped on purpose.
+- **About:** photo banner → big quote → story + portrait → workshop photo + CTA. Owner's wording kept verbatim.
+- **Ordering:** 5-step journey timeline (every claim already on the site) → two ways to order → help → returns policy (unchanged).
+- **Colour guide:** photo tiles instead of a text list. **Product page:** trust row, "How to measure" diagram, collapsible
+  questions (confirmed facts only), phone-only sticky price + Add to cart bar (fixed under the header, not at the bottom,
+  because the bottom nav + Netlify badge live there).
+- **Footer:** "not sure what size you need?" call to action (hidden on cart/checkout/quote/confirmation via `body[data-route]`),
+  logo, delivery areas. Scroll reveals trimmed to colour cards, gallery and ordering steps; nav links get a hover underline.
+- Gotcha: images with width/height attributes + CSS `aspect-ratio` need `height:auto`, or the attribute wins and they stretch.
