@@ -763,3 +763,18 @@ abandon it, just `git checkout master`.
 - **Footer:** "not sure what size you need?" call to action (hidden on cart/checkout/quote/confirmation via `body[data-route]`),
   logo, delivery areas. Scroll reveals trimmed to colour cards, gallery and ordering steps; nav links get a hover underline.
 - Gotcha: images with width/height attributes + CSS `aspect-ratio` need `height:auto`, or the attribute wins and they stretch.
+
+### Round 2: homewares, cart and "finish" pass (2026-11-21, branch `redesign-3d`)
+- **Homewares:** category pills are now large serif collection headings (`.coll-tab`, aqua underline slides under the chosen one).
+  A single product with a photo = editorial feature (`.coll-feature`); everything still coming and no photography = one calm
+  panel (`.soon-panel`: "more from bali, arriving soon" with the line-drawing icons, each linking to its register-interest page);
+  anything on sale = the ordinary grid. "Coming soon" is now an italic "Arriving soon" line — no grey filter, no "not yet for sale"
+  watermark, no pills. Adding product photos later: set `image:` on the product and the panel/feature switches itself.
+- **Cart + checkout:** `flowTracker(step)` (Cart → Details → Payment, shown on both), bigger photo (`cartThumb()` uses the chosen
+  colour's swatch photo), serif name/price, text "Remove", 46px quantity buttons, beige summary panel with big serif total,
+  text links for secondary actions, trust lines. Checkout inherits the summary + tracker.
+- **Finish pass:** base text 17px (`html{font-size:106.25%}`); `--tan-text:#7d6648` for text that used `--tan` (contrast ~5:1);
+  greys #777/#888/#999 darkened; one `.btn` (52px min height, 3px radius, 1px border, focus ring); form labels sentence case;
+  shared `--shadow-soft` + 6px radius on photos/cards. Checked: no horizontal overflow on 14 routes at 375px.
+- Gotchas: `h3` has no serif by default (only h1/h2/.brand-font) — set `font-family:var(--serif)` on new h3s;
+  `.wrap.cart-wrap{padding:44px 0 …}` wiped the side padding on phones — use padding-top/bottom only on `.wrap` elements.
