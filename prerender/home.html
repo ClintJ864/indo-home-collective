@@ -679,7 +679,7 @@
 
 
   /* ---------- v2: blinds-first home ---------- */
-  /* Hero: your garden, with a 3D timber blind that rolls up as you scroll.
+  /* Hero: a soft-focus garden backdrop, with a 3D timber blind that rolls up as you scroll.
      Without JS / WebGL / with reduced motion it is simply the still photo + text
      (the .is-3d class, which adds the scroll run, is only set once 3D is running). */
   .rhero{position:relative; --stage-h:max(540px, calc(100svh - var(--hdr, 73px)));}
@@ -1113,7 +1113,7 @@
 <main id="app">
     <section class="rhero" id="rhero" aria-label="Indo Home Collective">
       <div class="rh-stage" id="rhStage">
-        <div class="rh-view"><img src="/assets/hero-garden.jpg" width="2000" height="679" alt="Tropical garden seen from a covered patio" fetchpriority="high"></div>
+        <div class="rh-view"><img src="/assets/hero-garden.jpg" width="2000" height="679" alt="" aria-hidden="true" fetchpriority="high"></div>
         <canvas class="rh-canvas" id="rhCanvas" aria-hidden="true"></canvas>
         <div class="rh-shade"></div>
         <div class="rh-copy"><div class="wrap"><div class="rh-text">
@@ -1170,23 +1170,23 @@
     <section class="home-section">
       <div class="wrap">
         <div class="section-head" style="margin-bottom:32px;">
-          <span class="eyebrow">in real homes</span>
+          <span class="eyebrow">up close</span>
           <h2>gallery</h2>
         </div>
         <div class="gal" role="region" aria-roledescription="carousel" aria-label="Photo gallery">
           <div class="gal-track" id="galTrack" tabindex="0">
             
             <figure class="gal-item">
-              <button type="button" class="gal-open" data-i="0" aria-label="View larger: Natural Wood, lowered over the garden">
-                <img src="/assets/blinds-natural-garden-web.jpg" alt="Pair of natural wood timber slat blinds lowered on a patio overlooking a tropical garden" loading="lazy" decoding="async">
+              <button type="button" class="gal-open" data-i="0" aria-label="View larger: Natural Wood, solid timber slats">
+                <img src="/assets/blinds-natural-detail-web.jpg" alt="Close-up of natural wood timber slats strung with cord, with green showing through the gaps" loading="lazy" decoding="async">
                 
                 <span class="gal-zoom" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="#3D5C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2H14v4.5M6.5 14H2V9.5M14 2L9 7M2 14l5-5"/></svg></span>
-                <figcaption class="gal-cap">Natural Wood, lowered over the garden</figcaption>
+                <figcaption class="gal-cap">Natural Wood, solid timber slats</figcaption>
               </button>
             </figure>
             <figure class="gal-item">
               <button type="button" class="gal-open" data-i="1" aria-label="View larger: White">
-                <img src="/assets/blinds-white-real-web.jpg" alt="White timber slat blind installed on an outdoor patio beside a glass pool fence" loading="lazy" decoding="async">
+                <img src="/assets/blinds-white-close-web.jpg" alt="Close-up of a white timber slat blind with its lift cord" loading="lazy" decoding="async">
                 
                 <span class="gal-zoom" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="#3D5C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2H14v4.5M6.5 14H2V9.5M14 2L9 7M2 14l5-5"/></svg></span>
                 <figcaption class="gal-cap">White</figcaption>
@@ -1194,26 +1194,26 @@
             </figure>
             <figure class="gal-item">
               <button type="button" class="gal-open" data-i="2" aria-label="View larger: Natural Wood">
-                <img src="/assets/blinds-natural-web.jpg" alt="Natural wood timber slat blind, handcrafted in Bali, installed on a patio" loading="lazy" decoding="async">
+                <img src="/assets/blinds-natural-web.jpg" alt="Natural wood timber slat blind seen from below at an angle, handcrafted in Bali" loading="lazy" decoding="async">
                 
                 <span class="gal-zoom" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="#3D5C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2H14v4.5M6.5 14H2V9.5M14 2L9 7M2 14l5-5"/></svg></span>
                 <figcaption class="gal-cap">Natural Wood</figcaption>
               </button>
             </figure>
             <figure class="gal-item">
-              <button type="button" class="gal-open" data-i="3" aria-label="View larger: White, by the pool">
-                <img src="/assets/blinds-white-pool-web.jpg" alt="White timber slat blind beside a swimming pool, with string lights and pool toys seen through the slats" loading="lazy" decoding="async">
+              <button type="button" class="gal-open" data-i="3" aria-label="View larger: White, filtered light">
+                <img src="/assets/blinds-white-light-web.jpg" alt="White timber slat blind with soft light and leaf shadows coming through the slats" loading="lazy" decoding="async">
                 
                 <span class="gal-zoom" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="#3D5C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2H14v4.5M6.5 14H2V9.5M14 2L9 7M2 14l5-5"/></svg></span>
-                <figcaption class="gal-cap">White, by the pool</figcaption>
+                <figcaption class="gal-cap">White, filtered light</figcaption>
               </button>
             </figure>
             <figure class="gal-item">
-              <button type="button" class="gal-open" data-i="4" aria-label="View larger: Solid timber slats">
-                <img src="/assets/blinds-natural-detail-web.jpg" alt="Close-up of natural wood timber slats strung with cord, with the garden showing through the gaps" loading="lazy" decoding="async">
+              <button type="button" class="gal-open" data-i="4" aria-label="View larger: Natural Wood, in the sun">
+                <img src="/assets/blinds-natural-sun-web.jpg" alt="Natural wood timber slat blind with sunlight streaming through the gaps between slats" loading="lazy" decoding="async">
                 
                 <span class="gal-zoom" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="#3D5C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2H14v4.5M6.5 14H2V9.5M14 2L9 7M2 14l5-5"/></svg></span>
-                <figcaption class="gal-cap">Solid timber slats</figcaption>
+                <figcaption class="gal-cap">Natural Wood, in the sun</figcaption>
               </button>
             </figure>
           </div>
@@ -1838,11 +1838,11 @@ function bindOrderStatusEvents(){
 // "AI-generated preview" label; never remove it from an image that isn't a
 // genuine photo of our product.
 const BLIND_GALLERY = [
-  {src:'/assets/blinds-natural-garden-web.jpg', caption:'Natural Wood, lowered over the garden', alt:'Pair of natural wood timber slat blinds lowered on a patio overlooking a tropical garden'},
-  {src:'/assets/blinds-white-real-web.jpg', caption:'White', alt:'White timber slat blind installed on an outdoor patio beside a glass pool fence'},
-  {src:'/assets/blinds-natural-web.jpg', caption:'Natural Wood', alt:'Natural wood timber slat blind, handcrafted in Bali, installed on a patio'},
-  {src:'/assets/blinds-white-pool-web.jpg', caption:'White, by the pool', alt:'White timber slat blind beside a swimming pool, with string lights and pool toys seen through the slats'},
-  {src:'/assets/blinds-natural-detail-web.jpg', caption:'Solid timber slats', alt:'Close-up of natural wood timber slats strung with cord, with the garden showing through the gaps'}
+  {src:'/assets/blinds-natural-detail-web.jpg', caption:'Natural Wood, solid timber slats', alt:'Close-up of natural wood timber slats strung with cord, with green showing through the gaps'},
+  {src:'/assets/blinds-white-close-web.jpg', caption:'White', alt:'Close-up of a white timber slat blind with its lift cord'},
+  {src:'/assets/blinds-natural-web.jpg', caption:'Natural Wood', alt:'Natural wood timber slat blind seen from below at an angle, handcrafted in Bali'},
+  {src:'/assets/blinds-white-light-web.jpg', caption:'White, filtered light', alt:'White timber slat blind with soft light and leaf shadows coming through the slats'},
+  {src:'/assets/blinds-natural-sun-web.jpg', caption:'Natural Wood, in the sun', alt:'Natural wood timber slat blind with sunlight streaming through the gaps between slats'}
 ];
 // The gallery is laid out for exactly 5 photos (1 big feature + 4 tiles on desktop).
 // If you add more, add them in a set that keeps the desktop mosaic tidy (a feature plus a multiple of 2).
@@ -2323,7 +2323,7 @@ function renderHome(){
   return `
     <section class="rhero" id="rhero" aria-label="Indo Home Collective">
       <div class="rh-stage" id="rhStage">
-        <div class="rh-view"><img src="/assets/hero-garden.jpg" width="2000" height="679" alt="Tropical garden seen from a covered patio" fetchpriority="high"></div>
+        <div class="rh-view"><img src="/assets/hero-garden.jpg" width="2000" height="679" alt="" aria-hidden="true" fetchpriority="high"></div>
         <canvas class="rh-canvas" id="rhCanvas" aria-hidden="true"></canvas>
         <div class="rh-shade"></div>
         <div class="rh-copy"><div class="wrap"><div class="rh-text">
@@ -2366,7 +2366,7 @@ function renderHome(){
     <section class="home-section">
       <div class="wrap">
         <div class="section-head" style="margin-bottom:32px;">
-          <span class="eyebrow">in real homes</span>
+          <span class="eyebrow">up close</span>
           <h2>gallery</h2>
         </div>
         <div class="gal" role="region" aria-roledescription="carousel" aria-label="Photo gallery">
@@ -3769,7 +3769,7 @@ async function bindConfirmationEvents(orderId){
 function renderAbout(){
   return `
     <figure class="ab-hero">
-      <img src="/assets/about-hero.jpg" width="1800" height="810" alt="A white timber slat blind lowered beside a pool, with the garden light coming through the slats" fetchpriority="high">
+      <img src="/assets/about-hero.jpg" width="1800" height="810" alt="A white timber slat blind with soft light coming through the slats" fetchpriority="high">
     </figure>
     <section class="ab-intro">
       <h1>about us</h1>
@@ -3781,8 +3781,8 @@ function renderAbout(){
         <p>We believe natural materials create a calm and welcoming space, which is why we choose real timber for its beauty, durability, and natural insulation qualities. Every blind is custom made by hand by a talented family of craftsmen who have been creating these beautiful products for over 30 years.</p>
       </div>
       <figure class="ab-photo">
-        <img src="/assets/about-portrait.jpg" width="900" height="1200" loading="lazy" alt="Natural timber slat blinds lowered over a garden of palms">
-        <figcaption>Natural wood, lowered over the garden</figcaption>
+        <img src="/assets/about-portrait.jpg" width="900" height="1200" loading="lazy" alt="Close-up of natural timber slats strung with cord">
+        <figcaption>Natural wood, up close</figcaption>
       </figure>
     </section>
     <section class="ab-close">
